@@ -1,8 +1,11 @@
+# syntax=docker/dockerfile:1
+
 FROM php:8.4-fpm-alpine3.21
 
 WORKDIR /var/www/html
 
-RUN apk add --no-cache \
+RUN --mount=type=cache,target=/var/cache/apk \
+    apk add --no-cache \
     bash \
     curl \
     freetype-dev \
@@ -22,7 +25,8 @@ RUN apk add --no-cache \
     && docker-php-ext-install -j$(nproc) \
         bcmath exif gd intl mbstring opcache pcntl pdo_mysql zip
 
-RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
+RUN --mount=type=cache,target=/var/cache/apk \
+    apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
     && pecl install redis \
     && docker-php-ext-enable redis \
     && apk del .build-deps
@@ -34,10 +38,12 @@ COPY docker/php/entrypoint.sh /usr/local/bin/artid-entrypoint
 RUN chmod +x /usr/local/bin/artid-entrypoint
 
 COPY composer.json composer.lock ./
-RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader --no-scripts --no-progress
+RUN --mount=type=cache,target=/root/.composer/cache \
+    composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader --no-scripts --no-progress
 
 COPY package.json package-lock.json ./
-RUN npm ci --no-audit --no-fund
+RUN --mount=type=cache,target=/root/.npm \
+    npm ci --no-audit --no-fund
 
 COPY . .
 
