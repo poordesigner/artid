@@ -8,8 +8,8 @@ services:
     env_file:
       - .env
     environment:
-      DB_CONNECTION: pgsql
-      DB_HOST: postgres
+      DB_CONNECTION: mysql
+      DB_HOST: mysql
       REDIS_HOST: redis
       REDIS_CLIENT: phpredis
       CACHE_STORE: redis
@@ -22,7 +22,7 @@ services:
       - storage:/var/www/html/storage
       - public_assets:/var/www/html/public
     depends_on:
-      - postgres
+      - mysql
       - redis
 
   nginx:
@@ -45,8 +45,8 @@ services:
     env_file:
       - .env
     environment:
-      DB_CONNECTION: pgsql
-      DB_HOST: postgres
+      DB_CONNECTION: mysql
+      DB_HOST: mysql
       REDIS_HOST: redis
       REDIS_CLIENT: phpredis
       CACHE_STORE: redis
@@ -58,7 +58,7 @@ services:
     volumes:
       - storage:/var/www/html/storage
     depends_on:
-      - postgres
+      - mysql
       - redis
 
   scheduler:
@@ -68,8 +68,8 @@ services:
     env_file:
       - .env
     environment:
-      DB_CONNECTION: pgsql
-      DB_HOST: postgres
+      DB_CONNECTION: mysql
+      DB_HOST: mysql
       REDIS_HOST: redis
       REDIS_CLIENT: phpredis
       CACHE_STORE: redis
@@ -81,18 +81,19 @@ services:
     volumes:
       - storage:/var/www/html/storage
     depends_on:
-      - postgres
+      - mysql
       - redis
 
-  postgres:
-    image: postgres:16-alpine
+  mysql:
+    image: mysql:8.4
     restart: unless-stopped
     environment:
-      POSTGRES_DB: ${DB_DATABASE:-artid}
-      POSTGRES_USER: ${DB_USERNAME:-artid}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-change_me}
+      MYSQL_DATABASE: ${DB_DATABASE:-artid}
+      MYSQL_USER: ${DB_USERNAME:-artid}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-change_me}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-change_root_me}
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - mysql_data:/var/lib/mysql
 
   redis:
     image: redis:7-alpine
@@ -101,7 +102,7 @@ services:
       - redis_data:/data
 
 volumes:
-  postgres_data:
+  mysql_data:
   redis_data:
   storage:
   public_assets:

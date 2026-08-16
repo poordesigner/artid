@@ -13,14 +13,14 @@ RUN apk add --no-cache \
     libzip-dev \
     nodejs \
     npm \
+    mysql-client \
     oniguruma-dev \
-    postgresql-dev \
     su-exec \
     unzip \
     zip \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) \
-        bcmath exif gd intl mbstring opcache pcntl pdo_pgsql pgsql zip
+        bcmath exif gd intl mbstring opcache pcntl pdo_mysql zip
 
 RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
     && pecl install redis \
