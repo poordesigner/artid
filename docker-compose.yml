@@ -1,0 +1,107 @@
+services:
+  app:
+    image: artid:main
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      DB_CONNECTION: pgsql
+      DB_HOST: postgres
+      REDIS_HOST: redis
+      REDIS_CLIENT: phpredis
+      CACHE_STORE: redis
+      QUEUE_CONNECTION: redis
+      SESSION_DRIVER: file
+      SESSION_SECURE_COOKIE: "true"
+      SESSION_SAME_SITE: lax
+      VIEW_COMPILED_PATH: /var/www/html/storage/framework/views
+    volumes:
+      - storage:/var/www/html/storage
+      - public_assets:/var/www/html/public
+    depends_on:
+      - postgres
+      - redis
+
+  nginx:
+    build:
+      context: .
+      dockerfile: docker/nginx/Dockerfile
+    restart: unless-stopped
+    expose:
+      - "80"
+    volumes:
+      - storage:/var/www/html/storage:ro
+      - public_assets:/var/www/html/public:ro
+    depends_on:
+      - app
+
+  queue:
+    image: artid:main
+    restart: unless-stopped
+    command: sh -c "php artisan queue:work --sleep=3 --tries=3 --timeout=120 || sleep 3600"
+    env_file:
+      - .env
+    environment:
+      DB_CONNECTION: pgsql
+      DB_HOST: postgres
+      REDIS_HOST: redis
+      REDIS_CLIENT: phpredis
+      CACHE_STORE: redis
+      QUEUE_CONNECTION: redis
+      SESSION_DRIVER: file
+      SESSION_SECURE_COOKIE: "true"
+      SESSION_SAME_SITE: lax
+      VIEW_COMPILED_PATH: /var/www/html/storage/framework/views
+    volumes:
+      - storage:/var/www/html/storage
+    depends_on:
+      - postgres
+      - redis
+
+  scheduler:
+    image: artid:main
+    restart: unless-stopped
+    command: sh -c "php artisan schedule:work || sleep 3600"
+    env_file:
+      - .env
+    environment:
+      DB_CONNECTION: pgsql
+      DB_HOST: postgres
+      REDIS_HOST: redis
+      REDIS_CLIENT: phpredis
+      CACHE_STORE: redis
+      QUEUE_CONNECTION: redis
+      SESSION_DRIVER: file
+      SESSION_SECURE_COOKIE: "true"
+      SESSION_SAME_SITE: lax
+      VIEW_COMPILED_PATH: /var/www/html/storage/framework/views
+    volumes:
+      - storage:/var/www/html/storage
+    depends_on:
+      - postgres
+      - redis
+
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_DATABASE:-artid}
+      POSTGRES_USER: ${DB_USERNAME:-artid}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-change_me}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+
+volumes:
+  postgres_data:
+  redis_data:
+  storage:
+  public_assets:
