@@ -9,6 +9,13 @@ class Exhibition extends Model
 {
     protected $fillable = ['name', 'date', 'description', 'links'];
 
+    protected function casts(): array
+    {
+        return [
+            'date' => 'date',
+        ];
+    }
+
     public function artwork(): BelongsTo
     {
         return $this->belongsTo(Artwork::class);
