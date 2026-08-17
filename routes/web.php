@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ArtworkController;
 use App\Http\Controllers\Auth\GitHubController;
+use App\Http\Controllers\ExhibitionController;
+use App\Http\Controllers\OwnershipController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SeriesController;
 use Illuminate\Support\Facades\Route;
@@ -30,11 +32,19 @@ Route::middleware('auth')->group(function () {
     Route::get('/artworks', [ArtworkController::class, 'index'])->name('artworks.index');
     Route::get('/artworks/create', [ArtworkController::class, 'create'])->name('artworks.create');
     Route::post('/artworks', [ArtworkController::class, 'store'])->name('artworks.store');
+    Route::get('/artworks/{artwork}', [ArtworkController::class, 'show'])->name('artworks.show');
     Route::get('/artworks/{artwork}/edit', [ArtworkController::class, 'edit'])->name('artworks.edit');
     Route::get('/artworks/{artwork}/qr', [ArtworkController::class, 'qr'])->name('artworks.qr');
     Route::get('/artworks/{artwork}/image', [ArtworkController::class, 'image'])->name('artworks.image');
     Route::patch('/artworks/{artwork}', [ArtworkController::class, 'update'])->name('artworks.update');
     Route::delete('/artworks/{artwork}', [ArtworkController::class, 'destroy'])->name('artworks.destroy');
+
+    Route::post('/artworks/{artwork}/exhibitions', [ExhibitionController::class, 'store'])->name('exhibitions.store');
+    Route::delete('/exhibitions/{exhibition}', [ExhibitionController::class, 'destroy'])->name('exhibitions.destroy');
+
+    Route::post('/artworks/{artwork}/ownerships', [OwnershipController::class, 'store'])->name('ownerships.store');
+    Route::post('/ownerships/{ownership}/reveal', [OwnershipController::class, 'reveal'])->name('ownerships.reveal');
+    Route::delete('/ownerships/{ownership}', [OwnershipController::class, 'destroy'])->name('ownerships.destroy');
 
     Route::get('/series', [SeriesController::class, 'index'])->name('series.index');
     Route::post('/series', [SeriesController::class, 'store'])->name('series.store');

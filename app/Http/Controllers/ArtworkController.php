@@ -97,6 +97,18 @@ class ArtworkController extends Controller
     }
 
     /**
+     * Show the artwork's history (exhibitions + ownership).
+     */
+    public function show(string $artwork): View
+    {
+        $artwork = Auth::user()->artworks()
+            ->with(['exhibitions' => fn ($q) => $q->latest(), 'ownerships' => fn ($q) => $q->latest()])
+            ->findOrFail($artwork);
+
+        return view('artworks.show', compact('artwork'));
+    }
+
+    /**
      * Render the QR code for the specified artwork.
      */
     public function qr(string $artwork): \Illuminate\Http\Response

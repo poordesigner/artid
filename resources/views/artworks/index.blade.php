@@ -44,7 +44,7 @@
                                                 </a>
                                             </td>
                                             <td class="px-4 py-3 text-sm text-gray-900">
-                                                {{ $artwork->title }}
+                                                <a href="{{ route('artworks.show', $artwork) }}" class="text-gray-900 hover:text-indigo-600 font-medium">{{ $artwork->title }}</a>
                                                 <span class="block font-mono text-xs text-gray-400">{{ $artwork->artwork_id }}</span>
                                             </td>
                                             <td class="px-4 py-3 text-sm text-gray-600">{{ $artwork->year ?? '—' }}</td>

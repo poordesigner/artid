@@ -44,4 +44,14 @@ class Artwork extends Model
     {
         return $this->belongsTo(Series::class);
     }
+
+    public function exhibitions(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Exhibition::class);
+    }
+
+    public function ownerships(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Ownership::class);
+    }
 }

@@ -1,0 +1,208 @@
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ $artwork->title }}
+        </h2>
+    </x-slot>
+
+    <div class="py-12">
+        <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
+            @if (session('status'))
+                <div class="mb-4 p-4 bg-green-50 text-green-700 rounded-md">{{ session('status') }}</div>
+            @endif
+
+            @if (session('error'))
+                <div class="mb-4 p-4 bg-red-50 text-red-700 rounded-md">{{ session('error') }}</div>
+            @endif
+
+            @if (session('secret_key'))
+                <div class="mb-4 p-4 bg-amber-50 border border-amber-200 rounded-md">
+                    <p class="text-sm font-semibold text-amber-800">{{ __('Llave secreta del nuevo propietario (guárdala, solo se muestra una vez):') }}</p>
+                    <code class="mt-1 block text-xl font-mono text-amber-900">{{ session('secret_key') }}</code>
+                </div>
+            @endif
+
+            @if (session('revealed'))
+                <div class="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-md">
+                    <p class="text-sm font-semibold text-blue-800">{{ __('Propietario revelado:') }}</p>
+                    <p class="mt-1 text-gray-900">{{ session('revealed')['name'] }}</p>
+                    @if (session('revealed')['email'])
+                        <p class="text-gray-700">{{ session('revealed')['email'] }}</p>
+                    @endif
+                    @if (session('revealed')['date'])
+                        <p class="text-gray-600">{{ session('revealed')['date'] }}</p>
+                    @endif
+                </div>
+            @endif
+
+            <!-- Summary -->
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 flex flex-col sm:flex-row gap-6">
+                    @if ($artwork->image)
+                        <div class="shrink-0">
+                            <img src="{{ route('artworks.image', $artwork) }}" alt="{{ $artwork->title }}" class="h-48 object-contain rounded border border-gray-200" />
+                        </div>
+                    @endif
+                    <div class="flex-1 min-w-0">
+                        <p class="text-lg font-semibold text-gray-900">{{ $artwork->title }}</p>
+                        <p class="font-mono text-sm text-gray-500">{{ $artwork->artwork_id }}</p>
+                        <dl class="mt-3 text-sm text-gray-700 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            @if ($artwork->year)
+                                <div><dt class="font-medium text-gray-500">{{ __('Year') }}</dt><dd>{{ $artwork->year }}</dd></div>
+                            @endif
+                            @if ($artwork->edition)
+                                <div><dt class="font-medium text-gray-500">{{ __('Edition') }}</dt><dd>{{ $artwork->edition }}</dd></div>
+                            @endif
+                            @if ($artwork->series)
+                                <div><dt class="font-medium text-gray-500">{{ __('Series') }}</dt><dd>{{ $artwork->series }}</dd></div>
+                            @endif
+                            @if ($artwork->technique)
+                                <div><dt class="font-medium text-gray-500">{{ __('Technique') }}</dt><dd>{{ $artwork->technique }}</dd></div>
+                            @endif
+                            @if ($artwork->dimensions)
+                                <div><dt class="font-medium text-gray-500">{{ __('Dimensions') }}</dt><dd>{{ $artwork->dimensions }}</dd></div>
+                            @endif
+                        </dl>
+                        @if ($artwork->description)
+                            <p class="mt-3 text-sm text-gray-700">{{ $artwork->description }}</p>
+                        @endif
+                    </div>
+                    <div class="shrink-0 text-center">
+                        <a href="{{ route('artworks.qr', $artwork) }}" target="_blank">
+                            <img src="{{ route('artworks.qr', $artwork) }}" alt="QR" class="h-28 w-28 inline-block" />
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exhibitions -->
+            <div class="mt-6 bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6">
+                    <h3 class="font-semibold text-lg text-gray-900">{{ __('Exhibitions') }}</h3>
+
+                    <form method="POST" action="{{ route('exhibitions.store', $artwork) }}" class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        @csrf
+                        <div>
+                            <x-input-label for="name" :value="__('Name')" />
+                            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required />
+                            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+                        </div>
+                        <div>
+                            <x-input-label for="date" :value="__('Date')" />
+                            <x-text-input id="date" class="block mt-1 w-full" type="date" name="date" :value="old('date')" />
+                            <x-input-error :messages="$errors->get('date')" class="mt-2" />
+                        </div>
+                        <div class="sm:col-span-2">
+                            <x-input-label for="description" :value="__('Description')" />
+                            <textarea id="description" name="description" rows="2" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full">{{ old('description') }}</textarea>
+                        </div>
+                        <div class="sm:col-span-2">
+                            <x-input-label for="links" :value="__('Links')" />
+                            <x-text-input id="links" class="block mt-1 w-full" type="text" name="links" :value="old('links')" placeholder="https://..." />
+                        </div>
+                        <div class="sm:col-span-2 flex justify-end">
+                            <x-primary-button>{{ __('Add exhibition') }}</x-primary-button>
+                        </div>
+                    </form>
+
+                    @if ($artwork->exhibitions->isEmpty())
+                        <p class="mt-4 text-sm text-gray-500">{{ __('No exhibitions yet.') }}</p>
+                    @else
+                        <ul class="mt-4 divide-y divide-gray-200">
+                            @foreach ($artwork->exhibitions as $exhibition)
+                                <li class="py-3 flex items-start justify-between gap-4">
+                                    <div class="min-w-0">
+                                        <p class="text-sm font-medium text-gray-900">{{ $exhibition->name }}</p>
+                                        @if ($exhibition->date)<p class="text-xs text-gray-500">{{ $exhibition->date->format('Y-m-d') }}</p>@endif
+                                        @if ($exhibition->description)<p class="text-sm text-gray-600">{{ $exhibition->description }}</p>@endif
+                                        @if ($exhibition->links)<p class="text-xs text-indigo-600 truncate">{{ $exhibition->links }}</p>@endif
+                                    </div>
+                                    <form method="POST" action="{{ route('exhibitions.destroy', $exhibition) }}" onsubmit="return confirm('{{ __('Are you sure?') }}');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-sm text-red-600 hover:text-red-900">{{ __('Delete') }}</button>
+                                    </form>
+                                </li>
+                            @endforeach
+                        </ul>
+                    @endif
+                </div>
+            </div>
+
+            <!-- Ownership -->
+            <div class="mt-6 bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6">
+                    <h3 class="font-semibold text-lg text-gray-900">{{ __('Ownership / Provenance') }}</h3>
+
+                    <form method="POST" action="{{ route('ownerships.store', $artwork) }}" class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        @csrf
+                        <div>
+                            <x-input-label for="type" :value="__('Type')" />
+                            <select id="type" name="type" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full">
+                                <option value="initial">{{ __('Initial owner (artist)') }}</option>
+                                <option value="transfer" @selected(old('type') === 'transfer')>{{ __('Transfer / Sale') }}</option>
+                            </select>
+                        </div>
+                        <div>
+                            <x-input-label for="owner_name" :value="__('Owner name')" />
+                            <x-text-input id="owner_name" class="block mt-1 w-full" type="text" name="owner_name" :value="old('owner_name')" required />
+                            <x-input-error :messages="$errors->get('owner_name')" class="mt-2" />
+                        </div>
+                        <div>
+                            <x-input-label for="owner_email" :value="__('Owner email (optional)')" />
+                            <x-text-input id="owner_email" class="block mt-1 w-full" type="email" name="owner_email" :value="old('owner_email')" />
+                            <x-input-error :messages="$errors->get('owner_email')" class="mt-2" />
+                        </div>
+                        <div>
+                            <x-input-label for="transferred_at" :value="__('Date')" />
+                            <x-text-input id="transferred_at" class="block mt-1 w-full" type="date" name="transferred_at" :value="old('transferred_at')" />
+                        </div>
+                        <div class="sm:col-span-2">
+                            <x-input-label for="notes" :value="__('Notes')" />
+                            <textarea id="notes" name="notes" rows="2" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full">{{ old('notes') }}</textarea>
+                        </div>
+                        <div class="sm:col-span-2 flex justify-end">
+                            <x-primary-button>{{ __('Add ownership') }}</x-primary-button>
+                        </div>
+                    </form>
+
+                    @if ($artwork->ownerships->isEmpty())
+                        <p class="mt-4 text-sm text-gray-500">{{ __('No ownership records yet.') }}</p>
+                    @else
+                        <ul class="mt-4 divide-y divide-gray-200">
+                            @foreach ($artwork->ownerships as $ownership)
+                                <li class="py-3">
+                                    <div class="flex items-start justify-between gap-4">
+                                        <div class="min-w-0">
+                                            <span class="text-xs uppercase tracking-wide text-gray-500">{{ $ownership->type === 'transfer' ? __('Transfer') : __('Initial') }}</span>
+                                            @if ($ownership->type === 'transfer')
+                                                <p class="text-sm text-gray-700">{{ __('🔒 Propietario protegido') }}</p>
+                                            @else
+                                                <p class="text-sm text-gray-900">{{ $ownership->owner_name }}</p>
+                                                @if ($ownership->owner_email)<p class="text-xs text-gray-500">{{ $ownership->owner_email }}</p>@endif
+                                            @endif
+                                            @if ($ownership->transferred_at)<p class="text-xs text-gray-500">{{ $ownership->transferred_at->format('Y-m-d') }}</p>@endif
+                                            @if ($ownership->notes)<p class="text-xs text-gray-500">{{ $ownership->notes }}</p>@endif
+                                        </div>
+                                        <form method="POST" action="{{ route('ownerships.destroy', $ownership) }}" onsubmit="return confirm('{{ __('Are you sure?') }}');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="text-sm text-red-600 hover:text-red-900">{{ __('Delete') }}</button>
+                                        </form>
+                                    </div>
+                                    @if ($ownership->type === 'transfer')
+                                        <form method="POST" action="{{ route('ownerships.reveal', $ownership) }}" class="mt-2 flex items-center gap-2">
+                                            @csrf
+                                            <x-text-input type="text" name="secret_key" placeholder="{{ __('Secret key') }}" class="block w-64" />
+                                            <x-secondary-button>{{ __('Reveal') }}</x-secondary-button>
+                                        </form>
+                                    @endif
+                                </li>
+                            @endforeach
+                        </ul>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+</x-app-layout>
