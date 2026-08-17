@@ -17,6 +17,11 @@ class Artist extends Authenticatable
     /** @use HasFactory<ArtistFactory> */
     use HasFactory, Notifiable;
 
+    public function artworks(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Artwork::class);
+    }
+
     /**
      * Get the attributes that should be cast.
      *
