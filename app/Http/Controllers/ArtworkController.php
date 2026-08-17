@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Artist;
 use App\Models\Artwork;
+use App\Models\Technique;
 use App\Services\GitHubService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -31,7 +32,9 @@ class ArtworkController extends Controller
      */
     public function create(): View
     {
-        return view('artworks.create');
+        $techniques = Technique::orderBy('name')->get();
+
+        return view('artworks.create', compact('techniques'));
     }
 
     /**
@@ -53,7 +56,7 @@ class ArtworkController extends Controller
             'edition' => $validated['edition'] ?? null,
             'status' => $validated['status'],
             'series' => $validated['series'] ?? null,
-            'technique' => $validated['technique'] ?? null,
+            'technique' => $this->techniquesToString($validated['techniques'] ?? []),
             'dimensions' => $validated['dimensions'] ?? null,
             'description' => $validated['description'] ?? null,
             'location' => $validated['location'] ?? null,
@@ -85,8 +88,9 @@ class ArtworkController extends Controller
     public function edit(string $artwork): View
     {
         $artwork = Auth::user()->artworks()->findOrFail($artwork);
+        $techniques = Technique::orderBy('name')->get();
 
-        return view('artworks.edit', compact('artwork'));
+        return view('artworks.edit', compact('artwork', 'techniques'));
     }
 
     /**
@@ -133,8 +137,10 @@ class ArtworkController extends Controller
         $validated = $request->validate($this->updateRules());
 
         $data = $validated;
+        unset($data['techniques']);
         $data['artwork_id'] = $artwork->artwork_id;
         $data['image'] = $artwork->image;
+        $data['technique'] = $this->techniquesToString($validated['techniques'] ?? []);
 
         $file = $request->file('image');
         if ($file) {
@@ -278,6 +284,8 @@ class ArtworkController extends Controller
         return [
             ...$this->metadataRules(),
             'artwork_id' => ['nullable', 'string', 'max:100', 'regex:/^[A-Za-z0-9._-]+$/'],
+            'techniques' => ['nullable', 'array'],
+            'techniques.*' => ['string', 'max:255'],
             'image' => ['nullable', 'image', 'max:20480'],
         ];
     }
@@ -289,6 +297,8 @@ class ArtworkController extends Controller
     {
         return [
             ...$this->metadataRules(),
+            'techniques' => ['nullable', 'array'],
+            'techniques.*' => ['string', 'max:255'],
             'image' => ['nullable', 'image', 'max:20480'],
         ];
     }
@@ -304,12 +314,23 @@ class ArtworkController extends Controller
             'edition' => ['nullable', 'string', 'max:255'],
             'status' => ['required', Rule::in(Artwork::STATUSES)],
             'series' => ['nullable', 'string', 'max:255'],
-            'technique' => ['nullable', 'string', 'max:255'],
             'dimensions' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'location' => ['nullable', 'string', 'max:255'],
             'owner' => ['nullable', 'string', 'max:255'],
         ];
+    }
+
+    /**
+     * Join the selected techniques into a comma-separated string.
+     *
+     * @param  array<int, mixed>  $techniques
+     */
+    private function techniquesToString(array $techniques): ?string
+    {
+        $techniques = array_values(array_filter($techniques, fn ($t) => is_string($t) && $t !== ''));
+
+        return $techniques ? implode(', ', $techniques) : null;
     }
 
     /**

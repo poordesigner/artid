@@ -60,9 +60,28 @@
 
 <!-- Technique -->
 <div class="mt-4">
-    <x-input-label for="technique" :value="__('Technique')" />
-    <x-text-input id="technique" class="block mt-1 w-full" type="text" name="technique" :value="old('technique', $artwork->technique ?? '')" />
-    <x-input-error :messages="$errors->get('technique')" class="mt-2" />
+    <x-input-label :value="__('Technique')" />
+    @php
+        $selectedTechniques = old('techniques', []);
+        if (empty($selectedTechniques) && isset($artwork) && $artwork && $artwork->technique) {
+            $selectedTechniques = array_map('trim', explode(',', $artwork->technique));
+        }
+    @endphp
+    <div class="mt-2 max-h-56 overflow-y-auto border border-gray-300 rounded-md p-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
+        @foreach ($techniques as $technique)
+            <label class="flex items-start gap-2 text-sm text-gray-700 cursor-pointer">
+                <input type="checkbox" name="techniques[]" value="{{ $technique->name }}" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500 mt-0.5"
+                    @if (in_array($technique->name, $selectedTechniques)) checked @endif>
+                <span>
+                    <span class="font-medium">{{ $technique->name }}</span>
+                    @if ($technique->description)
+                        <span class="block text-xs text-gray-500">{{ $technique->description }}</span>
+                    @endif
+                </span>
+            </label>
+        @endforeach
+    </div>
+    <x-input-error :messages="$errors->get('techniques')" class="mt-2" />
 </div>
 
 <!-- Dimensions -->
