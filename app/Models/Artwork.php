@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
     'description',
     'location',
     'owner',
+    'image',
     'short_url',
     'qr_code',
 ])]

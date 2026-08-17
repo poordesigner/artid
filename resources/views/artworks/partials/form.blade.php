@@ -5,6 +5,26 @@
     <x-input-error :messages="$errors->get('title')" class="mt-2" />
 </div>
 
+@if (! isset($artwork) || ! $artwork)
+<!-- Artwork ID (create only, permanent) -->
+<div class="mt-4">
+    <x-input-label for="artwork_id" :value="__('Artwork ID (optional)')" />
+    <x-text-input id="artwork_id" class="block mt-1 w-full" type="text" name="artwork_id" :value="old('artwork_id')" placeholder="Ej: NATURAI-3.0" />
+    <x-input-error :messages="$errors->get('artwork_id')" class="mt-2" />
+    <p class="mt-1 text-xs text-gray-500">{{ __('Uppercase, dashes or dots. If empty, it is generated from the title.') }}</p>
+</div>
+@endif
+
+<!-- Image -->
+<div class="mt-4">
+    <x-input-label for="image" :value="__('Image')" />
+    <input id="image" name="image" type="file" accept="image/*" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full text-sm text-gray-700" />
+    <x-input-error :messages="$errors->get('image')" class="mt-2" />
+    @if (isset($artwork) && $artwork && $artwork->image)
+        <p class="mt-1 text-xs text-gray-500">{{ __('Current image:') }} <span class="font-mono">{{ $artwork->image }}</span></p>
+    @endif
+</div>
+
 <!-- Year -->
 <div class="mt-4">
     <x-input-label for="year" :value="__('Year')" />

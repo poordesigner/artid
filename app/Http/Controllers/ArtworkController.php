@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Artist;
 use App\Models\Artwork;
+use App\Services\GitHubService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -35,13 +38,42 @@ class ArtworkController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $validated = $request->validate($this->rules());
+        $validated = $request->validate($this->storeRules());
 
-        $request->user()->artworks()->create([
-            ...$validated,
+        $artist = $request->user();
+        $artworkId = $this->resolveArtworkId($validated['title'], $validated['artwork_id'] ?? null);
+
+        $data = [
+            'artist_id' => $artist->id,
+            'artwork_id' => $artworkId,
             'slug' => $this->uniqueSlug($validated['title']),
-            'artwork_id' => $this->uniqueArtworkId(),
-        ]);
+            'title' => $validated['title'],
+            'year' => $validated['year'] ?? null,
+            'edition' => $validated['edition'] ?? null,
+            'status' => $validated['status'],
+            'series' => $validated['series'] ?? null,
+            'technique' => $validated['technique'] ?? null,
+            'dimensions' => $validated['dimensions'] ?? null,
+            'description' => $validated['description'] ?? null,
+            'location' => $validated['location'] ?? null,
+            'owner' => $validated['owner'] ?? null,
+            'image' => null,
+        ];
+
+        $file = $request->file('image');
+        if ($file) {
+            $data['image'] = $artworkId.'.'.$file->extension();
+        }
+
+        if ($artist->github_repo) {
+            try {
+                $this->syncCreate($artist, $artworkId, $data, $file);
+            } catch (\RuntimeException $e) {
+                return back()->withInput()->with('error', 'Error en GitHub: '.$e->getMessage());
+            }
+        }
+
+        Artwork::create($data);
 
         return redirect()->route('artworks.index')->with('status', 'Artwork created.');
     }
@@ -63,7 +95,27 @@ class ArtworkController extends Controller
     {
         $artwork = Auth::user()->artworks()->findOrFail($artwork);
 
-        $artwork->update($request->validate($this->rules()));
+        $validated = $request->validate($this->updateRules());
+
+        $data = $validated;
+        $data['artwork_id'] = $artwork->artwork_id;
+        $data['image'] = $artwork->image;
+
+        $file = $request->file('image');
+        if ($file) {
+            $data['image'] = $artwork->artwork_id.'.'.$file->extension();
+        }
+
+        $artist = Auth::user();
+        if ($artist->github_repo) {
+            try {
+                $this->syncUpdate($artist, $artwork, $data, $file);
+            } catch (\RuntimeException $e) {
+                return back()->withInput()->with('error', 'Error en GitHub: '.$e->getMessage());
+            }
+        }
+
+        $artwork->update($data);
 
         return redirect()->route('artworks.index')->with('status', 'Artwork updated.');
     }
@@ -73,15 +125,143 @@ class ArtworkController extends Controller
      */
     public function destroy(string $artwork): RedirectResponse
     {
-        Auth::user()->artworks()->findOrFail($artwork)->delete();
+        $artwork = Auth::user()->artworks()->findOrFail($artwork);
+        $artist = Auth::user();
+
+        if ($artist->github_repo) {
+            try {
+                $this->syncDelete($artist, $artwork);
+            } catch (\RuntimeException $e) {
+                return back()->with('error', 'Error en GitHub: '.$e->getMessage());
+            }
+        }
+
+        $artwork->delete();
 
         return redirect()->route('artworks.index')->with('status', 'Artwork deleted.');
     }
 
     /**
-     * Validation rules shared between store and update.
+     * Commit a new artwork to the artist's repository.
+     *
+     * @param  array<string, mixed>  $data
      */
-    private function rules(): array
+    private function syncCreate(Artist $artist, string $artworkId, array $data, ?UploadedFile $file): void
+    {
+        $service = new GitHubService($artist->github_token);
+        $repo = $artist->github_repo;
+        $path = "artworks/$artworkId";
+
+        $service->putFile($repo, "$path/metadata.json", $this->metadataJson($data, $artist), "Create artwork $artworkId");
+
+        if ($file) {
+            $service->putFile($repo, "$path/{$data['image']}", (string) $file->get(), "Add image {$data['image']}");
+        }
+
+        $ids = $service->getManifest($repo);
+        if (! in_array($artworkId, $ids, true)) {
+            $ids[] = $artworkId;
+            $service->saveManifest($repo, $ids, "Add $artworkId to manifest");
+        }
+    }
+
+    /**
+     * Commit artwork updates to the artist's repository.
+     *
+     * @param  array<string, mixed>  $data
+     */
+    private function syncUpdate(Artist $artist, Artwork $artwork, array $data, ?UploadedFile $file): void
+    {
+        $service = new GitHubService($artist->github_token);
+        $repo = $artist->github_repo;
+        $path = "artworks/{$artwork->artwork_id}";
+
+        $service->putFile($repo, "$path/metadata.json", $this->metadataJson($data, $artist), "Update artwork {$artwork->artwork_id}");
+
+        if ($file) {
+            $service->putFile($repo, "$path/{$data['image']}", (string) $file->get(), "Update image {$data['image']}");
+
+            if ($artwork->image && $artwork->image !== $data['image']) {
+                $service->deleteFile($repo, "$path/{$artwork->image}", 'Remove old image');
+            }
+        }
+    }
+
+    /**
+     * Remove an artwork from the artist's repository.
+     */
+    private function syncDelete(Artist $artist, Artwork $artwork): void
+    {
+        $service = new GitHubService($artist->github_token);
+        $repo = $artist->github_repo;
+        $path = "artworks/{$artwork->artwork_id}";
+
+        $service->deleteFile($repo, "$path/metadata.json", "Delete artwork {$artwork->artwork_id}");
+
+        if ($artwork->image) {
+            $service->deleteFile($repo, "$path/{$artwork->image}", 'Delete image');
+        }
+
+        $ids = $service->getManifest($repo);
+        $ids = array_values(array_diff($ids, [$artwork->artwork_id]));
+        $service->saveManifest($repo, $ids, "Remove {$artwork->artwork_id}");
+    }
+
+    /**
+     * Build the metadata.json content.
+     *
+     * @param  array<string, mixed>  $data
+     */
+    private function metadataJson(array $data, Artist $artist): string
+    {
+        $fields = [
+            'artwork_id' => $data['artwork_id'],
+            'title' => $data['title'],
+            'artist' => '@'.($artist->github_nickname ?: $artist->name),
+            'year' => $data['year'] ?? null,
+            'edition' => $data['edition'] ?? null,
+            'status' => $data['status'] ?? null,
+            'series' => $data['series'] ?? null,
+            'technique' => $data['technique'] ?? null,
+            'dimensions' => $data['dimensions'] ?? null,
+            'description' => $data['description'] ?? null,
+            'location' => $data['location'] ?? null,
+            'owner' => $data['owner'] ?? null,
+            'image' => $data['image'] ?? null,
+        ];
+
+        $fields = array_filter($fields, fn ($v) => $v !== null && $v !== '');
+
+        return json_encode($fields, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    }
+
+    /**
+     * Validation rules for creating an artwork (metadata + artwork_id + image).
+     */
+    private function storeRules(): array
+    {
+        return [
+            ...$this->metadataRules(),
+            'artwork_id' => ['nullable', 'string', 'max:100', 'regex:/^[A-Za-z0-9._-]+$/'],
+            'image' => ['nullable', 'image', 'max:20480'],
+        ];
+    }
+
+    /**
+     * Validation rules for updating an artwork (metadata + image).
+     */
+    private function updateRules(): array
+    {
+        return [
+            ...$this->metadataRules(),
+            'image' => ['nullable', 'image', 'max:20480'],
+        ];
+    }
+
+    /**
+     * Shared metadata validation rules.
+     */
+    private function metadataRules(): array
     {
         return [
             'title' => ['required', 'string', 'max:255'],
@@ -95,6 +275,24 @@ class ArtworkController extends Controller
             'location' => ['nullable', 'string', 'max:255'],
             'owner' => ['nullable', 'string', 'max:255'],
         ];
+    }
+
+    /**
+     * Resolve a unique, permanent artwork_id (uppercase, dashes/dots).
+     */
+    private function resolveArtworkId(string $title, ?string $provided): string
+    {
+        $base = strtoupper($provided ?: Str::slug($title, '-'));
+        $base = $base ?: 'OBRA';
+
+        $id = $base;
+        $counter = 1;
+
+        while (Artwork::where('artwork_id', $id)->exists()) {
+            $id = $base.'-'.($counter++);
+        }
+
+        return $id;
     }
 
     /**
@@ -112,17 +310,5 @@ class ArtworkController extends Controller
         }
 
         return $slug;
-    }
-
-    /**
-     * Generate a unique permanent identifier for the artwork.
-     */
-    private function uniqueArtworkId(): string
-    {
-        do {
-            $code = strtoupper(Str::random(12));
-        } while (Artwork::where('artwork_id', $code)->exists());
-
-        return $code;
     }
 }
