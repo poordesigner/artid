@@ -96,9 +96,9 @@ class ArtworkController extends Controller
     {
         $artwork = Auth::user()->artworks()->findOrFail($artwork);
 
-        $png = QrCode::format('png')->size(600)->margin(2)->generate($this->publicUrl($artwork));
+        $svg = QrCode::format('svg')->size(600)->margin(2)->generate($this->publicUrl($artwork));
 
-        return response($png, 200, ['Content-Type' => 'image/png']);
+        return response($svg, 200, ['Content-Type' => 'image/svg+xml']);
     }
 
     /**
