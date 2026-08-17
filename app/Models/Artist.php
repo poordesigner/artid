@@ -22,6 +22,11 @@ class Artist extends Authenticatable
         return $this->hasMany(Artwork::class);
     }
 
+    public function series(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Series::class);
+    }
+
     /**
      * Get the attributes that should be cast.
      *

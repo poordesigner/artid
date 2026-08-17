@@ -155,13 +155,19 @@ class GitHubController extends Controller
                 $slug = $slug.'-'.Str::lower($id);
             }
 
+            $seriesName = $meta['series'] ?? null;
+            $seriesId = $seriesName
+                ? $artist->series()->firstOrCreate(['name' => $seriesName])->id
+                : null;
+
             $artwork->fill([
                 'title' => $meta['title'] ?? $id,
                 'slug' => $artwork->slug ?: $slug,
                 'year' => isset($meta['year']) ? (string) $meta['year'] : null,
                 'edition' => $meta['edition'] ?? null,
                 'status' => in_array($meta['status'] ?? 'created', Artwork::STATUSES, true) ? $meta['status'] : 'created',
-                'series' => $meta['series'] ?? null,
+                'series' => $seriesName,
+                'series_id' => $seriesId,
                 'technique' => $meta['technique'] ?? null,
                 'dimensions' => $meta['dimensions'] ?? null,
                 'description' => $meta['description'] ?? null,

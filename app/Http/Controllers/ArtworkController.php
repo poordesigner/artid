@@ -33,8 +33,9 @@ class ArtworkController extends Controller
     public function create(): View
     {
         $techniques = Technique::orderBy('name')->get();
+        $seriesList = Auth::user()->series()->orderBy('name')->get();
 
-        return view('artworks.create', compact('techniques'));
+        return view('artworks.create', compact('techniques', 'seriesList'));
     }
 
     /**
@@ -47,6 +48,8 @@ class ArtworkController extends Controller
         $artist = $request->user();
         $artworkId = $this->resolveArtworkId($validated['title'], $validated['artwork_id'] ?? null);
 
+        $series = $validated['series_id'] ? $artist->series()->findOrFail($validated['series_id']) : null;
+
         $data = [
             'artist_id' => $artist->id,
             'artwork_id' => $artworkId,
@@ -54,13 +57,12 @@ class ArtworkController extends Controller
             'title' => $validated['title'],
             'year' => $validated['year'] ?? null,
             'edition' => $validated['edition'] ?? null,
-            'status' => $validated['status'],
-            'series' => $validated['series'] ?? null,
+            'status' => 'created',
+            'series_id' => $series?->id,
+            'series' => $series?->name,
             'technique' => $this->techniquesToString($validated['techniques'] ?? []),
             'dimensions' => $validated['dimensions'] ?? null,
             'description' => $validated['description'] ?? null,
-            'location' => $validated['location'] ?? null,
-            'owner' => $validated['owner'] ?? null,
             'image' => null,
         ];
 
@@ -89,8 +91,9 @@ class ArtworkController extends Controller
     {
         $artwork = Auth::user()->artworks()->findOrFail($artwork);
         $techniques = Technique::orderBy('name')->get();
+        $seriesList = Auth::user()->series()->orderBy('name')->get();
 
-        return view('artworks.edit', compact('artwork', 'techniques'));
+        return view('artworks.edit', compact('artwork', 'techniques', 'seriesList'));
     }
 
     /**
@@ -136,11 +139,15 @@ class ArtworkController extends Controller
 
         $validated = $request->validate($this->updateRules());
 
+        $series = $validated['series_id'] ? Auth::user()->series()->findOrFail($validated['series_id']) : null;
+
         $data = $validated;
         unset($data['techniques']);
         $data['artwork_id'] = $artwork->artwork_id;
         $data['image'] = $artwork->image;
         $data['technique'] = $this->techniquesToString($validated['techniques'] ?? []);
+        $data['series'] = $series?->name;
+        $data['status'] = $artwork->status;
 
         $file = $request->file('image');
         if ($file) {
@@ -266,8 +273,6 @@ class ArtworkController extends Controller
             'technique' => $data['technique'] ?? null,
             'dimensions' => $data['dimensions'] ?? null,
             'description' => $data['description'] ?? null,
-            'location' => $data['location'] ?? null,
-            'owner' => $data['owner'] ?? null,
             'image' => $data['image'] ?? null,
         ];
 
@@ -284,6 +289,7 @@ class ArtworkController extends Controller
         return [
             ...$this->metadataRules(),
             'artwork_id' => ['nullable', 'string', 'max:100', 'regex:/^[A-Za-z0-9._-]+$/'],
+            'series_id' => ['nullable', 'integer'],
             'techniques' => ['nullable', 'array'],
             'techniques.*' => ['string', 'max:255'],
             'image' => ['nullable', 'image', 'max:20480'],
@@ -297,6 +303,7 @@ class ArtworkController extends Controller
     {
         return [
             ...$this->metadataRules(),
+            'series_id' => ['nullable', 'integer'],
             'techniques' => ['nullable', 'array'],
             'techniques.*' => ['string', 'max:255'],
             'image' => ['nullable', 'image', 'max:20480'],
@@ -312,12 +319,8 @@ class ArtworkController extends Controller
             'title' => ['required', 'string', 'max:255'],
             'year' => ['nullable', 'string', 'max:50'],
             'edition' => ['nullable', 'string', 'max:255'],
-            'status' => ['required', Rule::in(Artwork::STATUSES)],
-            'series' => ['nullable', 'string', 'max:255'],
             'dimensions' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
-            'location' => ['nullable', 'string', 'max:255'],
-            'owner' => ['nullable', 'string', 'max:255'],
         ];
     }
 

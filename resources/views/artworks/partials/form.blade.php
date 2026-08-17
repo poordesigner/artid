@@ -41,21 +41,18 @@
 </div>
 
 <!-- Status -->
-<div class="mt-4">
-    <x-input-label for="status" :value="__('Status')" />
-    <select id="status" name="status" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full">
-        @foreach (\App\Models\Artwork::STATUSES as $status)
-            <option value="{{ $status }}" @selected(old('status', $artwork->status ?? 'created') === $status)>{{ ucfirst($status) }}</option>
-        @endforeach
-    </select>
-    <x-input-error :messages="$errors->get('status')" class="mt-2" />
-</div>
+<!-- (oculto por ahora: se deriva del historial) -->
 
 <!-- Series -->
 <div class="mt-4">
-    <x-input-label for="series" :value="__('Series')" />
-    <x-text-input id="series" class="block mt-1 w-full" type="text" name="series" :value="old('series', $artwork->series ?? '')" />
-    <x-input-error :messages="$errors->get('series')" class="mt-2" />
+    <x-input-label for="series_id" :value="__('Series')" />
+    <select id="series_id" name="series_id" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full">
+        <option value="">{{ __('None') }}</option>
+        @foreach ($seriesList as $item)
+            <option value="{{ $item->id }}" @selected((int) old('series_id', $artwork->series_id ?? 0) === $item->id)>{{ $item->name }}</option>
+        @endforeach
+    </select>
+    <x-input-error :messages="$errors->get('series_id')" class="mt-2" />
 </div>
 
 <!-- Technique -->
@@ -96,18 +93,4 @@
     <x-input-label for="description" :value="__('Description')" />
     <textarea id="description" name="description" rows="4" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full">{{ old('description', $artwork->description ?? '') }}</textarea>
     <x-input-error :messages="$errors->get('description')" class="mt-2" />
-</div>
-
-<!-- Location -->
-<div class="mt-4">
-    <x-input-label for="location" :value="__('Location')" />
-    <x-text-input id="location" class="block mt-1 w-full" type="text" name="location" :value="old('location', $artwork->location ?? '')" />
-    <x-input-error :messages="$errors->get('location')" class="mt-2" />
-</div>
-
-<!-- Owner -->
-<div class="mt-4">
-    <x-input-label for="owner" :value="__('Owner')" />
-    <x-text-input id="owner" class="block mt-1 w-full" type="text" name="owner" :value="old('owner', $artwork->owner ?? '')" />
-    <x-input-error :messages="$errors->get('owner')" class="mt-2" />
 </div>

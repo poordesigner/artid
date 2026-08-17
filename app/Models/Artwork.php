@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
     'edition',
     'status',
     'series',
+    'series_id',
     'technique',
     'dimensions',
     'description',
@@ -37,5 +38,10 @@ class Artwork extends Model
     public function artist(): BelongsTo
     {
         return $this->belongsTo(Artist::class);
+    }
+
+    public function series(): BelongsTo
+    {
+        return $this->belongsTo(Series::class);
     }
 }

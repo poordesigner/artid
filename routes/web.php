@@ -3,6 +3,7 @@
 use App\Http\Controllers\ArtworkController;
 use App\Http\Controllers\Auth\GitHubController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SeriesController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -34,6 +35,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/artworks/{artwork}/image', [ArtworkController::class, 'image'])->name('artworks.image');
     Route::patch('/artworks/{artwork}', [ArtworkController::class, 'update'])->name('artworks.update');
     Route::delete('/artworks/{artwork}', [ArtworkController::class, 'destroy'])->name('artworks.destroy');
+
+    Route::get('/series', [SeriesController::class, 'index'])->name('series.index');
+    Route::post('/series', [SeriesController::class, 'store'])->name('series.store');
+    Route::patch('/series/{series}', [SeriesController::class, 'update'])->name('series.update');
+    Route::delete('/series/{series}', [SeriesController::class, 'destroy'])->name('series.destroy');
 });
 
 require __DIR__.'/auth.php';
