@@ -78,32 +78,10 @@
             <!-- Exhibitions -->
             <div class="mt-6 bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6">
-                    <h3 class="font-semibold text-lg text-gray-900">{{ __('Exhibitions') }}</h3>
-
-                    <form method="POST" action="{{ route('exhibitions.store', $artwork) }}" class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        @csrf
-                        <div>
-                            <x-input-label for="name" :value="__('Name')" />
-                            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required />
-                            <x-input-error :messages="$errors->get('name')" class="mt-2" />
-                        </div>
-                        <div>
-                            <x-input-label for="date" :value="__('Date')" />
-                            <x-text-input id="date" class="block mt-1 w-full" type="date" name="date" :value="old('date')" />
-                            <x-input-error :messages="$errors->get('date')" class="mt-2" />
-                        </div>
-                        <div class="sm:col-span-2">
-                            <x-input-label for="description" :value="__('Description')" />
-                            <textarea id="description" name="description" rows="2" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full">{{ old('description') }}</textarea>
-                        </div>
-                        <div class="sm:col-span-2">
-                            <x-input-label for="links" :value="__('Links')" />
-                            <x-text-input id="links" class="block mt-1 w-full" type="text" name="links" :value="old('links')" placeholder="https://..." />
-                        </div>
-                        <div class="sm:col-span-2 flex justify-end">
-                            <x-primary-button>{{ __('Add exhibition') }}</x-primary-button>
-                        </div>
-                    </form>
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-semibold text-lg text-gray-900">{{ __('Exhibitions') }}</h3>
+                        <a href="{{ route('exhibitions.create', $artwork) }}" class="text-sm text-indigo-600 hover:text-indigo-900 font-medium">{{ __('+ Add exhibition') }}</a>
+                    </div>
 
                     @if ($artwork->exhibitions->isEmpty())
                         <p class="mt-4 text-sm text-gray-500">{{ __('No exhibitions yet.') }}</p>
@@ -132,39 +110,10 @@
             <!-- Ownership -->
             <div class="mt-6 bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6">
-                    <h3 class="font-semibold text-lg text-gray-900">{{ __('Ownership / Provenance') }}</h3>
-
-                    <form method="POST" action="{{ route('ownerships.store', $artwork) }}" class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        @csrf
-                        <div>
-                            <x-input-label for="type" :value="__('Type')" />
-                            <select id="type" name="type" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full">
-                                <option value="initial">{{ __('Initial owner (artist)') }}</option>
-                                <option value="transfer" @selected(old('type') === 'transfer')>{{ __('Transfer / Sale') }}</option>
-                            </select>
-                        </div>
-                        <div>
-                            <x-input-label for="owner_name" :value="__('Owner name')" />
-                            <x-text-input id="owner_name" class="block mt-1 w-full" type="text" name="owner_name" :value="old('owner_name')" required />
-                            <x-input-error :messages="$errors->get('owner_name')" class="mt-2" />
-                        </div>
-                        <div>
-                            <x-input-label for="owner_email" :value="__('Owner email (optional)')" />
-                            <x-text-input id="owner_email" class="block mt-1 w-full" type="email" name="owner_email" :value="old('owner_email')" />
-                            <x-input-error :messages="$errors->get('owner_email')" class="mt-2" />
-                        </div>
-                        <div>
-                            <x-input-label for="transferred_at" :value="__('Date')" />
-                            <x-text-input id="transferred_at" class="block mt-1 w-full" type="date" name="transferred_at" :value="old('transferred_at')" />
-                        </div>
-                        <div class="sm:col-span-2">
-                            <x-input-label for="notes" :value="__('Notes')" />
-                            <textarea id="notes" name="notes" rows="2" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full">{{ old('notes') }}</textarea>
-                        </div>
-                        <div class="sm:col-span-2 flex justify-end">
-                            <x-primary-button>{{ __('Add ownership') }}</x-primary-button>
-                        </div>
-                    </form>
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-semibold text-lg text-gray-900">{{ __('Ownership / Provenance') }}</h3>
+                        <a href="{{ route('ownerships.create', $artwork) }}" class="text-sm text-indigo-600 hover:text-indigo-900 font-medium">{{ __('+ Add ownership') }}</a>
+                    </div>
 
                     @if ($artwork->ownerships->isEmpty())
                         <p class="mt-4 text-sm text-gray-500">{{ __('No ownership records yet.') }}</p>

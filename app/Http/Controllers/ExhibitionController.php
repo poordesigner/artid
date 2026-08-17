@@ -7,9 +7,20 @@ use App\Services\GitHubService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class ExhibitionController extends Controller
 {
+    /**
+     * Show the form for adding an exhibition.
+     */
+    public function create(string $artwork): View
+    {
+        $artwork = Auth::user()->artworks()->findOrFail($artwork);
+
+        return view('exhibitions.create', compact('artwork'));
+    }
+
     /**
      * Store a newly created exhibition.
      */

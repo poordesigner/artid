@@ -39,9 +39,11 @@ Route::middleware('auth')->group(function () {
     Route::patch('/artworks/{artwork}', [ArtworkController::class, 'update'])->name('artworks.update');
     Route::delete('/artworks/{artwork}', [ArtworkController::class, 'destroy'])->name('artworks.destroy');
 
+    Route::get('/artworks/{artwork}/exhibitions/create', [ExhibitionController::class, 'create'])->name('exhibitions.create');
     Route::post('/artworks/{artwork}/exhibitions', [ExhibitionController::class, 'store'])->name('exhibitions.store');
     Route::delete('/exhibitions/{exhibition}', [ExhibitionController::class, 'destroy'])->name('exhibitions.destroy');
 
+    Route::get('/artworks/{artwork}/ownerships/create', [OwnershipController::class, 'create'])->name('ownerships.create');
     Route::post('/artworks/{artwork}/ownerships', [OwnershipController::class, 'store'])->name('ownerships.store');
     Route::post('/ownerships/{ownership}/reveal', [OwnershipController::class, 'reveal'])->name('ownerships.reveal');
     Route::delete('/ownerships/{ownership}', [OwnershipController::class, 'destroy'])->name('ownerships.destroy');

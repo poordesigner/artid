@@ -10,9 +10,20 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Illuminate\View\View;
 
 class OwnershipController extends Controller
 {
+    /**
+     * Show the form for adding an ownership record.
+     */
+    public function create(string $artwork): View
+    {
+        $artwork = Auth::user()->artworks()->findOrFail($artwork);
+
+        return view('ownerships.create', compact('artwork'));
+    }
+
     /**
      * Store a new ownership record.
      */
