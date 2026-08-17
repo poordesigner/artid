@@ -24,6 +24,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/github', [GitHubController::class, 'settings'])->name('github.settings');
     Route::post('/github/link', [GitHubController::class, 'linkRepo'])->name('github.link');
     Route::post('/github/create', [GitHubController::class, 'createRepo'])->name('github.create');
+    Route::post('/github/sync', [GitHubController::class, 'sync'])->name('github.sync');
 
     Route::get('/artworks', [ArtworkController::class, 'index'])->name('artworks.index');
     Route::get('/artworks/create', [ArtworkController::class, 'create'])->name('artworks.create');

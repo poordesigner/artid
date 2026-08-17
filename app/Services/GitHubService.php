@@ -156,4 +156,39 @@ class GitHubService
             $message
         );
     }
+
+    /**
+     * List the artwork IDs present in the repository.
+     * Prefers the manifest; falls back to scanning the artworks/ folder.
+     *
+     * @return array<int, string>
+     */
+    public function listArtworkIds(string $repo): array
+    {
+        $ids = $this->getManifest($repo);
+
+        if (! empty($ids)) {
+            return $ids;
+        }
+
+        $res = $this->client()->get("https://api.github.com/repos/$repo/contents/artworks");
+
+        if ($res->failed()) {
+            return [];
+        }
+
+        $ids = [];
+        foreach ($res->json() as $item) {
+            if (($item['type'] ?? null) !== 'dir') {
+                continue;
+            }
+
+            $name = (string) $item['name'];
+            if ($this->getFile($repo, "artworks/$name/metadata.json")) {
+                $ids[] = $name;
+            }
+        }
+
+        return $ids;
+    }
 }

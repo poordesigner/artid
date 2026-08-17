@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\Artist;
+use App\Models\Artwork;
 use App\Services\GitHubService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -74,7 +76,10 @@ class GitHubController extends Controller
 
         $request->user()->update(['github_repo' => $validated['repo']]);
 
-        return redirect()->route('github.settings')->with('status', 'Repositorio vinculado.');
+        $imported = $this->importArtworks($request->user());
+
+        return redirect()->route('github.settings')
+            ->with('status', "Repositorio vinculado. {$imported} obras importadas.");
     }
 
     /**
@@ -97,5 +102,78 @@ class GitHubController extends Controller
         $artist->update(['github_repo' => $fullName]);
 
         return redirect()->route('github.settings')->with('status', 'Repositorio creado y vinculado.');
+    }
+
+    /**
+     * Re-sync the local cache with the artworks in the linked repository.
+     */
+    public function sync(Request $request): RedirectResponse
+    {
+        $artist = $request->user();
+
+        if (! $artist->github_repo) {
+            return redirect()->route('github.settings')->with('error', 'Primero vinculá un repositorio.');
+        }
+
+        try {
+            $imported = $this->importArtworks($artist);
+        } catch (\RuntimeException $e) {
+            return redirect()->route('github.settings')->with('error', 'Error en GitHub: '.$e->getMessage());
+        }
+
+        return redirect()->route('artworks.index')->with('status', "Sincronizado: {$imported} obras.");
+    }
+
+    /**
+     * Import the repository's artworks into the local cache.
+     */
+    private function importArtworks(Artist $artist): int
+    {
+        $service = new GitHubService($artist->github_token);
+        $repo = $artist->github_repo;
+
+        $ids = $service->listArtworkIds($repo);
+        $imported = 0;
+
+        foreach ($ids as $id) {
+            $file = $service->getFile($repo, "artworks/$id/metadata.json");
+
+            if (! $file) {
+                continue;
+            }
+
+            $meta = json_decode($file['content'], true);
+
+            if (! is_array($meta)) {
+                continue;
+            }
+
+            $artwork = $artist->artworks()->firstOrNew(['artwork_id' => $id]);
+
+            $slug = Str::slug($meta['title'] ?? $id) ?: 'obra';
+            if (Artwork::where('slug', $slug)->where('id', '!=', $artwork->id)->exists()) {
+                $slug = $slug.'-'.Str::lower($id);
+            }
+
+            $artwork->fill([
+                'title' => $meta['title'] ?? $id,
+                'slug' => $artwork->slug ?: $slug,
+                'year' => isset($meta['year']) ? (string) $meta['year'] : null,
+                'edition' => $meta['edition'] ?? null,
+                'status' => in_array($meta['status'] ?? 'created', Artwork::STATUSES, true) ? $meta['status'] : 'created',
+                'series' => $meta['series'] ?? null,
+                'technique' => $meta['technique'] ?? null,
+                'dimensions' => $meta['dimensions'] ?? null,
+                'description' => $meta['description'] ?? null,
+                'location' => $meta['location'] ?? null,
+                'owner' => $meta['owner'] ?? null,
+                'image' => $meta['image'] ?? null,
+            ]);
+
+            $artwork->save();
+            $imported++;
+        }
+
+        return $imported;
     }
 }
