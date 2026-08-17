@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class ArtworkController extends Controller
 {
@@ -86,6 +87,18 @@ class ArtworkController extends Controller
         $artwork = Auth::user()->artworks()->findOrFail($artwork);
 
         return view('artworks.edit', compact('artwork'));
+    }
+
+    /**
+     * Render the QR code for the specified artwork.
+     */
+    public function qr(string $artwork): \Illuminate\Http\Response
+    {
+        $artwork = Auth::user()->artworks()->findOrFail($artwork);
+
+        $png = QrCode::format('png')->size(600)->margin(2)->generate($this->publicUrl($artwork));
+
+        return response($png, 200, ['Content-Type' => 'image/png']);
     }
 
     /**
@@ -293,6 +306,16 @@ class ArtworkController extends Controller
         }
 
         return $id;
+    }
+
+    /**
+     * Build the public URL encoded in the artwork's QR.
+     */
+    private function publicUrl(Artwork $artwork): string
+    {
+        $base = rtrim(env('ARTID_SHORT_DOMAIN', 'https://tatomico.s.gy'), '/');
+
+        return $base.'?art='.$artwork->artwork_id;
     }
 
     /**

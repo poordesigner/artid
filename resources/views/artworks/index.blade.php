@@ -41,7 +41,8 @@
                                             <td class="px-4 py-3 text-sm text-gray-600">{{ $artwork->year ?? '—' }}</td>
                                             <td class="px-4 py-3 text-sm text-gray-600">{{ ucfirst($artwork->status) }}</td>
                                             <td class="px-4 py-3 text-sm text-right whitespace-nowrap">
-                                                <a href="{{ route('artworks.edit', $artwork) }}" class="text-indigo-600 hover:text-indigo-900">{{ __('Edit') }}</a>
+                                                <a href="{{ route('artworks.qr', $artwork) }}" target="_blank" class="text-gray-600 hover:text-gray-900">{{ __('QR') }}</a>
+                                                <a href="{{ route('artworks.edit', $artwork) }}" class="ms-3 text-indigo-600 hover:text-indigo-900">{{ __('Edit') }}</a>
                                                 <form method="POST" action="{{ route('artworks.destroy', $artwork) }}" class="inline" onsubmit="return confirm('{{ __('Are you sure?') }}');">
                                                     @csrf
                                                     @method('DELETE')
