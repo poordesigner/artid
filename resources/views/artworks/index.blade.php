@@ -28,6 +28,7 @@
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('QR') }}</th>
                                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Title') }}</th>
                                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Year') }}</th>
                                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Status') }}</th>
@@ -37,12 +38,19 @@
                                 <tbody class="divide-y divide-gray-200">
                                     @foreach ($artworks as $artwork)
                                         <tr>
-                                            <td class="px-4 py-3 text-sm text-gray-900">{{ $artwork->title }}</td>
+                                            <td class="px-4 py-3">
+                                                <a href="{{ route('artworks.qr', $artwork) }}" target="_blank" title="{{ $artwork->artwork_id }}">
+                                                    <img src="{{ route('artworks.qr', $artwork) }}" alt="QR {{ $artwork->artwork_id }}" class="h-16 w-16 object-contain" />
+                                                </a>
+                                            </td>
+                                            <td class="px-4 py-3 text-sm text-gray-900">
+                                                {{ $artwork->title }}
+                                                <span class="block font-mono text-xs text-gray-400">{{ $artwork->artwork_id }}</span>
+                                            </td>
                                             <td class="px-4 py-3 text-sm text-gray-600">{{ $artwork->year ?? '—' }}</td>
                                             <td class="px-4 py-3 text-sm text-gray-600">{{ ucfirst($artwork->status) }}</td>
                                             <td class="px-4 py-3 text-sm text-right whitespace-nowrap">
-                                                <a href="{{ route('artworks.qr', $artwork) }}" target="_blank" class="text-gray-600 hover:text-gray-900">{{ __('QR') }}</a>
-                                                <a href="{{ route('artworks.edit', $artwork) }}" class="ms-3 text-indigo-600 hover:text-indigo-900">{{ __('Edit') }}</a>
+                                                <a href="{{ route('artworks.edit', $artwork) }}" class="text-indigo-600 hover:text-indigo-900">{{ __('Edit') }}</a>
                                                 <form method="POST" action="{{ route('artworks.destroy', $artwork) }}" class="inline" onsubmit="return confirm('{{ __('Are you sure?') }}');">
                                                     @csrf
                                                     @method('DELETE')
