@@ -27,6 +27,17 @@
                         <p class="mt-2 text-gray-700">
                             {{ __('Connected as') }} <span class="font-mono text-gray-900">&#64;{{ Auth::user()->github_nickname }}</span>
                         </p>
+                        <p class="mt-2 text-gray-700">
+                            {{ __('Repository:') }}
+                            @if (Auth::user()->github_repo)
+                                <span class="font-mono text-gray-900">{{ Auth::user()->github_repo }}</span>
+                            @else
+                                <span class="text-gray-500">{{ __('not set') }}</span>
+                            @endif
+                        </p>
+                        <a href="{{ route('github.settings') }}" class="mt-4 inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition ease-in-out duration-150">
+                            {{ __('Configure repository') }}
+                        </a>
                     @else
                         <p class="mt-2 text-gray-700">
                             {{ __('Connect your GitHub account to set up your artwork framework.') }}

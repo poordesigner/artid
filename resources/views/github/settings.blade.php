@@ -1,0 +1,74 @@
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('GitHub Repository') }}
+        </h2>
+    </x-slot>
+
+    <div class="py-12">
+        <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
+            @if (session('status'))
+                <div class="mb-4 p-4 bg-green-50 text-green-700 rounded-md">{{ session('status') }}</div>
+            @endif
+
+            @if (session('error'))
+                <div class="mb-4 p-4 bg-red-50 text-red-700 rounded-md">{{ session('error') }}</div>
+            @endif
+
+            @if (Auth::user()->github_repo)
+                <div class="mb-6 p-4 bg-gray-50 border border-gray-200 rounded-lg">
+                    <p class="text-sm text-gray-700">
+                        {{ __('Current repository:') }}
+                        <span class="font-mono font-semibold text-gray-900">{{ Auth::user()->github_repo }}</span>
+                    </p>
+                </div>
+            @endif
+
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6">
+                    <h3 class="font-semibold text-lg text-gray-900">{{ __('Link an existing repository') }}</h3>
+                    <p class="mt-1 text-sm text-gray-600">{{ __('Choose one of your GitHub repositories to store your artwork framework.') }}</p>
+
+                    @if (empty($repos))
+                        <p class="mt-4 text-sm text-gray-500">{{ __('No repositories found.') }}</p>
+                    @else
+                        <ul class="mt-4 divide-y divide-gray-200 border border-gray-200 rounded-lg">
+                            @foreach ($repos as $repo)
+                                <li class="flex items-center justify-between px-4 py-3">
+                                    <span class="font-mono text-sm text-gray-900">{{ $repo['full_name'] }}</span>
+                                    <form method="POST" action="{{ route('github.link') }}">
+                                        @csrf
+                                        <input type="hidden" name="repo" value="{{ $repo['full_name'] }}">
+                                        <button type="submit" class="text-sm text-indigo-600 hover:text-indigo-900 font-medium">
+                                            {{ __('Link') }}
+                                        </button>
+                                    </form>
+                                </li>
+                            @endforeach
+                        </ul>
+                    @endif
+                </div>
+            </div>
+
+            <div class="mt-6 bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6">
+                    <h3 class="font-semibold text-lg text-gray-900">{{ __('Create a new repository') }}</h3>
+                    <p class="mt-1 text-sm text-gray-600">{{ __('ARTid will create a new repository in your GitHub account.') }}</p>
+
+                    <form method="POST" action="{{ route('github.create') }}" class="mt-4">
+                        @csrf
+                        <div>
+                            <x-input-label for="name" :value="__('Repository name')" />
+                            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required />
+                            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+                        </div>
+
+                        <div class="mt-4 flex justify-end">
+                            <x-primary-button>{{ __('Create') }}</x-primary-button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</x-app-layout>

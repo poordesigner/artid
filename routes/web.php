@@ -21,6 +21,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/auth/github/redirect', [GitHubController::class, 'redirect'])->name('auth.github.redirect');
     Route::get('/auth/github/callback', [GitHubController::class, 'callback'])->name('auth.github.callback');
 
+    Route::get('/github', [GitHubController::class, 'settings'])->name('github.settings');
+    Route::post('/github/link', [GitHubController::class, 'linkRepo'])->name('github.link');
+    Route::post('/github/create', [GitHubController::class, 'createRepo'])->name('github.create');
+
     Route::get('/artworks', [ArtworkController::class, 'index'])->name('artworks.index');
     Route::get('/artworks/create', [ArtworkController::class, 'create'])->name('artworks.create');
     Route::post('/artworks', [ArtworkController::class, 'store'])->name('artworks.store');
