@@ -113,9 +113,10 @@ class ArtworkController extends Controller
      */
     public function qr(string $artwork): \Illuminate\Http\Response
     {
-        $artwork = Auth::user()->artworks()->findOrFail($artwork);
+        $artist = Auth::user();
+        $artwork = $artist->artworks()->findOrFail($artwork);
 
-        $svg = QrCode::format('svg')->size(600)->margin(2)->generate($this->publicUrl($artwork));
+        $svg = QrCode::format('svg')->size(600)->margin(2)->generate($this->publicUrl($artwork, $artist));
 
         return response($svg, 200, ['Content-Type' => 'image/svg+xml']);
     }
@@ -369,9 +370,14 @@ class ArtworkController extends Controller
     /**
      * Build the public URL encoded in the artwork's QR.
      */
-    private function publicUrl(Artwork $artwork): string
+    private function publicUrl(Artwork $artwork, Artist $artist): string
     {
-        $base = rtrim(env('ARTID_SHORT_DOMAIN', 'https://tatomico.s.gy'), '/');
+        $domain = $artist->short_domain ?: env('ARTID_SHORT_DOMAIN', 'https://tatomico.s.gy');
+
+        $base = rtrim($domain, '/');
+        if (! preg_match('~^https?://~', $base)) {
+            $base = 'https://'.$base;
+        }
 
         return $base.'?art='.$artwork->artwork_id;
     }

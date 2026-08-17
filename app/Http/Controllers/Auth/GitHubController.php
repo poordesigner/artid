@@ -163,6 +163,24 @@ class GitHubController extends Controller
     }
 
     /**
+     * Update the artist's short URL domain (short.io).
+     */
+    public function updateShortDomain(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'short_domain' => ['nullable', 'string', 'max:255'],
+        ]);
+
+        $domain = trim((string) $validated['short_domain']);
+        $domain = preg_replace('~^https?://~', '', $domain);
+        $domain = rtrim($domain, '/');
+
+        $request->user()->update(['short_domain' => $domain ?: null]);
+
+        return redirect()->route('github.settings')->with('status', 'Dominio corto actualizado.');
+    }
+
+    /**
      * Import the repository's artworks into the local cache.
      */
     private function importArtworks(Artist $artist): int

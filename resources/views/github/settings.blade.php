@@ -66,6 +66,26 @@
 
             <div class="mt-6 bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6">
+                    <h3 class="font-semibold text-lg text-gray-900">{{ __('Short URL (short.io)') }}</h3>
+                    <p class="mt-1 text-sm text-gray-600">{{ __('Tu dominio corto (sin https://). El QR codificará https://<dominio>?art=<ID>.') }}</p>
+
+                    <form method="POST" action="{{ route('github.short-domain') }}" class="mt-4">
+                        @csrf
+                        <div>
+                            <x-input-label for="short_domain" :value="__('Short domain')" />
+                            <x-text-input id="short_domain" class="block mt-1 w-full" type="text" name="short_domain" :value="old('short_domain', Auth::user()->short_domain)" placeholder="tatomico.s.gy" />
+                            <x-input-error :messages="$errors->get('short_domain')" class="mt-2" />
+                        </div>
+
+                        <div class="mt-4 flex justify-end">
+                            <x-primary-button>{{ __('Save') }}</x-primary-button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="mt-6 bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6">
                     <h3 class="font-semibold text-lg text-gray-900">{{ __('Create a new repository') }}</h3>
                     <p class="mt-1 text-sm text-gray-600">{{ __('ARTid will create a new repository in your GitHub account.') }}</p>
 
