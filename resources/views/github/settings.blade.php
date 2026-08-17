@@ -16,17 +16,25 @@
             @endif
 
             @if (Auth::user()->github_repo)
-                <div class="mb-6 p-4 bg-gray-50 border border-gray-200 rounded-lg flex items-center justify-between">
+                <div class="mb-6 p-4 bg-gray-50 border border-gray-200 rounded-lg flex items-center justify-between gap-4">
                     <p class="text-sm text-gray-700">
                         {{ __('Current repository:') }}
                         <span class="font-mono font-semibold text-gray-900">{{ Auth::user()->github_repo }}</span>
                     </p>
-                    <form method="POST" action="{{ route('github.sync') }}">
-                        @csrf
-                        <button type="submit" class="text-sm text-indigo-600 hover:text-indigo-900 font-medium">
-                            {{ __('Sync artworks') }}
-                        </button>
-                    </form>
+                    <div class="flex items-center gap-4">
+                        <form method="POST" action="{{ route('github.sync-ficha') }}">
+                            @csrf
+                            <button type="submit" class="text-sm text-indigo-600 hover:text-indigo-900 font-medium">
+                                {{ __('Install ficha') }}
+                            </button>
+                        </form>
+                        <form method="POST" action="{{ route('github.sync') }}">
+                            @csrf
+                            <button type="submit" class="text-sm text-indigo-600 hover:text-indigo-900 font-medium">
+                                {{ __('Sync artworks') }}
+                            </button>
+                        </form>
+                    </div>
                 </div>
             @endif
 

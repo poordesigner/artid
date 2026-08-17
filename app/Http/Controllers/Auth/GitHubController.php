@@ -125,6 +125,44 @@ class GitHubController extends Controller
     }
 
     /**
+     * Install the open-source "ficha" files into the artist's repository.
+     */
+    public function syncFicha(Request $request): RedirectResponse
+    {
+        $artist = $request->user();
+
+        if (! $artist->github_repo) {
+            return redirect()->route('github.settings')->with('error', 'Primero vinculá un repositorio.');
+        }
+
+        $service = new GitHubService($artist->github_token);
+        $repo = $artist->github_repo;
+
+        $files = [
+            'index.html' => 'index.html',
+            'redirect.html' => 'redirect.html',
+            'css/style.css' => 'css/style.css',
+            'js/app.js' => 'js/app.js',
+        ];
+
+        try {
+            foreach ($files as $local => $remote) {
+                $path = base_path('ficha/'.$local);
+
+                if (! is_file($path)) {
+                    continue;
+                }
+
+                $service->putFile($repo, $remote, (string) file_get_contents($path), "Sync ficha: $remote");
+            }
+        } catch (\RuntimeException $e) {
+            return redirect()->route('github.settings')->with('error', 'Error en GitHub: '.$e->getMessage());
+        }
+
+        return redirect()->route('github.settings')->with('status', 'Ficha instalada en tu repositorio.');
+    }
+
+    /**
      * Import the repository's artworks into the local cache.
      */
     private function importArtworks(Artist $artist): int
