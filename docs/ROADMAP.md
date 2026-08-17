@@ -1,46 +1,43 @@
-# ARTid — SaaS
+# ARTid — Facilitador de identidad digital para obras de arte
 
-Plataforma SaaS de identidad digital para obras de arte: cada obra física tiene un QR permanente que enlaza a su ficha digital, editable y con historial versionado.
+ARTid ayuda al artista a montar su propio framework de identidad (QR permanente + short URL + ficha pública), siendo el artista **dueño de su información**. El SaaS es el **configurador**.
 
 ## Estado
 
-- **Origen**: evolución del prototipo estático (`arte/` dentro del repo `tachoatomico/portal`).
-- **Decisión**: pasarlo a una plataforma multi-usuario con backend propio.
-- **Stack**: Laravel (PHP-FPM + Postgres + Redis) sobre Coolify.
-- **Repo**: `artid` (cuenta GitHub por definir).
+- **Origen**: prototipo estático (`arte/` dentro del repo `tachoatomico/portal`).
+- **Decisión (revisada)**: ARTid es un **facilitador/configurador**, no un hosting centralizado.
+- **Propiedad**: el artista es dueño de su GitHub, su short.io, su dominio y su ficha.
+- **Stack**: Laravel + MySQL + Redis sobre Coolify.
+- **Repo**: `poordesigner/artid`.
 - **Local**: `C:\opencode\proyectos\bepoor\artid`.
 
 ---
 
 ## Roadmap
 
-### Fase 0 — Fundamentos
-- [ ] Repo `artid` + cuenta GitHub nueva
-- [ ] Proyecto Laravel base (`laravel new` / composer)
-- [ ] Proyecto nuevo en Coolify (app PHP-FPM + postgres + redis)
-- [ ] CI/deploy automático al pushear a `main`
+### Fase 0 — Fundamentos ✅
+- [x] Repo `artid` + cuenta GitHub
+- [x] Laravel base + docker (app/nginx/queue/scheduler/mysql/redis)
+- [x] Deploy automático en Coolify
 
-### Fase 1 — MVP (núcleo multi-usuario)
-- [ ] Modelos: `Artist` (cuenta), `Artwork`, `Edition`
-- [ ] Autenticación: registro/login de artistas (Laravel Breeze/Fortify)
-- [ ] Multi-tenant: todo filtrado por `artist_id`
-- [ ] CRUD de obras (metadata) vía API + web
-- [ ] Storage de imágenes (Cloudflare R2 / S3)
-- [ ] Página pública de obra: `/{slug}` sirviendo desde la DB (reusar diseño ARTid)
-- [ ] Generación de QR por obra
+### Fase 1 — MVP (configurador)
+- [x] Auth de artista (Breeze + Google OAuth)
+- [ ] Vinculación GitHub (OAuth, estilo Coolify)
+- [ ] Configurador: CRUD de obras → commits a GitHub (`metadata.json` + imágenes)
+- [ ] Framework "ficha" open source (descargable / self-host)
+- [ ] Generación de QR (apuntando al short URL del artista)
 
-### Fase 2 — QR permanente + short URL
-- [ ] Integración con API de Short.io (crear link por obra)
-- [ ] QR apunta a short link permanente, no al hosting
+### Fase 2 — Short URL
+- [ ] short.io del artista
+- [ ] QR permanente → short URL
 
-### Fase 3 — Dashboard del artista
-- [ ] UI de gestión: crear/editar obras, subir imágenes, ver QR
-- [ ] Analytics básico: conteo de escaneos por QR
+### Fase 3 — Analytics + dashboard
+- [ ] Conteo de escaneos por QR
+- [ ] Dashboard completo
 
-### Fase 4 — Multi-tenant + billing
-- [ ] Planes (gratis/pago) y límites de obras
-- [ ] Stripe: suscripciones
-- [ ] Roles y permisos
+### Fase 4 — Tokens/billing + Pro
+- [ ] Créditos por consumo (no suscripción)
+- [ ] Pro: storage R2 + gestión short.io
 
 ### Fase 5 — Madurez
 - [ ] API pública con API keys
@@ -49,50 +46,39 @@ Plataforma SaaS de identidad digital para obras de arte: cada obra física tiene
 
 ---
 
-## Modelo de datos (boceto)
+## Modelo de datos (índice/caché)
 
 ```
 artists
-  id, name, slug, email, password_hash, plan_id
+  id, name, email, github_id, github_token, credits, timestamps
 
-artworks
-  id, artist_id, slug (único por artista), artwork_id,
-  title, year, edition, status, series, technique,
-  dimensions, description, location, owner,
-  short_url, qr_code, created_at, updated_at
+artworks  (caché de lo que vive en GitHub)
+  id, artist_id, artwork_id, title, github_repo, github_path,
+  short_url, qr_code, status, timestamps
 
-media
-  id, artwork_id, type (image/video), path, sort
-
-editions (opcional, para ediciones numeradas)
-  id, artwork_id, number, total, status
-
-plans / subscriptions (Fase 4)
+credits / token_usage  (Fase 4)
 ```
 
-## API (boceto, Fase 1)
-
-```
-POST   /register
-POST   /login
-GET    /api/artworks            # listar las del artista autenticado
-POST   /api/artworks            # crear obra
-GET    /api/artworks/{id}
-PUT    /api/artworks/{id}
-DELETE /api/artworks/{id}
-POST   /api/artworks/{id}/media # subir imagen
-GET    /o/{slug}                # página pública de obra (sin auth)
-```
+**Fuente de verdad**: repo GitHub del artista → `artworks/<ARTWORK_ID>/metadata.json` + imágenes.
 
 ---
 
 ## Principios
 
-- Simplicidad > sofisticación
-- Identidad de la obra > infraestructura
-- Migrabilidad > dependencia tecnológica
+- Propiedad del artista > control del SaaS
 - El QR nunca cambia; el destino sí puede cambiar
+- Ficha pública open source y self-host
+- Migrabilidad > dependencia tecnológica
+
+---
+
+## Decisiones abiertas
+
+- **Repo GitHub del artista**: ¿ARTid lo crea automáticamente o el artista vincula uno existente? (TBD)
+
+---
 
 ## Historial
 
-Ver el repo estático previo (`tachoatomico/portal` → carpeta `arte/`) y el prompt original en `tachoatomico/docs/Prompt_desarrollo_QR_ShortURL_GitHub_Obras_Arte.docx`.
+- Prototipo estático: `tachoatomico/portal` → carpeta `arte/` (ver `docs/CONTEXTO-ESTATICO.md`).
+- Prompt original: `tachoatomico/docs/Prompt_desarrollo_QR_ShortURL_GitHub_Obras_Arte.docx`.

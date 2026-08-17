@@ -1,180 +1,176 @@
-# PROMPT DE DESARROLLO — ARTid (SaaS)
+# PROMPT DE DESARROLLO — ARTid (Facilitador de identidad digital para obras de arte)
 
-Sistema SaaS de identidad digital para obras de arte — QR + Short URL + ficha digital editable + historial versionado.
+ARTid es un **facilitador**: ayuda al artista a montar su propio framework de identidad digital (QR + short URL + ficha pública), siendo el artista **dueño de su información**.
 
 ---
 
 ## 1. CONCEPTO GENERAL
 
-Desarrollar una plataforma web multi-usuario (SaaS) para que **artistas** asocien cada una de sus **obras físicas** con una **ficha digital pública y actualizable**.
+ARTid **no aloja** las obras del artista. Es un **configurador** que lo conecta con sus propias herramientas.
 
-El objetivo es que cada obra física tenga un **QR permanente** impreso en ella durante años, mientras que la información digital asociada pueda **actualizarse sin cambiar el QR**.
+| Pieza del framework | Dueño | Rol de ARTid |
+|---|---|---|
+| Repo GitHub (metadata + imágenes) | Artista | Conectar vía OAuth y escribir ahí |
+| Ficha pública (frontend estático) | Artista (self-host) | Plantilla open source descargable |
+| Short URL (short.io) | Artista | (Pro) gestionar en su nombre |
+| QR permanente | Artista | Generarlo apuntando a su short URL |
+| Analytics | ARTid | Conteo de escaneos (futuro) |
 
-Arquitectura:
+**Flujo de la obra:**
 
 ```
 OBRA FÍSICA
     ▼
-  QR
+  QR (permanente)
     ▼
-Short URL (permanente, administrado vía Short.io)
+Short URL (short.io del artista)
     ▼
-Aplicación web (ARTid)
+Ficha pública (self-host, dominio del artista)
     ▼
-Backend + Base de datos (Laravel + Postgres)
-    ▼
-Metadata + imágenes + historial
+Metadata + imágenes (repo GitHub del artista)
 ```
 
-El QR **NO** debe apuntar directamente al backend ni al storage. Debe apuntar a una URL corta (`https://tatomico.s.gy?art=<ARTWORK_ID>`), cuyo destino puede cambiar en el futuro sin modificar el QR.
+El **QR nunca cambia**; el destino del short URL sí puede cambiar (migrabilidad).
 
-## 2. OBJETIVO
+---
 
-Pasar del prototipo estático (un sitio que lee `metadata.json` desde GitHub) a una **plataforma multi-usuario** donde:
+## 2. PRINCIPIO DE PROPIEDAD
 
-- Varios artistas tengan **cuenta propia**.
-- Cada artista gestione sus obras (crear, editar, subir imágenes, ver QR).
-- Cada obra tenga una **ficha pública** con URL amigable.
-- Cada obra tenga un **QR permanente** asociado.
-- El historial de cambios quede **versionado**.
+- El artista es **dueño** de su metadata, sus imágenes, su short URL y su ficha.
+- La **ficha pública** (páginas de enrutamiento y renderizado) es **open source**, descargable y montable en el servidor/dominio que el artista elija.
+- El historial versionado es nativo: el **git history** del repo del artista.
 
-## 3. DIFERENCIAS CON EL PROTOTIPO
+---
 
-| Prototipo (estático) | ARTid (SaaS) |
-|---|---|
-| Un solo artista | Multi-tenant (varios artistas) |
-| `metadata.json` en GitHub | Metadata en base de datos |
-| Sin autenticación | Registro/login de artistas |
-| Edición manual de JSON | Dashboard de gestión |
-| Sin storage propio | Storage de imágenes (R2/S3) |
-| Sin analytics | Conteo de escaneos por QR |
+## 3. PIEZAS DE CÓDIGO
 
-## 4. ROLES Y MULTI-TENANCY
+1. **Framework "ficha" open source** — frontend estático (routing por hash + render + redirect), versión genérica del prototipo. El artista lo descarga y lo monta.
+2. **Configurador SaaS (ARTid)** — auth + integración GitHub (estilo Coolify) + CRUD de obras que commitea a `artworks/<ID>/metadata.json` e imágenes en el repo del artista + generador de QR.
+3. **Servicios futuros** — gestión short.io (Pro), analytics, tokens/credits.
 
-- **Artista**: crea y gestiona sus propias obras. Solo ve/edita lo suyo.
-- **Admin**: gestiona artistas, planes y la plataforma.
-- El aislamiento se garantiza con `artist_id` en todas las entidades del artista.
+---
 
-## 5. MODELO DE DATOS (boceto)
+## 4. ALMACENAMIENTO (evolución)
+
+- **v1**: GitHub del artista (portafolios livianos).
+- **Pro**: Cloudflare R2 (S3-compatible) para multimedia pesada.
+- Recomendación del sistema: escalar a R2 (free o pago).
+
+---
+
+## 5. MODELO DE DATOS
+
+La **fuente de verdad** es el repo GitHub del artista. La BD de ARTid es **índice/caché** + cuenta/créditos.
+
+**Repo del artista (GitHub):**
+
+```
+<repo>/
+  artworks/
+    <ARTWORK_ID>/
+      metadata.json
+      <imagen>.jpg
+    manifest.json
+```
+
+**BD de ARTid (índice/caché):**
 
 ```
 artists
-  id, name, slug, email, password, plan_id, timestamps
+  id, name, email, github_id, github_token, credits, timestamps
 
-artworks
-  id, artist_id, slug, artwork_id,
-  title, year, edition, status, series,
-  technique, dimensions, description,
-  location, owner, short_url, qr_code, timestamps
+artworks  (caché de lo que vive en GitHub)
+  id, artist_id, artwork_id, title, github_repo, github_path,
+  short_url, qr_code, status, timestamps
 
-media
-  id, artwork_id, type (image|video), path, sort_order
-
-plans / subscriptions (fase billing)
+credits / token_usage  (Fase billing)
 ```
 
-### Estados de la obra (`status`)
+**Metadata de la obra** (esquema del `metadata.json`): `artwork_id`, `title`, `artist`, `year`, `edition`, `status`, `series`, `technique`, `dimensions`, `description`, `location`, `owner`, `image`.
 
-- `created`
-- `exhibited`
-- `sold`
-- `transferred`
-- `archived`
+**Estados (`status`)**: `created`, `exhibited`, `sold`, `transferred`, `archived`.
 
-El estado se modifica **solo** desde el dashboard, sin tocar el QR.
-
-### Campos de metadata (extensibles)
-
-`artwork_id`, `title`, `artist`, `year`, `edition`, `status`, `series`, `technique`, `dimensions`, `description`, `location`, `owner`, `image(s)`.
+---
 
 ## 6. FUNCIONALIDAD
 
-### 6.1 Autenticación
-- Registro y login de artistas.
-- Protección de rutas de gestión (middleware auth).
+- **Auth** del artista (registro/login, Google + email/password).
+- **Vinculación GitHub** (OAuth, estilo Coolify).
+- **Configurador**: crear/editar/borrar obras (commit a GitHub), subir imágenes, ver/descargar QR, cambiar estado.
+- **Ficha pública**: open source, self-host por el artista.
+- **QR + short URL**: el QR codifica el short URL del artista.
+- **Historial**: git history del repo del artista.
+- **Futuro**: analytics, gestión short.io (Pro), tokens.
 
-### 6.2 Gestión de obras (dashboard)
-- Listar obras del artista.
-- Crear obra (formulario de metadata).
-- Editar obra.
-- Subir imagen(es) / video.
-- Ver y descargar el QR.
-- Cambiar estado.
-
-### 6.3 Ficha pública de obra
-- URL amigable: `/{slug}` o `/o/{artwork_id}`.
-- Muestra imagen protagonista + metadata secundaria + estado.
-- Responsive, elegante, orientada a QR (reusar diseño del prototipo).
-
-### 6.4 QR + Short URL
-- Generar QR por obra (librería server o cliente).
-- El QR codifica el short URL permanente.
-- Integración con Short.io para crear el short link automáticamente.
-
-### 6.5 Historial
-- Versionado de cambios (audit log o historial por obra).
+---
 
 ## 7. STACK TECNOLÓGICO
 
-- **Backend**: Laravel (PHP 8.x)
-- **Base de datos**: PostgreSQL
-- **Cache/colas**: Redis
-- **Storage**: Cloudflare R2 (S3-compatible) para imágenes/videos
-- **Frontend**: Blade + Tailwind (o Livewire/Inertia) — dashboards
-- **Páginas públicas**: Blade (SEO-friendly, sin framework pesado)
-- **Infra**: VPS + Coolify (proyecto nuevo)
-- **Short URL**: Short.io API
+- **Backend**: Laravel (PHP 8.x), MySQL, Redis.
+- **GitHub**: API (OAuth + contenidos/commits).
+- **Short.io**: API (futuro / Pro).
+- **Storage**: Cloudflare R2 (opción Pro).
+- **Frontend ficha**: HTML + CSS + JS vanilla (open source).
+- **Infra**: VPS + Coolify.
 
-## 8. API (boceto, Fase 1)
+---
 
-```
-POST   /register
-POST   /login
-POST   /logout
-GET    /api/artworks             # del artista autenticado
-POST   /api/artworks
-GET    /api/artworks/{id}
-PUT    /api/artworks/{id}
-DELETE /api/artworks/{id}
-POST   /api/artworks/{id}/media  # subir imagen/video
-GET    /o/{artwork_id}           # pública, sin auth
-```
+## 8. MONETIZACIÓN (tokens)
+
+- **Créditos por consumo**, no suscripción.
+- Se consumen por **acciones de configuración/gestión** (crear obra, generar QR, export, gestión Pro).
+- **No** se cobra por escaneo servido (preservar la promesa del QR permanente).
+
+---
 
 ## 9. FASES DE DESARROLLO
 
-- **Fase 0**: fundamentos (repo, proyecto Laravel, Coolify, deploy).
-- **Fase 1**: MVP — auth, CRUD de obras, storage, página pública, QR.
-- **Fase 2**: short URL (Short.io) + QR permanente.
-- **Fase 3**: dashboard completo + analytics básico.
-- **Fase 4**: billing (Stripe), planes y límites.
+- **Fase 0**: fundamentos (repo, Laravel, Coolify, deploy). ✅
+- **Fase 1**: MVP — auth, vinculación GitHub, configurador (CRUD → commits a GitHub), ficha open source, QR.
+- **Fase 2**: short URL (short.io del artista) + QR permanente.
+- **Fase 3**: analytics + dashboard completo.
+- **Fase 4**: tokens/billing + Pro (R2, gestión short.io).
 - **Fase 5**: API pública, webhooks, equipos.
+
+---
 
 ## 10. CRITERIOS DE ACEPTACIÓN (MVP)
 
-1. Un artista se registra, inicia sesión y crea una obra.
-2. La obra genera una ficha pública en `/{slug}` con su imagen y metadata.
-3. Subir una imagen y editarla se refleja al recargar.
-4. El QR de la obra codifica el short URL permanente.
-5. Un artista **no** puede ver ni editar obras de otro artista.
-6. El estado de la obra se cambia desde el dashboard sin modificar el QR.
+1. El artista crea cuenta y vincula su cuenta de GitHub.
+2. El configurador crea una obra y commitea `metadata.json` al repo del artista.
+3. La ficha pública open source se descarga y monta en un servidor propio.
+4. El QR codifica el short URL del artista.
+5. El artista puede exportar/tomarse su información en cualquier momento.
+
+---
 
 ## 11. FILOSOFÍA
 
+- **Propiedad del artista > control del SaaS**.
 - Simplicidad > sofisticación.
-- Mantenibilidad > descentralización.
-- Identidad de la obra > infraestructura.
 - Migrabilidad > dependencia tecnológica.
+- El QR nunca cambia; el destino sí.
 
-## 12. NO INCLUIR EN EL MVP
+---
+
+## 12. NO INCLUIR (MVP)
 
 - NFT, blockchain, wallets, IPFS/IPNS.
-- Panel administrativo complejo.
-- Billing (se deja para Fase 4).
+- Storage R2 (queda para Pro).
+- Analytics (Fase 3).
+- Billing (Fase 4).
+
+---
+
+## Decisiones abiertas
+
+- **Repo GitHub del artista**: ¿ARTid lo crea automáticamente o el artista vincula uno existente? (TBD)
 
 ---
 
 ## Referencias
 
+- Prototipo estático: `docs/CONTEXTO-ESTATICO.md`
 - Prompt original (prototipo estático): `tachoatomico/docs/Prompt_desarrollo_QR_ShortURL_GitHub_Obras_Arte.docx`
 - Prototipo estático: repo `tachoatomico/portal`, carpeta `arte/`
 - Short URL actual: `tatomico.s.gy`
