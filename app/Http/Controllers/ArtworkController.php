@@ -102,6 +102,28 @@ class ArtworkController extends Controller
     }
 
     /**
+     * Serve the artwork image from the artist's repository.
+     */
+    public function image(string $artwork): \Illuminate\Http\Response
+    {
+        $artwork = Auth::user()->artworks()->findOrFail($artwork);
+        $artist = Auth::user();
+
+        if (! $artwork->image || ! $artist->github_repo) {
+            abort(404);
+        }
+
+        $service = new GitHubService($artist->github_token);
+        $file = $service->getFile($artist->github_repo, "artworks/{$artwork->artwork_id}/{$artwork->image}");
+
+        if (! $file) {
+            abort(404);
+        }
+
+        return response($file['content'], 200, ['Content-Type' => $this->mimeFor($artwork->image)]);
+    }
+
+    /**
      * Update the specified artwork.
      */
     public function update(Request $request, string $artwork): RedirectResponse
@@ -316,6 +338,21 @@ class ArtworkController extends Controller
         $base = rtrim(env('ARTID_SHORT_DOMAIN', 'https://tatomico.s.gy'), '/');
 
         return $base.'?art='.$artwork->artwork_id;
+    }
+
+    /**
+     * Resolve the mime type for a filename.
+     */
+    private function mimeFor(string $filename): string
+    {
+        return match (strtolower(pathinfo($filename, PATHINFO_EXTENSION))) {
+            'jpg', 'jpeg' => 'image/jpeg',
+            'png' => 'image/png',
+            'gif' => 'image/gif',
+            'webp' => 'image/webp',
+            'svg' => 'image/svg+xml',
+            default => 'application/octet-stream',
+        };
     }
 
     /**

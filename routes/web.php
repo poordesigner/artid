@@ -31,6 +31,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/artworks', [ArtworkController::class, 'store'])->name('artworks.store');
     Route::get('/artworks/{artwork}/edit', [ArtworkController::class, 'edit'])->name('artworks.edit');
     Route::get('/artworks/{artwork}/qr', [ArtworkController::class, 'qr'])->name('artworks.qr');
+    Route::get('/artworks/{artwork}/image', [ArtworkController::class, 'image'])->name('artworks.image');
     Route::patch('/artworks/{artwork}', [ArtworkController::class, 'update'])->name('artworks.update');
     Route::delete('/artworks/{artwork}', [ArtworkController::class, 'destroy'])->name('artworks.destroy');
 });
