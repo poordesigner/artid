@@ -109,7 +109,13 @@ class Artwork extends Model
      */
     public function signedUrl(): string
     {
-        return rtrim((string) config('artid.public_url'), '/').'/o/'.$this->public_id.'?s='.$this->signature();
+        $base = rtrim((string) config('artid.public_url'), '/');
+
+        if (! preg_match('~^https?://~', $base)) {
+            $base = 'https://'.$base;
+        }
+
+        return $base.'/o/'.$this->public_id.'?s='.$this->signature();
     }
 
     /**
