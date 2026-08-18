@@ -40,7 +40,7 @@
                 <div class="p-6 flex flex-col sm:flex-row gap-6">
                     @if ($artwork->image)
                         <div class="shrink-0">
-                            <img src="{{ route('artworks.image', $artwork) }}" alt="{{ $artwork->title }}" class="h-48 object-contain rounded border border-gray-200" />
+                            <img src="{{ $artwork->imageUrl() }}" alt="{{ $artwork->title }}" class="h-48 object-contain rounded border border-gray-200" />
                         </div>
                     @endif
                     <div class="flex-1 min-w-0">

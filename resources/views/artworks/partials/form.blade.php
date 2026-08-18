@@ -21,7 +21,7 @@
     <input id="image" name="image" type="file" accept="image/*" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full text-sm text-gray-700" />
     <x-input-error :messages="$errors->get('image')" class="mt-2" />
     @if (isset($artwork) && $artwork && $artwork->image)
-        <img src="{{ route('artworks.image', $artwork) }}" alt="{{ $artwork->title }}" class="mt-2 h-40 object-contain rounded border border-gray-200" />
+        <img src="{{ $artwork->imageUrl() }}" alt="{{ $artwork->title }}" class="mt-2 h-40 object-contain rounded border border-gray-200" />
         <p class="mt-1 text-xs text-gray-500">{{ __('Current image:') }} <span class="font-mono">{{ $artwork->image }}</span></p>
     @endif
 </div>

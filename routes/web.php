@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\GitHubController;
 use App\Http\Controllers\ExhibitionController;
 use App\Http\Controllers\OwnershipController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PublicArtworkController;
 use App\Http\Controllers\SeriesController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,6 +16,8 @@ Route::get('/', function () {
 Route::get('/ayuda', function () {
     return view('ayuda');
 })->name('ayuda');
+
+Route::get('/o/{publicId}', [PublicArtworkController::class, 'show'])->name('public.artwork');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -41,7 +44,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/artworks/{artwork}', [ArtworkController::class, 'show'])->name('artworks.show');
     Route::get('/artworks/{artwork}/edit', [ArtworkController::class, 'edit'])->name('artworks.edit');
     Route::get('/artworks/{artwork}/qr', [ArtworkController::class, 'qr'])->name('artworks.qr');
-    Route::get('/artworks/{artwork}/image', [ArtworkController::class, 'image'])->name('artworks.image');
     Route::patch('/artworks/{artwork}', [ArtworkController::class, 'update'])->name('artworks.update');
     Route::delete('/artworks/{artwork}', [ArtworkController::class, 'destroy'])->name('artworks.destroy');
 

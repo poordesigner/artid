@@ -2,16 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Artist;
 use App\Models\Artwork;
 use App\Models\Technique;
-use App\Services\GitHubService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
@@ -68,15 +65,9 @@ class ArtworkController extends Controller
 
         $file = $request->file('image');
         if ($file) {
-            $data['image'] = $artworkId.'.'.$file->extension();
-        }
-
-        if ($artist->github_repo) {
-            try {
-                $this->syncCreate($artist, $artworkId, $data, $file);
-            } catch (\RuntimeException $e) {
-                return back()->withInput()->with('error', 'Error en GitHub: '.$e->getMessage());
-            }
+            $filename = $artworkId.'.'.$file->extension();
+            Storage::disk('r2')->put("artworks/$artworkId/$filename", $file->get());
+            $data['image'] = $filename;
         }
 
         Artwork::create($data);
@@ -113,34 +104,11 @@ class ArtworkController extends Controller
      */
     public function qr(string $artwork): \Illuminate\Http\Response
     {
-        $artist = Auth::user();
-        $artwork = $artist->artworks()->findOrFail($artwork);
+        $artwork = Auth::user()->artworks()->findOrFail($artwork);
 
-        $svg = QrCode::format('svg')->size(600)->margin(2)->generate($this->publicUrl($artwork, $artist));
+        $svg = QrCode::format('svg')->size(600)->margin(2)->generate($artwork->signedUrl());
 
         return response($svg, 200, ['Content-Type' => 'image/svg+xml']);
-    }
-
-    /**
-     * Serve the artwork image from the artist's repository.
-     */
-    public function image(string $artwork): \Illuminate\Http\Response
-    {
-        $artwork = Auth::user()->artworks()->findOrFail($artwork);
-        $artist = Auth::user();
-
-        if (! $artwork->image || ! $artist->github_repo) {
-            abort(404);
-        }
-
-        $service = new GitHubService($artist->github_token);
-        $file = $service->getFile($artist->github_repo, "artworks/{$artwork->artwork_id}/{$artwork->image}");
-
-        if (! $file) {
-            abort(404);
-        }
-
-        return response($file['content'], 200, ['Content-Type' => $this->mimeFor($artwork->image)]);
     }
 
     /**
@@ -164,16 +132,14 @@ class ArtworkController extends Controller
 
         $file = $request->file('image');
         if ($file) {
-            $data['image'] = $artwork->artwork_id.'.'.$file->extension();
-        }
+            $filename = $artwork->artwork_id.'.'.$file->extension();
+            Storage::disk('r2')->put("artworks/{$artwork->artwork_id}/$filename", $file->get());
 
-        $artist = Auth::user();
-        if ($artist->github_repo) {
-            try {
-                $this->syncUpdate($artist, $artwork, $data, $file);
-            } catch (\RuntimeException $e) {
-                return back()->withInput()->with('error', 'Error en GitHub: '.$e->getMessage());
+            if ($artwork->image && $artwork->image !== $filename) {
+                Storage::disk('r2')->delete("artworks/{$artwork->artwork_id}/{$artwork->image}");
             }
+
+            $data['image'] = $filename;
         }
 
         $artwork->update($data);
@@ -187,111 +153,14 @@ class ArtworkController extends Controller
     public function destroy(string $artwork): RedirectResponse
     {
         $artwork = Auth::user()->artworks()->findOrFail($artwork);
-        $artist = Auth::user();
 
-        if ($artist->github_repo) {
-            try {
-                $this->syncDelete($artist, $artwork);
-            } catch (\RuntimeException $e) {
-                return back()->with('error', 'Error en GitHub: '.$e->getMessage());
-            }
+        if ($artwork->image) {
+            Storage::disk('r2')->delete("artworks/{$artwork->artwork_id}/{$artwork->image}");
         }
 
         $artwork->delete();
 
         return redirect()->route('artworks.index')->with('status', 'Artwork deleted.');
-    }
-
-    /**
-     * Commit a new artwork to the artist's repository.
-     *
-     * @param  array<string, mixed>  $data
-     */
-    private function syncCreate(Artist $artist, string $artworkId, array $data, ?UploadedFile $file): void
-    {
-        $service = new GitHubService($artist->github_token);
-        $repo = $artist->github_repo;
-        $path = "artworks/$artworkId";
-
-        $service->putFile($repo, "$path/metadata.json", $this->metadataJson($data, $artist), "Create artwork $artworkId");
-
-        if ($file) {
-            $service->putFile($repo, "$path/{$data['image']}", (string) $file->get(), "Add image {$data['image']}");
-        }
-
-        $ids = $service->getManifest($repo);
-        if (! in_array($artworkId, $ids, true)) {
-            $ids[] = $artworkId;
-            $service->saveManifest($repo, $ids, "Add $artworkId to manifest");
-        }
-    }
-
-    /**
-     * Commit artwork updates to the artist's repository.
-     *
-     * @param  array<string, mixed>  $data
-     */
-    private function syncUpdate(Artist $artist, Artwork $artwork, array $data, ?UploadedFile $file): void
-    {
-        $service = new GitHubService($artist->github_token);
-        $repo = $artist->github_repo;
-        $path = "artworks/{$artwork->artwork_id}";
-
-        $service->putFile($repo, "$path/metadata.json", $this->metadataJson($data, $artist), "Update artwork {$artwork->artwork_id}");
-
-        if ($file) {
-            $service->putFile($repo, "$path/{$data['image']}", (string) $file->get(), "Update image {$data['image']}");
-
-            if ($artwork->image && $artwork->image !== $data['image']) {
-                $service->deleteFile($repo, "$path/{$artwork->image}", 'Remove old image');
-            }
-        }
-    }
-
-    /**
-     * Remove an artwork from the artist's repository.
-     */
-    private function syncDelete(Artist $artist, Artwork $artwork): void
-    {
-        $service = new GitHubService($artist->github_token);
-        $repo = $artist->github_repo;
-        $path = "artworks/{$artwork->artwork_id}";
-
-        $service->deleteFile($repo, "$path/metadata.json", "Delete artwork {$artwork->artwork_id}");
-
-        if ($artwork->image) {
-            $service->deleteFile($repo, "$path/{$artwork->image}", 'Delete image');
-        }
-
-        $ids = $service->getManifest($repo);
-        $ids = array_values(array_diff($ids, [$artwork->artwork_id]));
-        $service->saveManifest($repo, $ids, "Remove {$artwork->artwork_id}");
-    }
-
-    /**
-     * Build the metadata.json content.
-     *
-     * @param  array<string, mixed>  $data
-     */
-    private function metadataJson(array $data, Artist $artist): string
-    {
-        $fields = [
-            'artwork_id' => $data['artwork_id'],
-            'title' => $data['title'],
-            'artist' => '@'.($artist->github_nickname ?: $artist->name),
-            'year' => $data['year'] ?? null,
-            'edition' => $data['edition'] ?? null,
-            'status' => $data['status'] ?? null,
-            'series' => $data['series'] ?? null,
-            'technique' => $data['technique'] ?? null,
-            'dimensions' => $data['dimensions'] ?? null,
-            'description' => $data['description'] ?? null,
-            'image' => $data['image'] ?? null,
-        ];
-
-        $fields = array_filter($fields, fn ($v) => $v !== null && $v !== '');
-
-        return json_encode($fields, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
     }
 
     /**
@@ -365,36 +234,6 @@ class ArtworkController extends Controller
         }
 
         return $id;
-    }
-
-    /**
-     * Build the public URL encoded in the artwork's QR.
-     */
-    private function publicUrl(Artwork $artwork, Artist $artist): string
-    {
-        $domain = $artist->short_domain ?: env('ARTID_SHORT_DOMAIN', 'https://tatomico.s.gy');
-
-        $base = rtrim($domain, '/');
-        if (! preg_match('~^https?://~', $base)) {
-            $base = 'https://'.$base;
-        }
-
-        return $base.'?art='.$artwork->artwork_id;
-    }
-
-    /**
-     * Resolve the mime type for a filename.
-     */
-    private function mimeFor(string $filename): string
-    {
-        return match (strtolower(pathinfo($filename, PATHINFO_EXTENSION))) {
-            'jpg', 'jpeg' => 'image/jpeg',
-            'png' => 'image/png',
-            'gif' => 'image/gif',
-            'webp' => 'image/webp',
-            'svg' => 'image/svg+xml',
-            default => 'application/octet-stream',
-        };
     }
 
     /**
