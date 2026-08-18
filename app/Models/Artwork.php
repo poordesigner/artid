@@ -72,11 +72,13 @@ class Artwork extends Model
      */
     public function signature(): string
     {
-        return 'v1.'.hash_hmac('sha256', $this->public_id, (string) config('artid.signing_key'));
+        $version = (string) config('artid.active_signing_version');
+
+        return $version.'.'.hash_hmac('sha256', $this->public_id, (string) config('artid.signing_keys.'.$version));
     }
 
     /**
-     * Verifica una firma HMAC (con soporte de versionado).
+     * Verifica una firma HMAC (soporta múltiples versiones de clave).
      */
     public function verifySignature(?string $signature): bool
     {
@@ -86,12 +88,18 @@ class Artwork extends Model
 
         $parts = explode('.', $signature, 2);
 
-        if (count($parts) !== 2 || $parts[0] !== 'v1') {
+        if (count($parts) !== 2) {
+            return false;
+        }
+
+        $key = config('artid.signing_keys.'.$parts[0]);
+
+        if (! $key) {
             return false;
         }
 
         return hash_equals(
-            hash_hmac('sha256', $this->public_id, (string) config('artid.signing_key')),
+            hash_hmac('sha256', $this->public_id, (string) $key),
             $parts[1]
         );
     }
