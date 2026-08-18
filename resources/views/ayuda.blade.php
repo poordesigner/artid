@@ -15,10 +15,42 @@
         <h1 class="mt-4 text-3xl font-bold">{{ __('Guía de inicio') }}</h1>
         <p class="mt-2 text-gray-600">{{ __('Configura tu framework de identidad digital de obras paso a paso.') }}</p>
 
+        <!-- Cómo funciona -->
+        <section id="como-funciona" class="mt-6 bg-white rounded-lg shadow-sm p-6">
+            <h2 class="font-semibold text-xl">Cómo funciona la ficha (open source)</h2>
+            <p class="mt-2 text-sm text-gray-600">La <strong>ficha</strong> es un conjunto de archivos estáticos (HTML + CSS + JS) que se instalan en <strong>tu</strong> repositorio. Es <strong>open source</strong>: tú la posees, puedes descargarla, modificarla y alojarla donde quieras.</p>
+
+            <h3 class="mt-4 font-semibold">El flujo al escanear el QR</h3>
+            <ol class="mt-2 text-sm space-y-2 list-decimal list-inside">
+                <li>Escaneas el <strong>QR</strong> → apunta a <code>https://tudominio.s.gy?art=&lt;ID&gt;</code>.</li>
+                <li><strong>short.io</strong> redirige a <code>https://tu-ficha/redirect.html?art=&lt;ID&gt;</code>.</li>
+                <li><code>redirect.html</code> convierte <code>?art=&lt;ID&gt;</code> en <code>#/art/&lt;ID&gt;</code> (routing por hash, sin servidor).</li>
+                <li><code>index.html</code> + <code>js/app.js</code> leen el hash y cargan desde GitHub:
+                    <ul class="mt-1 ml-5 list-disc">
+                        <li><code>artworks/&lt;ID&gt;/metadata.json</code> — datos de la obra.</li>
+                        <li><code>artworks/&lt;ID&gt;/exhibitions.json</code> — exposiciones.</li>
+                        <li><code>artworks/&lt;ID&gt;/ownership.json</code> — proveniencia.</li>
+                    </ul>
+                </li>
+                <li>Se renderiza la obra con su imagen, metadata e historial.</li>
+            </ol>
+
+            <h3 class="mt-4 font-semibold">Los archivos</h3>
+            <ul class="mt-2 text-sm space-y-1 list-disc list-inside">
+                <li><code>index.html</code> — estructura base de la página.</li>
+                <li><code>js/app.js</code> — lógica: routing + carga de JSON + render.</li>
+                <li><code>css/style.css</code> — diseño oscuro minimalista.</li>
+                <li><code>redirect.html</code> — puente entre el short URL y la ficha.</li>
+            </ul>
+
+            <p class="mt-4 text-sm text-gray-600">Todo es tuyo: el repositorio, el dominio y el short URL. El <strong>QR nunca cambia</strong>; si mañana migras a otro hosting, solo re-apuntas el short URL.</p>
+        </section>
+
         <!-- Índice -->
         <div class="mt-6 bg-white rounded-lg shadow-sm p-5">
             <h2 class="font-semibold text-lg">{{ __('Índice') }}</h2>
             <ol class="mt-2 text-sm text-indigo-600 space-y-1">
+                <li><a href="#como-funciona" class="hover:underline">Cómo funciona la ficha (open source)</a></li>
                 <li><a href="#registro" class="hover:underline">1. Crear tu cuenta en ARTid</a></li>
                 <li><a href="#github-cuenta" class="hover:underline">2. Conectar tu cuenta de GitHub</a></li>
                 <li><a href="#repo" class="hover:underline">3. Vincular o crear tu repositorio</a></li>
