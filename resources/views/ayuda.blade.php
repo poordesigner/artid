@@ -19,17 +19,15 @@
         <section id="intro" class="mt-6 bg-white rounded-lg shadow-sm p-6">
             <h2 class="font-semibold text-xl">¿Qué es ARTid?</h2>
             <p class="mt-2 text-sm text-gray-700">
-                <strong>ARTid</strong> — by <a href="https://poordesigner.com" class="text-indigo-600 hover:underline" target="_blank" rel="noopener">POORdesigner.com</a> — es una herramienta que da
-                <strong>identidad digital</strong> a tus obras de arte físicas. Cada obra recibe un
-                <strong>QR permanente</strong> impreso en ella, que enlaza a una
-                <strong>ficha digital pública y actualizable</strong>, sin necesidad de volver a imprimir el QR nunca.
+                <strong>ARTid</strong> — by <a href="https://poordesigner.com" class="text-indigo-600 hover:underline" target="_blank" rel="noopener">POORdesigner.com</a> — es una estructura diseñada para dar identidad digital a tus obras de arte físicas. Cada obra se asocia con un QR permanente, que enlaza a una ficha digital pública y actualizable donde va a residir la información básica, su historia y un control cifrado de propiedad de la misma.
             </p>
 
             <ul class="mt-4 text-sm space-y-2 list-disc list-inside text-gray-700">
-                <li><strong>QR permanente</strong> — se imprime una vez en la obra física y nunca cambia.</li>
-                <li><strong>Short URL</strong> — el punto intermedio entre el QR y la ficha. Si cambias de hosting, solo re-apuntas el short URL.</li>
-                <li><strong>Ficha pública</strong> — muestra la imagen, la metadata y el historial (exposiciones y proveniencia).</li>
-                <li><strong>Eres dueño de tu información</strong> — tus obras viven en <em>tu</em> GitHub, <em>tu</em> dominio y <em>tu</em> short URL, no en un servidor ajeno.</li>
+                <li><strong>Eres dueño de tu información</strong> — tus obras viven en tu GitHub, tu dominio y tu short URL, no en un servidor ajeno.</li>
+                <li><strong>QR permanente</strong> — se genera una vez y se asocia a la obra física, nunca cambia.</li>
+                <li><strong>Short URL</strong> — el punto intermedio entre el QR y la ficha digital. Si cambias de hosting, solo re-apuntas el short URL.</li>
+                <li><strong>Ficha pública</strong> — muestra la imagen, la metadata, el historial (exposiciones y proveniencia).</li>
+                <li><strong>Control de Propiedad</strong> — la generación de llaves cifradas permiten establecer un método digital para demostrar quién es el propietario de la pieza.</li>
             </ul>
 
             <p class="mt-4 text-sm text-gray-600">Filosofía: <strong>propiedad del artista &gt; control de la plataforma</strong>. El QR nunca cambia; el destino sí.</p>
