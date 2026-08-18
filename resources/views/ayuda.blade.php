@@ -19,18 +19,26 @@
         <section id="intro" class="mt-6 bg-white rounded-lg shadow-sm p-6">
             <h2 class="font-semibold text-xl">¿Qué es ARTid?</h2>
             <p class="mt-2 text-sm text-gray-700">
-                <strong>ARTid</strong> — by <a href="https://poordesigner.com" class="text-indigo-600 hover:underline" target="_blank" rel="noopener">POORdesigner.com</a> — es una estructura diseñada para dar identidad digital a tus obras de arte físicas. Cada obra se asocia con un QR permanente, que enlaza a una ficha digital pública y actualizable donde va a residir la información básica, su historia y un control cifrado de propiedad de la misma.
+                <strong>ARTid</strong> — by <a href="https://poordesigner.com" class="text-indigo-600 hover:underline" target="_blank" rel="noopener">POORdesigner.com</a> — es una plataforma diseñada para dar identidad digital a las obras de arte, de manera que el artista, como dueño de la propiedad intelectual, tenga el control de su información y el propietario, tenga un medio digital para validar la autenticidad de su obra.
+            </p>
+            <p class="mt-2 text-sm text-gray-700">
+                Cada obra se asocia con un <strong>QR permanente</strong>, que enlaza a una <strong>ficha digital pública y actualizable</strong> donde van a residir datos básicos e históricos de la misma. Adicional, cada obra va a tener un sistema de control cifrado para identificar la propiedad de la misma.
             </p>
 
             <ul class="mt-4 text-sm space-y-2 list-disc list-inside text-gray-700">
-                <li><strong>Eres dueño de tu información</strong> — tus obras viven en tu GitHub, tu dominio y tu short URL, no en un servidor ajeno.</li>
+                <li><strong>Tú eres el dueño de la información</strong> — la identidad digital de tus obras viven en tu GitHub, tu dominio y tu short URL.</li>
                 <li><strong>QR permanente</strong> — se genera una vez y se asocia a la obra física, nunca cambia.</li>
-                <li><strong>Short URL</strong> — el punto intermedio entre el QR y la ficha digital. Si cambias de hosting, solo re-apuntas el short URL.</li>
+                <li><strong>Short URL</strong> — el punto intermedio entre el QR y la ficha digital. Si cambias de hosting o de dominio, solo re-apuntas el short URL y el acceso a la ficha pública se mantiene vigente sin tener que modificar tu QR.</li>
                 <li><strong>Ficha pública</strong> — muestra la imagen, la metadata, el historial (exposiciones y proveniencia).</li>
                 <li><strong>Control de Propiedad</strong> — la generación de llaves cifradas permiten establecer un método digital para demostrar quién es el propietario de la pieza.</li>
             </ul>
 
-            <p class="mt-4 text-sm text-gray-600">Filosofía: <strong>propiedad del artista &gt; control de la plataforma</strong>. El QR nunca cambia; el destino sí.</p>
+            <h3 class="mt-4 font-semibold">Filosofía</h3>
+            <ul class="mt-2 text-sm space-y-1 list-disc list-inside text-gray-700">
+                <li>El artista es dueño de su información.</li>
+                <li>La plataforma es abierta, y permite la gestión manual de cada ficha técnica si así se desea.</li>
+                <li>ARTid es la estructura definida para que esto sea posible, y a su vez es una herramienta, un facilitador, para la gestión y mantenimiento de la identidad digital de cada obra.</li>
+            </ul>
         </section>
 
         <!-- Cómo funciona -->
