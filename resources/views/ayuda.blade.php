@@ -15,6 +15,26 @@
         <h1 class="mt-4 text-3xl font-bold">{{ __('Guía de inicio') }}</h1>
         <p class="mt-2 text-gray-600">{{ __('Configura tu framework de identidad digital de obras paso a paso.') }}</p>
 
+        <!-- Introducción -->
+        <section id="intro" class="mt-6 bg-white rounded-lg shadow-sm p-6">
+            <h2 class="font-semibold text-xl">¿Qué es ARTid?</h2>
+            <p class="mt-2 text-sm text-gray-700">
+                <strong>ARTid</strong> — by <a href="https://poordesigner.com" class="text-indigo-600 hover:underline" target="_blank" rel="noopener">POORdesigner.com</a> — es una herramienta que da
+                <strong>identidad digital</strong> a tus obras de arte físicas. Cada obra recibe un
+                <strong>QR permanente</strong> impreso en ella, que enlaza a una
+                <strong>ficha digital pública y actualizable</strong>, sin necesidad de volver a imprimir el QR nunca.
+            </p>
+
+            <ul class="mt-4 text-sm space-y-2 list-disc list-inside text-gray-700">
+                <li><strong>QR permanente</strong> — se imprime una vez en la obra física y nunca cambia.</li>
+                <li><strong>Short URL</strong> — el punto intermedio entre el QR y la ficha. Si cambias de hosting, solo re-apuntas el short URL.</li>
+                <li><strong>Ficha pública</strong> — muestra la imagen, la metadata y el historial (exposiciones y proveniencia).</li>
+                <li><strong>Eres dueño de tu información</strong> — tus obras viven en <em>tu</em> GitHub, <em>tu</em> dominio y <em>tu</em> short URL, no en un servidor ajeno.</li>
+            </ul>
+
+            <p class="mt-4 text-sm text-gray-600">Filosofía: <strong>propiedad del artista &gt; control de la plataforma</strong>. El QR nunca cambia; el destino sí.</p>
+        </section>
+
         <!-- Cómo funciona -->
         <section id="como-funciona" class="mt-6 bg-white rounded-lg shadow-sm p-6">
             <h2 class="font-semibold text-xl">Cómo funciona la ficha (open source)</h2>
@@ -50,6 +70,7 @@
         <div class="mt-6 bg-white rounded-lg shadow-sm p-5">
             <h2 class="font-semibold text-lg">{{ __('Índice') }}</h2>
             <ol class="mt-2 text-sm text-indigo-600 space-y-1">
+                <li><a href="#intro" class="hover:underline">¿Qué es ARTid?</a></li>
                 <li><a href="#como-funciona" class="hover:underline">Cómo funciona la ficha (open source)</a></li>
                 <li><a href="#registro" class="hover:underline">1. Crear tu cuenta en ARTid</a></li>
                 <li><a href="#github-cuenta" class="hover:underline">2. Conectar tu cuenta de GitHub</a></li>
