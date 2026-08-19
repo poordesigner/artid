@@ -13,7 +13,7 @@
         <img src="{{ asset('img/logo.png') }}" alt="ARTid" class="h-24 w-auto">
 
         <p class="mt-6 text-center text-gray-600 max-w-md">
-            Identidad digital para tus obras de arte — QR permanente, ficha pública y control de propiedad.
+            Identidad Digital para tus Obras de Arte
         </p>
 
         <div class="mt-8 flex flex-col sm:flex-row gap-3">
@@ -25,7 +25,7 @@
             </a>
         </div>
 
-        <a href="{{ route('ayuda') }}" class="mt-8 text-sm text-gray-500 hover:text-gray-700 underline">{{ __('Ayuda') }}</a>
+        <a href="{{ route('ayuda') }}" class="mt-8 text-lg text-gray-600 hover:text-gray-900 underline">{{ __('Ayuda') }}</a>
     </div>
 </body>
 </html>
