@@ -20,6 +20,7 @@ class TechniqueSeeder extends Seeder
             ['Modelado 3D', 'Creación de objetos tridimensionales virtuales mediante software informático.'],
             ['Arte generativo', 'Obras creadas mediante algoritmos y código de programación.'],
             ['Arte de inteligencia artificial', 'Imágenes generadas mediante redes neuronales y descripciones de texto.'],
+            ['Arte Electrónico', 'Arte creado usando código, microprocesadores y otros componentes electrónicos.'],
             ['Pixel art', 'Dibujo digital editado a nivel de píxeles individuales.'],
             ['Grabado', 'Transferencia de tinta desde una matriz tallada al papel.'],
             ['Carboncillo', 'Dibujo con palillos de madera carbonizada de tono negro intenso.'],
