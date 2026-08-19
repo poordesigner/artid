@@ -14,6 +14,9 @@
             <!-- Right side: menu + settings dropdown -->
             <div class="hidden sm:flex sm:items-center sm:gap-8">
                 <!-- Navigation Links -->
+                <x-nav-link :href="route('artworks.index')" :active="request()->routeIs('artworks.*')">
+                    {{ __('Artworks') }}
+                </x-nav-link>
                 <x-nav-link :href="route('github.settings')" :active="request()->routeIs('github.*')">
                     {{ __('Configuración') }}
                 </x-nav-link>
@@ -69,6 +72,9 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
+            <x-responsive-nav-link :href="route('artworks.index')" :active="request()->routeIs('artworks.*')">
+                {{ __('Artworks') }}
+            </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('github.settings')" :active="request()->routeIs('github.*')">
                 {{ __('Configuración') }}
             </x-responsive-nav-link>
