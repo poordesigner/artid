@@ -20,7 +20,7 @@ Route::get('/ayuda', function () {
 Route::get('/o/{publicId}', [PublicArtworkController::class, 'show'])->name('public.artwork');
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    return redirect()->route('artworks.index');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {

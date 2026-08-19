@@ -10,7 +10,7 @@
 </head>
 <body class="font-sans antialiased bg-gray-100 text-gray-900">
     <div class="max-w-3xl mx-auto py-10 px-4 sm:px-6">
-        <a href="{{ route('dashboard') }}" class="text-sm text-indigo-600 hover:text-indigo-900">&larr; {{ __('Volver al panel') }}</a>
+        <a href="{{ route('artworks.index') }}" class="text-sm text-indigo-600 hover:text-indigo-900">&larr; {{ __('Volver al panel') }}</a>
 
         <h1 class="mt-4 text-3xl font-bold">{{ __('Guía de inicio') }}</h1>
         <p class="mt-2 text-gray-600">{{ __('Configura tu framework de identidad digital de obras paso a paso.') }}</p>
