@@ -10,7 +10,7 @@
 </head>
 <body class="font-sans text-gray-900 antialiased">
     <div class="min-h-screen flex flex-col items-center justify-center bg-gray-100 px-4">
-        <img src="{{ asset('img/logo.png') }}" alt="ARTid" class="h-24 w-auto">
+        <img src="{{ asset('img/logo.png') }}" alt="ARTid" class="h-80 w-auto">
 
         <p class="mt-6 text-center text-gray-600 max-w-md">
             Identidad Digital para tus Obras de Arte
