@@ -13,80 +13,39 @@
         <a href="{{ route('artworks.index') }}" class="text-sm text-indigo-600 hover:text-indigo-900">&larr; {{ __('Volver al panel') }}</a>
 
         <h1 class="mt-4 text-3xl font-bold">{{ __('Guía de inicio') }}</h1>
-        <p class="mt-2 text-gray-600">{{ __('Configura tu framework de identidad digital de obras paso a paso.') }}</p>
+        <p class="mt-2 text-gray-600">{{ __('Conoce tu plataforma de identidad digital para obras de arte, paso a paso.') }}</p>
 
         <!-- Introducción -->
         <section id="intro" class="mt-6 bg-white rounded-lg shadow-sm p-6">
             <h2 class="font-semibold text-xl">¿Qué es ARTid?</h2>
             <p class="mt-2 text-sm text-gray-700">
-                <strong>ARTid</strong> — by <a href="https://poordesigner.com" class="text-indigo-600 hover:underline" target="_blank" rel="noopener">POORdesigner.com</a> — es una plataforma diseñada para dar identidad digital a las obras de arte, de manera que el artista, como dueño de la propiedad intelectual, tenga el control de su información y el propietario, tenga un medio digital para validar la autenticidad de su obra.
+                <strong>ARTid</strong> — by <a href="https://poordesigner.com" class="text-indigo-600 hover:underline" target="_blank" rel="noopener">POORdesigner.com</a> — es una plataforma que da identidad digital a las obras de arte. El artista, como dueño de la propiedad intelectual, mantiene el control de la información de su obra, y el propietario cuenta con un medio digital para validar su autenticidad.
             </p>
             <p class="mt-2 text-sm text-gray-700">
-                Cada obra se asocia con un <strong>QR permanente</strong>, que enlaza a una <strong>ficha digital pública y actualizable</strong> donde van a residir datos básicos e históricos de la misma. Adicional, cada obra va a tener un sistema de control cifrado para identificar la propiedad de la misma.
+                Cada obra se asocia con un <strong>QR permanente</strong> que enlaza a una <strong>ficha digital pública</strong> alojada por ARTid, donde residen los datos básicos e históricos de la obra. Además, cada obra cuenta con un <strong>control cifrado de propiedad</strong> para identificar a su dueño a lo largo del tiempo.
             </p>
 
             <ul class="mt-4 text-sm space-y-2 list-disc list-inside text-gray-700">
-                <li><strong>Tú eres el dueño de la información</strong> — la identidad digital de tus obras viven en tu GitHub, tu dominio y tu short URL.</li>
-                <li><strong>QR permanente</strong> — se genera una vez y se asocia a la obra física, nunca cambia.</li>
-                <li><strong>Short URL</strong> — el punto intermedio entre el QR y la ficha digital. Si cambias de hosting o de dominio, solo re-apuntas el short URL y el acceso a la ficha pública se mantiene vigente sin tener que modificar tu QR.</li>
-                <li><strong>Ficha pública</strong> — muestra la imagen, la metadata, el historial (exposiciones y proveniencia).</li>
-                <li><strong>Control de Propiedad</strong> — la generación de llaves cifradas permiten establecer un método digital para demostrar quién es el propietario de la pieza.</li>
+                <li><strong>QR permanente</strong> — se genera una vez y se imprime en la obra física. Nunca cambia.</li>
+                <li><strong>Ficha pública</strong> — muestra la imagen, la metadata, el historial (exposiciones y proveniencia) y el estado de la obra.</li>
+                <li><strong>URL firmada</strong> — el QR codifica un enlace cifrado; solo las fichas firmadas por ARTid son accesibles al público.</li>
+                <li><strong>Control de Propiedad</strong> — un sistema de llaves cifradas permite demostrar quién es el propietario de la pieza en cada momento.</li>
+                <li><strong>Tú eres el dueño de tu información</strong> — decides qué datos publicar y qué es privado.</li>
             </ul>
-
-            <h3 class="mt-4 font-semibold">Filosofía</h3>
-            <ul class="mt-2 text-sm space-y-1 list-disc list-inside text-gray-700">
-                <li>El artista es dueño de su información.</li>
-                <li>La plataforma es abierta, y permite la gestión manual de cada ficha técnica si así se desea.</li>
-                <li>ARTid es la estructura definida para que esto sea posible, y a su vez es una herramienta, un facilitador, para la gestión y mantenimiento de la identidad digital de cada obra.</li>
-            </ul>
-        </section>
-
-        <!-- Cómo funciona -->
-        <section id="como-funciona" class="mt-6 bg-white rounded-lg shadow-sm p-6">
-            <h2 class="font-semibold text-xl">Cómo funciona la ficha (open source)</h2>
-            <p class="mt-2 text-sm text-gray-600">La <strong>ficha</strong> es un conjunto de archivos estáticos (HTML + CSS + JS) que se instalan en <strong>tu</strong> repositorio. Es <strong>open source</strong>: tú la posees, puedes descargarla, modificarla y alojarla donde quieras.</p>
-
-            <h3 class="mt-4 font-semibold">El flujo al escanear el QR</h3>
-            <ol class="mt-2 text-sm space-y-2 list-decimal list-inside">
-                <li>Escaneas el <strong>QR</strong> → apunta a <code>https://tudominio.s.gy?art=&lt;ID&gt;</code>.</li>
-                <li><strong>short.io</strong> redirige a <code>https://tu-ficha/redirect.html?art=&lt;ID&gt;</code>.</li>
-                <li><code>redirect.html</code> convierte <code>?art=&lt;ID&gt;</code> en <code>#/art/&lt;ID&gt;</code> (routing por hash, sin servidor).</li>
-                <li><code>index.html</code> + <code>js/app.js</code> leen el hash y cargan desde GitHub:
-                    <ul class="mt-1 ml-5 list-disc">
-                        <li><code>artworks/&lt;ID&gt;/metadata.json</code> — datos de la obra.</li>
-                        <li><code>artworks/&lt;ID&gt;/exhibitions.json</code> — exposiciones.</li>
-                        <li><code>artworks/&lt;ID&gt;/ownership.json</code> — proveniencia.</li>
-                    </ul>
-                </li>
-                <li>Se renderiza la obra con su imagen, metadata e historial.</li>
-            </ol>
-
-            <h3 class="mt-4 font-semibold">Los archivos</h3>
-            <ul class="mt-2 text-sm space-y-1 list-disc list-inside">
-                <li><code>index.html</code> — estructura base de la página.</li>
-                <li><code>js/app.js</code> — lógica: routing + carga de JSON + render.</li>
-                <li><code>css/style.css</code> — diseño oscuro minimalista.</li>
-                <li><code>redirect.html</code> — puente entre el short URL y la ficha.</li>
-            </ul>
-
-            <p class="mt-4 text-sm text-gray-600">Todo es tuyo: el repositorio, el dominio y el short URL. El <strong>QR nunca cambia</strong>; si mañana migras a otro hosting, solo re-apuntas el short URL.</p>
         </section>
 
         <!-- Índice -->
         <div class="mt-6 bg-white rounded-lg shadow-sm p-5">
             <h2 class="font-semibold text-lg">{{ __('Índice') }}</h2>
             <ol class="mt-2 text-sm text-indigo-600 space-y-1">
-                <li><a href="#intro" class="hover:underline">¿Qué es ARTid?</a></li>
-                <li><a href="#como-funciona" class="hover:underline">Cómo funciona la ficha (open source)</a></li>
                 <li><a href="#registro" class="hover:underline">1. Crear tu cuenta en ARTid</a></li>
-                <li><a href="#github-cuenta" class="hover:underline">2. Conectar tu cuenta de GitHub</a></li>
-                <li><a href="#repo" class="hover:underline">3. Vincular o crear tu repositorio</a></li>
-                <li><a href="#ficha" class="hover:underline">4. Instalar la ficha</a></li>
-                <li><a href="#pages" class="hover:underline">5. Publicar con GitHub Pages</a></li>
-                <li><a href="#shortio" class="hover:underline">6. Configurar short.io</a></li>
-                <li><a href="#obra" class="hover:underline">7. Crear tu primera obra</a></li>
-                <li><a href="#qr" class="hover:underline">8. Generar el QR</a></li>
-                <li><a href="#historial" class="hover:underline">9. Historial de la obra</a></li>
+                <li><a href="#panel" class="hover:underline">2. El panel de obras</a></li>
+                <li><a href="#obra" class="hover:underline">3. Crear tu primera obra</a></li>
+                <li><a href="#series" class="hover:underline">4. Organizar en series</a></li>
+                <li><a href="#qr" class="hover:underline">5. Generar e imprimir el QR</a></li>
+                <li><a href="#ficha" class="hover:underline">6. La ficha pública</a></li>
+                <li><a href="#exposiciones" class="hover:underline">7. Registrar exposiciones</a></li>
+                <li><a href="#propiedad" class="hover:underline">8. Control de propiedad</a></li>
             </ol>
         </div>
 
@@ -95,110 +54,112 @@
             <h2 class="font-semibold text-xl">1. Crear tu cuenta en ARTid</h2>
             <ol class="mt-3 text-sm space-y-2 list-decimal list-inside">
                 <li>Entra a <span class="font-mono">{{ config('app.url') }}</span>.</li>
-                <li>Haz clic en <strong>«Continuar con Google»</strong> o regístrate con email y contraseña.</li>
-                <li>Se crea tu cuenta de artista y entras al <strong>Dashboard</strong>.</li>
+                <li>Clic en <strong>«Continuar con Google»</strong>, o regístrate con tu <strong>email y contraseña</strong>.</li>
+                <li>Se crea tu cuenta de artista y entras al <strong>panel de obras</strong>.</li>
             </ol>
         </section>
 
         <!-- 2 -->
-        <section id="github-cuenta" class="mt-6 bg-white rounded-lg shadow-sm p-6">
-            <h2 class="font-semibold text-xl">2. Conectar tu cuenta de GitHub</h2>
-            <p class="mt-2 text-sm text-gray-600">ARTid guarda tus obras en <strong>tu</strong> repositorio de GitHub. Necesitas una cuenta de GitHub:</p>
-            <ol class="mt-3 text-sm space-y-2 list-decimal list-inside">
-                <li>Si no tienes cuenta, créala en <a href="https://github.com/signup" class="text-indigo-600 hover:underline" target="_blank" rel="noopener">github.com/signup</a>.</li>
-                <li>En el Dashboard de ARTid, haz clic en <strong>«Connect GitHub»</strong>.</li>
-                <li>GitHub te pedirá autorizar a ARTid (acceso a tus repositorios). Acepta.</li>
-                <li>Al volver verás «Conectado como @tuusuario».</li>
-            </ol>
+        <section id="panel" class="mt-6 bg-white rounded-lg shadow-sm p-6">
+            <h2 class="font-semibold text-xl">2. El panel de obras</h2>
+            <p class="mt-2 text-sm text-gray-600">El panel (<strong>Artworks</strong>) lista todas tus obras con su QR, título, año y estado. Desde aquí puedes:</p>
+            <ul class="mt-2 text-sm space-y-1 list-disc list-inside">
+                <li><strong>New Artwork</strong> — crear una obra nueva.</li>
+                <li>Clic en el <strong>QR</strong> — verlo en tamaño completo para imprimir.</li>
+                <li>Clic en el <strong>título</strong> — abrir la obra: metadata, exposiciones y propiedad.</li>
+                <li><strong>+ Expo</strong> / <strong>+ Propiedad</strong> — atajos para sumar historial.</li>
+                <li><strong>Edit</strong> — modificar los datos de la obra.</li>
+                <li><strong>Series</strong> — administrar tus series.</li>
+            </ul>
         </section>
 
         <!-- 3 -->
-        <section id="repo" class="mt-6 bg-white rounded-lg shadow-sm p-6">
-            <h2 class="font-semibold text-xl">3. Vincular o crear tu repositorio</h2>
-            <p class="mt-2 text-sm text-gray-600">El repositorio es donde vivirán tus obras (<code>artworks/</code>) y la ficha.</p>
+        <section id="obra" class="mt-6 bg-white rounded-lg shadow-sm p-6">
+            <h2 class="font-semibold text-xl">3. Crear tu primera obra</h2>
             <ol class="mt-3 text-sm space-y-2 list-decimal list-inside">
-                <li>Dashboard → <strong>«Configure repository»</strong>.</li>
-                <li><strong>Opción A — vincular existente</strong>: elige uno de tus repositorios y clic en <strong>«Link»</strong>.</li>
-                <li><strong>Opción B — crear nuevo</strong>: escribe un nombre (ej. <code>arte</code>) y clic en <strong>«Create»</strong>.</li>
-                <li>Si el repo ya tiene obras, usa <strong>«Sync artworks»</strong> para importarlas.</li>
+                <li>Panel → <strong>«New Artwork»</strong>.</li>
+                <li>Completa los campos:
+                    <ul class="mt-1 ml-5 list-disc">
+                        <li><strong>Título</strong> (obligatorio).</li>
+                        <li><strong>Artwork ID</strong> (opcional) — identificador permanente de la obra, en mayúsculas y guiones. Ej: <code>NATURAI-3.0</code>. Si lo dejas vacío, se genera automáticamente.</li>
+                        <li><strong>Imagen</strong> — foto de la obra (se almacena de forma segura).</li>
+                        <li><strong>Año</strong>, <strong>Edición</strong> (ej. 1/3), <strong>Dimensiones</strong> y <strong>Descripción</strong>.</li>
+                        <li><strong>Serie</strong> — elige una de tus series o ninguna.</li>
+                        <li><strong>Técnicas</strong> — marca las técnicas utilizadas en la obra.</li>
+                    </ul>
+                </li>
+                <li>Guarda: se genera su <strong>ID</strong> y su <strong>QR firmado</strong>.</li>
             </ol>
         </section>
 
         <!-- 4 -->
-        <section id="ficha" class="mt-6 bg-white rounded-lg shadow-sm p-6">
-            <h2 class="font-semibold text-xl">4. Instalar la ficha</h2>
-            <p class="mt-2 text-sm text-gray-600">La ficha es la página pública que muestra tu obra al escanear el QR.</p>
+        <section id="series" class="mt-6 bg-white rounded-lg shadow-sm p-6">
+            <h2 class="font-semibold text-xl">4. Organizar en series</h2>
+            <p class="mt-2 text-sm text-gray-600">Las <strong>series</strong> agrupan obras relacionadas, y su nombre se muestra en cada ficha pública.</p>
             <ol class="mt-3 text-sm space-y-2 list-decimal list-inside">
-                <li>En la configuración de GitHub, haz clic en <strong>«Install ficha»</strong>.</li>
-                <li>ARTid escribe en la raíz de tu repositorio: <code>index.html</code>, <code>redirect.html</code>, <code>js/app.js</code> y <code>css/style.css</code>.</li>
+                <li>Panel → <strong>«Series»</strong>.</li>
+                <li>Crea una serie con su <strong>nombre</strong> y una descripción opcional.</li>
+                <li>Asigna esa serie a tus obras desde el formulario de creación/edición.</li>
+                <li>Puedes <strong>editar</strong> o <strong>eliminar</strong> series existentes.</li>
             </ol>
         </section>
 
         <!-- 5 -->
-        <section id="pages" class="mt-6 bg-white rounded-lg shadow-sm p-6">
-            <h2 class="font-semibold text-xl">5. Publicar con GitHub Pages</h2>
-            <p class="mt-2 text-sm text-gray-600">Para que la ficha sea pública y accesible por URL:</p>
+        <section id="qr" class="mt-6 bg-white rounded-lg shadow-sm p-6">
+            <h2 class="font-semibold text-xl">5. Generar e imprimir el QR</h2>
             <ol class="mt-3 text-sm space-y-2 list-decimal list-inside">
-                <li>Ve a tu repositorio en GitHub → <strong>Settings</strong> → <strong>Pages</strong>.</li>
-                <li>En <strong>«Build and deployment»</strong> → Source: <strong>«Deploy from a branch»</strong>.</li>
-                <li>Rama: <strong><code>main</code></strong>, carpeta: <strong><code>/ (root)</code></strong> → <strong>Save</strong>.</li>
-                <li>GitHub te da una URL del tipo <code>https://tuusuario.github.io/turepo/</code>.</li>
-                <li>Esa URL es tu <strong>ficha base</strong>. El short URL apuntará a <code>&lt;esa URL&gt;/redirect.html</code>.</li>
-                <li class="text-gray-500">(Alternativa: sube el contenido del repo a tu propio hosting/dominio.)</li>
+                <li>En la lista de obras verás el <strong>QR</strong> de cada una.</li>
+                <li>Clic sobre el QR para abrirlo en <strong>tamaño completo</strong>.</li>
+                <li>Descárgalo (SVG, vectorial) e imprímelo en la obra física.</li>
+                <li>El QR codifica la <strong>URL firmada</strong> de la ficha pública. Es permanente: aunque edites la obra, el QR sigue funcionando.</li>
             </ol>
         </section>
 
         <!-- 6 -->
-        <section id="shortio" class="mt-6 bg-white rounded-lg shadow-sm p-6">
-            <h2 class="font-semibold text-xl">6. Configurar short.io</h2>
-            <p class="mt-2 text-sm text-gray-600">El short URL es el punto intermedio entre el QR y tu ficha. Así el QR nunca cambia aunque cambies de hosting.</p>
-            <ol class="mt-3 text-sm space-y-2 list-decimal list-inside">
-                <li>Crea una cuenta en <a href="https://short.io" class="text-indigo-600 hover:underline" target="_blank" rel="noopener">short.io</a>.</li>
-                <li>Añade un <strong>dominio corto</strong> (puedes usar el gratuito <code>.s.gy</code> que te asigna, o conectar tu propio dominio).</li>
-                <li>Configura el <strong>root redirect</strong> del dominio para que apunte a la URL de tu ficha + <code>redirect.html</code>. Ejemplo:
-                    <pre class="mt-1 bg-gray-100 rounded p-2 font-mono text-xs overflow-x-auto">https://tuusuario.github.io/turepo/redirect.html</pre>
-                </li>
-                <li>Prueba: abre <code>https://tudominio.s.gy?art=NOMBRE_DE_OBRA</code> → debe redirigir a tu ficha y mostrar la obra.</li>
-                <li>En ARTid → GitHub settings → <strong>«Short URL»</strong>, escribe tu dominio corto (ej. <code>tudominio.s.gy</code>) y guarda.</li>
-            </ol>
-            <p class="mt-3 text-sm text-gray-600">Así, el QR codifica <code>https://tudominio.s.gy?art=&lt;ID&gt;</code>, y short.io reenvía a tu ficha con el parámetro <code>?art=</code>.</p>
+        <section id="ficha" class="mt-6 bg-white rounded-lg shadow-sm p-6">
+            <h2 class="font-semibold text-xl">6. La ficha pública</h2>
+            <p class="mt-2 text-sm text-gray-600">Al escanear el QR se abre la <strong>ficha pública</strong> de la obra, alojada por ARTid (<span class="font-mono">arte.poordesigner.com/o/&lt;id&gt;</span>). Muestra:</p>
+            <ul class="mt-2 text-sm space-y-1 list-disc list-inside">
+                <li>La <strong>imagen</strong> de la obra.</li>
+                <li>La <strong>metadata</strong>: título, año, edición, técnica, dimensiones y descripción.</li>
+                <li>El <strong>historial</strong>: exposiciones y proveniencia.</li>
+                <li>El <strong>estado</strong> de la obra.</li>
+            </ul>
+            <p class="mt-2 text-sm text-gray-600">La fichas solo se muestran si la <strong>firma</strong> es válida. Así, ARTid garantiza que la información pública proviene del artista.</p>
         </section>
 
         <!-- 7 -->
-        <section id="obra" class="mt-6 bg-white rounded-lg shadow-sm p-6">
-            <h2 class="font-semibold text-xl">7. Crear tu primera obra</h2>
+        <section id="exposiciones" class="mt-6 bg-white rounded-lg shadow-sm p-6">
+            <h2 class="font-semibold text-xl">7. Registrar exposiciones</h2>
             <ol class="mt-3 text-sm space-y-2 list-decimal list-inside">
-                <li>Menú → <strong>«Artworks»</strong> → <strong>«New Artwork»</strong>.</li>
-                <li>Completa: título, año, edición (1/x), serie, técnicas y descripción.</li>
-                <li>Sube la <strong>imagen</strong> de la obra.</li>
-                <li>El <strong>Artwork ID</strong> se genera del título (o escríbelo tú, en mayúsculas y guiones).</li>
-                <li>Al guardar, ARTid commitea <code>artworks/&lt;ID&gt;/metadata.json</code> + la imagen a tu repositorio.</li>
+                <li>Abre la obra → sección <strong>Exhibitions</strong> → <strong>«+ Add exhibition»</strong>.</li>
+                <li>Completa: <strong>nombre</strong>, <strong>fecha</strong>, <strong>descripción</strong> y <strong>links</strong> (opcional).</li>
+                <li>Al guardar, la exposición aparece en la obra y en su <strong>ficha pública</strong>.</li>
             </ol>
         </section>
 
         <!-- 8 -->
-        <section id="qr" class="mt-6 bg-white rounded-lg shadow-sm p-6">
-            <h2 class="font-semibold text-xl">8. Generar el QR</h2>
-            <ol class="mt-3 text-sm space-y-2 list-decimal list-inside">
-                <li>En la lista de obras verás el <strong>QR</strong> de cada una.</li>
-                <li>Haz clic sobre el QR para abrirlo en tamaño completo.</li>
-                <li>Descárgalo (SVG, vectorial) e imprímelo en la obra física.</li>
-                <li>El QR codifica <code>https://tudominio.s.gy?art=&lt;ID&gt;</code>.</li>
+        <section id="propiedad" class="mt-6 bg-white rounded-lg shadow-sm p-6">
+            <h2 class="font-semibold text-xl">8. Control de propiedad</h2>
+            <p class="mt-2 text-sm text-gray-600">El <strong>historial de propiedad</strong> (proveniencia) registra quién es el dueño de la obra y cómo fue pasando de mano en mano.</p>
+
+            <h3 class="mt-4 font-semibold">Propietario inicial</h3>
+            <ol class="mt-2 text-sm space-y-2 list-decimal list-inside">
+                <li>Abre la obra → <strong>Ownership / Provenance</strong> → <strong>«+ Add ownership»</strong>.</li>
+                <li>Tipo: <strong>«Initial owner (artist)»</strong> — registra al artista como dueño, con nombre, email opcional, fecha y notas.</li>
             </ol>
+
+            <h3 class="mt-4 font-semibold">Transferencia / venta</h3>
+            <ol class="mt-2 text-sm space-y-2 list-decimal list-inside">
+                <li>Abre la obra → <strong>«+ Add ownership»</strong> → tipo <strong>«Transfer / Sale»</strong>.</li>
+                <li>Completa los datos y guarda: se genera una <strong>llave secreta</strong> (se muestra una sola vez, ¡guárdala!).</li>
+                <li>Entrega la llave al <strong>nuevo propietario</strong>, junto con la obra.</li>
+                <li>Si el nuevo dueño necesita demostrar la propiedad, introduce la llave en <strong>«Secret key» → Reveal</strong> y verá los detalles del registro.</li>
+            </ol>
+            <p class="mt-3 text-sm text-gray-600">Los datos del propietario en una transferencia están <strong>cifrados</strong>: ARTid guarda una marca de que ocurrió la transferencia, pero solo quien posee la llave puede conocer los datos de la persona.</p>
         </section>
 
-        <!-- 9 -->
-        <section id="historial" class="mt-6 bg-white rounded-lg shadow-sm p-6">
-            <h2 class="font-semibold text-xl">9. Historial de la obra</h2>
-            <ol class="mt-3 text-sm space-y-2 list-decimal list-inside">
-                <li>En la lista de obras, clic en el <strong>título</strong> para abrir el historial.</li>
-                <li><strong>+ Expo</strong>: agrega exposiciones (nombre, fecha, descripción, links).</li>
-                <li><strong>+ Propiedad</strong>: registra la propiedad. En una venta se genera una <strong>llave secreta</strong> para revelar al nuevo propietario.</li>
-                <li>El historial se muestra en la ficha pública (exposiciones + proveniencia).</li>
-            </ol>
-        </section>
-
-        <p class="mt-8 text-sm text-gray-500">{{ __('¿Dudas? Revisa tu configuración en GitHub settings o contacta con soporte.') }}</p>
+        <p class="mt-8 text-sm text-gray-500">{{ __('¿Dudas? Revisa las secciones de este guía o contacta con soporte.') }}</p>
     </div>
 </body>
 </html>
