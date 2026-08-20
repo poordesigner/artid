@@ -19,18 +19,14 @@
         <section id="intro" class="mt-6 bg-white rounded-lg shadow-sm p-6">
             <h2 class="font-semibold text-xl">¿Qué es ARTid?</h2>
             <p class="mt-2 text-sm text-gray-700">
-                <strong>ARTid</strong> — by <a href="https://poordesigner.com" class="text-indigo-600 hover:underline" target="_blank" rel="noopener">POORdesigner.com</a> — es una plataforma que da identidad digital a las obras de arte. El artista, como dueño de la propiedad intelectual, mantiene el control de la información de su obra, y el propietario cuenta con un medio digital para validar su autenticidad.
-            </p>
-            <p class="mt-2 text-sm text-gray-700">
-                Cada obra se asocia con un <strong>QR permanente</strong> que enlaza a una <strong>ficha digital pública</strong> alojada por ARTid, donde residen los datos básicos e históricos de la obra. Además, cada obra cuenta con un <strong>control cifrado de propiedad</strong> para identificar a su dueño a lo largo del tiempo.
+                <strong>ARTid</strong> — by <a href="https://poordesigner.com" class="text-indigo-600 hover:underline" target="_blank" rel="noopener">POORdesigner.com</a> — es una herramienta diseñada para que los artistas puedan generar una identidad digital para sus obras físicas.
             </p>
 
-            <ul class="mt-4 text-sm space-y-2 list-disc list-inside text-gray-700">
-                <li><strong>QR permanente</strong> — se genera una vez y se imprime en la obra física. Nunca cambia.</li>
-                <li><strong>Ficha pública</strong> — muestra la imagen, la metadata, el historial (exposiciones y proveniencia) y el estado de la obra.</li>
-                <li><strong>URL firmada</strong> — el QR codifica un enlace cifrado; solo las fichas firmadas por ARTid son accesibles al público.</li>
-                <li><strong>Control de Propiedad</strong> — un sistema de llaves cifradas permite demostrar quién es el propietario de la pieza en cada momento.</li>
-                <li><strong>Tú eres el dueño de tu información</strong> — decides qué datos publicar y qué es privado.</li>
+            <h3 class="mt-4 font-semibold">¿Cómo está estructurado ARTid?</h3>
+            <ul class="mt-2 text-sm space-y-2 list-disc list-inside text-gray-700">
+                <li><strong>Ficha de Datos</strong> — ARTid permite crear una ficha básica para cada obra de arte.</li>
+                <li><strong>QR permanente</strong> — ARTid crea un código QR permanente, que se convierte en un medio digital único de acceso a la ficha técnica de la obra.</li>
+                <li><strong>Llaves cifradas</strong> — La creación de llaves cifradas hace que la relación entre la Ficha de Datos y el código QR sea única, evitando suplantaciones.</li>
             </ul>
         </section>
 
