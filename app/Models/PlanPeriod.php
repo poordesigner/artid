@@ -11,12 +11,12 @@ class PlanPeriod extends Model
         'plan_id',
         'number',
         'period',
-        'discount',
+        'price',
     ];
 
     protected $casts = [
         'number' => 'integer',
-        'discount' => 'decimal:2',
+        'price' => 'decimal:2',
     ];
 
     const PERIODS = [

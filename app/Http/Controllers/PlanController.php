@@ -29,13 +29,12 @@ class PlanController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'base_value' => 'required|numeric|min:0',
             'is_active' => 'boolean',
             'sort_order' => 'integer|min:0',
             'periods' => 'array',
             'periods.*.number' => 'required_with:periods.*|integer|min:1',
             'periods.*.period' => 'required_with:periods.*|in:monthly,quarterly,semiannual,annual',
-            'periods.*.discount' => 'required_with:periods.*|numeric|min:0|max:100',
+            'periods.*.price' => 'required_with:periods.*|numeric|min:0',
             'features' => 'array',
             'features.*.description' => 'required_with:features.*|string',
             'legal_terms' => 'array',
@@ -46,7 +45,6 @@ class PlanController extends Controller
         $plan = Plan::create([
             'name' => $validated['name'],
             'description' => $validated['description'] ?? null,
-            'base_value' => $validated['base_value'],
             'is_active' => $validated['is_active'] ?? true,
             'sort_order' => $validated['sort_order'] ?? 0,
         ]);
@@ -69,13 +67,12 @@ class PlanController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'base_value' => 'required|numeric|min:0',
             'is_active' => 'boolean',
             'sort_order' => 'integer|min:0',
             'periods' => 'array',
             'periods.*.number' => 'required_with:periods.*|integer|min:1',
             'periods.*.period' => 'required_with:periods.*|in:monthly,quarterly,semiannual,annual',
-            'periods.*.discount' => 'required_with:periods.*|numeric|min:0|max:100',
+            'periods.*.price' => 'required_with:periods.*|numeric|min:0',
             'features' => 'array',
             'features.*.description' => 'required_with:features.*|string',
             'legal_terms' => 'array',
@@ -86,7 +83,6 @@ class PlanController extends Controller
         $plan->update([
             'name' => $validated['name'],
             'description' => $validated['description'] ?? null,
-            'base_value' => $validated['base_value'],
             'is_active' => $validated['is_active'] ?? true,
             'sort_order' => $validated['sort_order'] ?? 0,
         ]);

@@ -125,16 +125,12 @@
                                                     @if ($plan->description)
                                                         <p class="text-sm text-gray-600 mt-1">{{ $plan->description }}</p>
                                                     @endif
-                                                    <p class="text-sm text-gray-500 mt-1">${{ number_format($plan->base_value, 2) }} USD / mes base</p>
 
                                                     @if ($plan->periods->count())
                                                         <div class="flex flex-wrap gap-2 mt-2">
                                                             @foreach ($plan->periods as $period)
                                                                 <span class="px-2 py-1 text-xs bg-indigo-50 text-indigo-700 rounded">
-                                                                    {{ $period->number }} {{ $period->period_label }}
-                                                                    @if ($period->discount > 0)
-                                                                        · -{{ $period->discount }}%
-                                                                    @endif
+                                                                    {{ $period->number }} {{ $period->period_label }} · ${{ number_format($period->price, 2) }} USD
                                                                 </span>
                                                             @endforeach
                                                         </div>
@@ -186,12 +182,6 @@
                                     <textarea id="description" name="description" rows="2" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full" x-model="form.description"></textarea>
                                 </div>
 
-                                {{-- Valor base --}}
-                                <div class="mt-4">
-                                    <x-input-label for="base_value" :value="__('Valor base (USD/mes)')" />
-                                    <x-text-input id="base_value" class="block mt-1 w-full" type="number" step="0.01" name="base_value" x-model="form.base_value" required />
-                                </div>
-
                                 {{-- Activo + Orden --}}
                                 <div class="grid grid-cols-2 gap-4 mt-4">
                                     <div>
@@ -228,8 +218,8 @@
                                                 </select>
                                             </div>
                                             <div>
-                                                <label class="text-xs text-gray-500">{{ __('Descuento %') }}</label>
-                                                <input type="number" :name="'periods[' + index + '][discount]'" x-model="period.discount" min="0" max="100" step="0.01" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm" required>
+                                                <label class="text-xs text-gray-500">{{ __('Precio (USD)') }}</label>
+                                                <input type="number" :name="'periods[' + index + '][price]'" x-model="period.price" min="0" step="0.01" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm" required>
                                             </div>
                                             <div class="flex justify-center">
                                                 <button type="button" @click="form.periods.splice(index, 1)" class="text-red-500 hover:text-red-700 text-sm">✕</button>
@@ -297,7 +287,6 @@
                 form: {
                     name: '',
                     description: '',
-                    base_value: '',
                     is_active: true,
                     sort_order: 0,
                     periods: [],
@@ -308,7 +297,6 @@
                     this.form = {
                         name: '',
                         description: '',
-                        base_value: '',
                         is_active: true,
                         sort_order: 0,
                         periods: [],
@@ -321,7 +309,6 @@
                     this.form = {
                         name: plan.name,
                         description: plan.description || '',
-                        base_value: plan.base_value,
                         is_active: plan.is_active,
                         sort_order: plan.sort_order,
                         periods: plan.periods.map(p => ({...p})),
@@ -332,7 +319,7 @@
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 },
                 addPeriod() {
-                    this.form.periods.push({ number: 1, period: 'monthly', discount: 0 });
+                    this.form.periods.push({ number: 1, period: 'monthly', price: 0 });
                 },
                 addFeature() {
                     this.form.features.push({ description: '' });
