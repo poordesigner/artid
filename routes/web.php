@@ -34,7 +34,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/configuracion', [ConfigController::class, 'index'])->name('configuracion');
 
     Route::middleware('admin')->group(function () {
-        Route::resource('plans', PlanController::class)->except(['show']);
+        Route::get('/configuracion/plans', [PlanController::class, 'index'])->name('plans.index');
+        Route::get('/configuracion/plans/create', [PlanController::class, 'create'])->name('plans.create');
+        Route::post('/configuracion/plans', [PlanController::class, 'store'])->name('plans.store');
+        Route::get('/configuracion/plans/{plan}/edit', [PlanController::class, 'edit'])->name('plans.edit');
+        Route::patch('/configuracion/plans/{plan}', [PlanController::class, 'update'])->name('plans.update');
+        Route::delete('/configuracion/plans/{plan}', [PlanController::class, 'destroy'])->name('plans.destroy');
     });
 
     Route::get('/artworks', [ArtworkController::class, 'index'])->name('artworks.index');

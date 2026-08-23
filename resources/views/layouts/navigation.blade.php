@@ -23,11 +23,6 @@
                 <x-nav-link :href="route('ayuda')" :active="request()->routeIs('ayuda')">
                     {{ __('Ayuda') }}
                 </x-nav-link>
-                @if (Auth::user()?->isAdmin())
-                    <x-nav-link :href="route('plans.index')" :active="request()->routeIs('plans.*')">
-                        {{ __('Planes') }}
-                    </x-nav-link>
-                @endif
 
                 <!-- Settings Dropdown -->
                 <x-dropdown align="right" width="48">
@@ -90,11 +85,6 @@
             <x-responsive-nav-link :href="route('ayuda')" :active="request()->routeIs('ayuda')">
                 {{ __('Ayuda') }}
             </x-responsive-nav-link>
-            @if (Auth::user()?->isAdmin())
-                <x-responsive-nav-link :href="route('plans.index')" :active="request()->routeIs('plans.*')">
-                    {{ __('Planes') }}
-                </x-responsive-nav-link>
-            @endif
         </div>
 
         <!-- Responsive Settings Options -->
