@@ -18,6 +18,10 @@ Route::get('/o/{publicId}', [PublicArtworkController::class, 'show'])->name('pub
 Route::get('/artist/{id}', [PublicArtworkController::class, 'artist'])->name('public.artist');
 
 Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', function () {
+        return redirect()->route('artworks.index');
+    })->name('dashboard');
+
     Route::get('/ayuda', function () {
         return view('ayuda');
     })->name('ayuda');
