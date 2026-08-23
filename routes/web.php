@@ -4,6 +4,7 @@ use App\Http\Controllers\ArtworkController;
 use App\Http\Controllers\ConfigController;
 use App\Http\Controllers\ExhibitionController;
 use App\Http\Controllers\OwnershipController;
+use App\Http\Controllers\PlanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicArtworkController;
 use App\Http\Controllers\SeriesController;
@@ -31,6 +32,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/configuracion', [ConfigController::class, 'index'])->name('configuracion');
+
+    Route::resource('plans', PlanController::class)->except(['show']);
 
     Route::get('/artworks', [ArtworkController::class, 'index'])->name('artworks.index');
     Route::get('/artworks/create', [ArtworkController::class, 'create'])->name('artworks.create');
