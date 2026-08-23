@@ -33,7 +33,13 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/configuracion', [ConfigController::class, 'index'])->name('configuracion');
 
-    Route::resource('plans', PlanController::class)->except(['show']);
+    Route::resource('plans', PlanController::class)->except(['show'])->middleware(function ($request, $next) {
+        if (! auth()->user()?->isAdmin()) {
+            abort(403);
+        }
+
+        return $next($request);
+    });
 
     Route::get('/artworks', [ArtworkController::class, 'index'])->name('artworks.index');
     Route::get('/artworks/create', [ArtworkController::class, 'create'])->name('artworks.create');
