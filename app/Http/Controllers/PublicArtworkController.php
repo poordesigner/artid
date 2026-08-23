@@ -24,4 +24,14 @@ class PublicArtworkController extends Controller
 
         return view('public.artwork', compact('artwork'));
     }
+
+    /**
+     * Public profile of an artist.
+     */
+    public function artist(string $id): View
+    {
+        $artist = \App\Models\Artist::withCount('artworks')->findOrFail($id);
+
+        return view('public.artist', compact('artist'));
+    }
 }

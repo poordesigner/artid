@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password', 'google_id', 'github_id', 'github_token', 'github_nickname', 'github_repo', 'short_domain'])]
+#[Fillable(['name', 'email', 'password', 'google_id', 'github_id', 'github_token', 'github_nickname', 'github_repo', 'short_domain', 'avatar', 'statement', 'cv_pdf', 'website_url', 'instagram', 'behance', 'artstation', 'youtube', 'tiktok'])]
 #[Hidden(['password', 'remember_token'])]
 class Artist extends Authenticatable
 {
@@ -25,6 +25,44 @@ class Artist extends Authenticatable
     public function series(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Series::class);
+    }
+
+    public function avatarUrl(): ?string
+    {
+        if (! $this->avatar) {
+            return null;
+        }
+
+        return rtrim((string) config('filesystems.disks.r2.url'), '/').'/artists/'.$this->id.'/'.$this->avatar;
+    }
+
+    public function cvUrl(): ?string
+    {
+        if (! $this->cv_pdf) {
+            return null;
+        }
+
+        return rtrim((string) config('filesystems.disks.r2.url'), '/').'/artists/'.$this->id.'/'.$this->cv_pdf;
+    }
+
+    public function socialUrl(string $network): ?string
+    {
+        $username = $this->{$network} ?? null;
+
+        if (! $username) {
+            return null;
+        }
+
+        $username = ltrim($username, '@');
+
+        return match ($network) {
+            'instagram' => 'https://instagram.com/'.$username,
+            'behance' => 'https://behance.net/'.$username,
+            'artstation' => 'https://www.artstation.com/'.$username,
+            'youtube' => 'https://youtube.com/@'.$username,
+            'tiktok' => 'https://tiktok.com/@'.$username,
+            default => null,
+        };
     }
 
     /**

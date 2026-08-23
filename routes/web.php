@@ -19,6 +19,8 @@ Route::get('/ayuda', function () {
 
 Route::get('/o/{publicId}', [PublicArtworkController::class, 'show'])->name('public.artwork');
 
+Route::get('/artist/{id}', [PublicArtworkController::class, 'artist'])->name('public.artist');
+
 Route::get('/dashboard', function () {
     return redirect()->route('artworks.index');
 })->middleware(['auth', 'verified'])->name('dashboard');

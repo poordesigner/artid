@@ -7,6 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
@@ -26,13 +27,38 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $user = $request->user();
+        $validated = $request->validated();
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        // Handle avatar upload
+        if ($request->hasFile('avatar')) {
+            if ($user->avatar) {
+                Storage::disk('r2')->delete("artists/{$user->id}/{$user->avatar}");
+            }
+            $file = $request->file('avatar');
+            $filename = 'avatar.'.$file->extension();
+            Storage::disk('r2')->put("artists/{$user->id}/$filename", $file->get());
+            $validated['avatar'] = $filename;
         }
 
-        $request->user()->save();
+        // Handle CV PDF upload
+        if ($request->hasFile('cv_pdf')) {
+            if ($user->cv_pdf) {
+                Storage::disk('r2')->delete("artists/{$user->id}/{$user->cv_pdf}");
+            }
+            $file = $request->file('cv_pdf');
+            $filename = 'cv.'.$file->extension();
+            Storage::disk('r2')->put("artists/{$user->id}/$filename", $file->get());
+            $validated['cv_pdf'] = $filename;
+        }
+
+        $user->fill($validated);
+
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
+        }
+
+        $user->save();
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }

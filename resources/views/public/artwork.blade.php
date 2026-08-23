@@ -41,7 +41,7 @@
         @endif
 
         <h1 class="title">{{ $artwork->title }}</h1>
-        <p class="artist">{{ '@'.($artwork->artist->name) }}</p>
+        <p class="artist"><a href="{{ route('public.artist', $artwork->artist_id) }}" style="color:inherit;text-decoration:none;">{{ '@'.($artwork->artist->name) }}</a></p>
 
         <div class="verified">&#10003; Verificado por ARTid</div>
 
