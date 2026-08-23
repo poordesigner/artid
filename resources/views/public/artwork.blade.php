@@ -64,7 +64,15 @@
                     @foreach ($artwork->exhibitions as $exhibition)
                         <li class="event">
                             <div class="event-name">{{ $exhibition->name }}</div>
-                            @if ($exhibition->date)<div class="event-date">{{ $exhibition->date->format('Y-m-d') }}</div>@endif
+                            @if ($exhibition->start_date)
+                                <div class="event-date">{{ __('Inicio') }}: {{ $exhibition->start_date->format('Y-m-d') }}</div>
+                            @endif
+                            @if ($exhibition->end_date)
+                                <div class="event-date">{{ __('Fin') }}: {{ $exhibition->end_date->format('Y-m-d') }}</div>
+                            @endif
+                            @if ($exhibition->location)
+                                <div class="event-date">{{ __('Ubicación') }}: {{ $exhibition->location }}</div>
+                            @endif
                             @if ($exhibition->description)<div class="event-desc">{{ $exhibition->description }}</div>@endif
                             @if ($exhibition->links)<a class="event-link" href="{{ $exhibition->links }}" target="_blank" rel="noopener">Enlace</a>@endif
                         </li>

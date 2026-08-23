@@ -58,25 +58,61 @@
 <!-- Technique -->
 <div class="mt-4">
     <x-input-label :value="__('Technique')" />
-    @php
-        $selectedTechniques = old('techniques', []);
-        if (empty($selectedTechniques) && isset($artwork) && $artwork && $artwork->technique) {
-            $selectedTechniques = array_map('trim', explode(',', $artwork->technique));
-        }
-    @endphp
-    <div class="mt-2 max-h-56 overflow-y-auto border border-gray-300 rounded-md p-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
-        @foreach ($techniques as $technique)
-            <label class="flex items-start gap-2 text-sm text-gray-700 cursor-pointer">
-                <input type="checkbox" name="techniques[]" value="{{ $technique->name }}" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500 mt-0.5"
-                    @if (in_array($technique->name, $selectedTechniques)) checked @endif>
-                <span>
-                    <span class="font-medium">{{ $technique->name }}</span>
-                    @if ($technique->description)
-                        <span class="block text-xs text-gray-500">{{ $technique->description }}</span>
-                    @endif
-                </span>
-            </label>
-        @endforeach
+    <p class="mt-1 text-xs text-gray-500">{{ __('Seleccioná una o más técnicas. Escribí para filtrar y usá el botón de borrar para quitar.') }}</p>
+
+{{-- técnicas seleccionadas (edición) --}}
+@php
+    $selectedTechniques = old('techniques', []);
+    if (empty($selectedTechniques) && isset($artwork) && $artwork && $artwork->technique) {
+        $selectedTechniques = array_map('trim', explode(',', $artwork->technique));
+    }
+@endphp
+<div x-data="techniquePicker(@json($selectedTechniques), @js($techniques->map(fn ($t) => ['value' => $t->name, 'name' => $t->name, 'description' => $t->description])->values()->all()))"
+     class="mt-2">
+    <div class="flex flex-wrap items-center gap-2">
+        <template x-for="tag in selected" :key="tag">
+            <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-indigo-100 text-indigo-800 rounded-full text-xs">
+                <span x-text="tag"></span>
+                <button type="button" @click="remove(tag)" class="hover:text-indigo-600" title="{{ __('Quitar') }}">&times;</button>
+            </span>
+        </template>
+
+        <input type="text"
+               x-model="search"
+               @focus="open = true; $el.focus()"
+               @blur="setTimeout(() => open = false, 200)"
+               @keydown-Backspace="onKeydown"
+               @keydown-Escape="open = false"
+               class="flex-1 min-w-[14rem] border border-gray-300 rounded-md shadow-sm text-sm text-gray-900 px-2 py-1 outline-none focus:ring-indigo-500 focus:border-indigo-500"
+               placeholder="{{ __('Buscar técnica...') }}">
+    </div>
+
+    <div x-show="open"
+         x-transition
+         class="mt-1 max-h-60 overflow-y-auto border border-gray-300 rounded-md bg-white shadow-lg z-10">
+        <template x-if="filtered.length === 0">
+            <p class="p-2 text-sm text-gray-500">{{ __('Sin resultados') }}</p>
+        </template>
+        <template x-for="option in filtered" :key="option.value">
+            <div class="px-3 py-1.5 cursor-pointer hover:bg-indigo-50"
+                 @mousedown.prevent="toggle(option)">
+                <div class="flex items-center gap-2">
+                    <input type="checkbox" :value="option.value" :checked="selected.includes(option.value)" class="pointer-events-none rounded border-gray-300 text-indigo-600">
+                    <div>
+                        <span class="text-sm text-gray-900" x-text="option.name"></span>
+                        <template x-if="option.description">
+                            <p class="text-xs text-gray-500" x-text="option.description"></p>
+                        </template>
+                    </div>
+                </div>
+            </div>
+        </template>
+    </div>
+
+        <!-- hidden inputs that mirror the selected techniques on submit -->
+        <template x-for="tag in selected" :key="tag">
+            <input type="hidden" name="techniques[]" :value="tag">
+        </template>
     </div>
     <x-input-error :messages="$errors->get('techniques')" class="mt-2" />
 </div>

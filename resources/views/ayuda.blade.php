@@ -24,9 +24,9 @@
 
             <h3 class="mt-4 font-semibold">¿Cómo está estructurado ARTid?</h3>
             <ul class="mt-2 text-sm space-y-2 list-disc list-inside text-gray-700">
-                <li><strong>Ficha de Datos</strong> — ARTid permite crear una ficha básica para cada obra de arte.</li>
-                <li><strong>QR permanente</strong> — ARTid crea un código QR permanente, que se convierte en un medio digital único de acceso a la ficha técnica de la obra.</li>
-                <li><strong>Llaves cifradas</strong> — La creación de llaves cifradas hace que la relación entre la Ficha de Datos y el código QR sea única, evitando suplantaciones.</li>
+                <li><strong>Ficha de Datos</strong> — ARTid permite crear una ficha técnica para cada obra: título, año, edición, serie, técnicas, dimensiones, descripción e imagen.</li>
+                <li><strong>QR permanente</strong> — ARTid genera un código QR permanente, que se convierte en un medio digital único de acceso a la ficha de la obra. El QR se imprime sobre la obra y **nunca cambia**.</li>
+                <li><strong>Llaves cifradas</strong> — La generación de llaves cifradas hace que la relación entre la Ficha de Datos y el código QR sea única, evitando suplantaciones. Sólo la obra cuyo QR codifica a la URL firmada puede acceder a su ficha pública.</li>
             </ul>
         </section>
 
@@ -36,8 +36,8 @@
             <ol class="mt-2 text-sm text-indigo-600 space-y-1">
                 <li><a href="#registro" class="hover:underline">1. Crear tu cuenta en ARTid</a></li>
                 <li><a href="#panel" class="hover:underline">2. El panel de obras</a></li>
-                <li><a href="#obra" class="hover:underline">3. Crear tu primera obra</a></li>
-                <li><a href="#series" class="hover:underline">4. Organizar en series</a></li>
+                <li><a href="#obra" class="hover:underline">3. Crear una obra</a></li>
+                <li><a href="#series" class="hover:underline">4. Organizar obras en series</a></li>
                 <li><a href="#qr" class="hover:underline">5. Generar e imprimir el QR</a></li>
                 <li><a href="#ficha" class="hover:underline">6. La ficha pública</a></li>
                 <li><a href="#exposiciones" class="hover:underline">7. Registrar exposiciones</a></li>
@@ -50,7 +50,7 @@
             <h2 class="font-semibold text-xl">1. Crear tu cuenta en ARTid</h2>
             <ol class="mt-3 text-sm space-y-2 list-decimal list-inside">
                 <li>Entra a <span class="font-mono">{{ config('app.url') }}</span>.</li>
-                <li>Clic en <strong>«Continuar con Google»</strong>, o regístrate con tu <strong>email y contraseña</strong>.</li>
+                <li>Haz clic en <strong>«Continue with Google»</strong> o regístrate con <strong>email y contraseña</strong> (el enlace «¿No tenés cuenta? Registrate» está en la página de login).</li>
                 <li>Se crea tu cuenta de artista y entras al <strong>panel de obras</strong>.</li>
             </ol>
         </section>
@@ -58,45 +58,37 @@
         <!-- 2 -->
         <section id="panel" class="mt-6 bg-white rounded-lg shadow-sm p-6">
             <h2 class="font-semibold text-xl">2. El panel de obras</h2>
-            <p class="mt-2 text-sm text-gray-600">El panel (<strong>Artworks</strong>) lista todas tus obras con su QR, título, año y estado. Desde aquí puedes:</p>
+            <p class="mt-2 text-sm text-gray-600">La página principal te muestra la lista de tus obras. Cada fila incluye el <strong>QR</strong> (en miniatura), el <strong>título</strong>, el <strong>año</strong> y el <strong>estado</strong>.</p>
             <ul class="mt-2 text-sm space-y-1 list-disc list-inside">
                 <li><strong>New Artwork</strong> — crear una obra nueva.</li>
-                <li>Clic en el <strong>QR</strong> — verlo en tamaño completo para imprimir.</li>
-                <li>Clic en el <strong>título</strong> — abrir la obra: metadata, exposiciones y propiedad.</li>
-                <li><strong>+ Expo</strong> / <strong>+ Propiedad</strong> — atajos para sumar historial.</li>
-                <li><strong>Edit</strong> — modificar los datos de la obra.</li>
                 <li><strong>Series</strong> — administrar tus series.</li>
+                <li><strong>+ Expo</strong> / <strong>+ Propiedad</strong> — sumar historial a una obra.</li>
+                <li><strong>Edit</strong> — modificar los datos de la obra.</li>
             </ul>
         </section>
 
         <!-- 3 -->
         <section id="obra" class="mt-6 bg-white rounded-lg shadow-sm p-6">
-            <h2 class="font-semibold text-xl">3. Crear tu primera obra</h2>
+            <h2 class="font-semibold text-xl">3. Crear una obra</h2>
             <ol class="mt-3 text-sm space-y-2 list-decimal list-inside">
                 <li>Panel → <strong>«New Artwork»</strong>.</li>
-                <li>Completa los campos:
-                    <ul class="mt-1 ml-5 list-disc">
-                        <li><strong>Título</strong> (obligatorio).</li>
-                        <li><strong>Artwork ID</strong> (opcional) — identificador permanente de la obra, en mayúsculas y guiones. Ej: <code>NATURAI-3.0</code>. Si lo dejas vacío, se genera automáticamente.</li>
-                        <li><strong>Imagen</strong> — foto de la obra (se almacena de forma segura).</li>
-                        <li><strong>Año</strong>, <strong>Edición</strong> (ej. 1/3), <strong>Dimensiones</strong> y <strong>Descripción</strong>.</li>
-                        <li><strong>Serie</strong> — elige una de tus series o ninguna.</li>
-                        <li><strong>Técnicas</strong> — marca las técnicas utilizadas en la obra.</li>
-                    </ul>
-                </li>
-                <li>Guarda: se genera su <strong>ID</strong> y su <strong>QR firmado</strong>.</li>
+                <li>Completá: título, año, edición (ej. <code>1/3</code>), serie y descripción.</li>
+                <li><strong>Artwork ID</strong> (opcional) — identificador permanente. Si lo dejás vacío se genera automáticamente del título.</li>
+                <li><strong>Técnicas</strong> — seleccioná una o más. Escribí para filtrar y usá el <code>x</code> para quitar.</li>
+                <li><strong>Dimensiones</strong> (ej. <code>50 x 70 cm</code>) y subí la <strong>imagen</strong> de la obra.</li>
+                <li>Al guardar, se crea la obra y ya podés ver su QR y su ficha.</li>
             </ol>
         </section>
 
         <!-- 4 -->
         <section id="series" class="mt-6 bg-white rounded-lg shadow-sm p-6">
-            <h2 class="font-semibold text-xl">4. Organizar en series</h2>
-            <p class="mt-2 text-sm text-gray-600">Las <strong>series</strong> agrupan obras relacionadas, y su nombre se muestra en cada ficha pública.</p>
+            <h2 class="font-semibold text-xl">4. Organizar obras en series</h2>
+            <p class="mt-2 text-sm text-gray-600">Las <strong>series</strong> agrupan obras relacionadas; el nombre de la serie aparece en la ficha pública de cada obra.</p>
             <ol class="mt-3 text-sm space-y-2 list-decimal list-inside">
                 <li>Panel → <strong>«Series»</strong>.</li>
-                <li>Crea una serie con su <strong>nombre</strong> y una descripción opcional.</li>
-                <li>Asigna esa serie a tus obras desde el formulario de creación/edición.</li>
-                <li>Puedes <strong>editar</strong> o <strong>eliminar</strong> series existentes.</li>
+                <li>Creá una serie con su nombre y una descripción.</li>
+                <li>Asigná la serie a tus obras desde el formulario de creación/edición.</li>
+                <li>Podés <strong>editar</strong> o <strong>eliminar</strong> series existentes.</li>
             </ol>
         </section>
 
@@ -105,31 +97,32 @@
             <h2 class="font-semibold text-xl">5. Generar e imprimir el QR</h2>
             <ol class="mt-3 text-sm space-y-2 list-decimal list-inside">
                 <li>En la lista de obras verás el <strong>QR</strong> de cada una.</li>
-                <li>Clic sobre el QR para abrirlo en <strong>tamaño completo</strong>.</li>
-                <li>Descárgalo (SVG, vectorial) e imprímelo en la obra física.</li>
-                <li>El QR codifica la <strong>URL firmada</strong> de la ficha pública. Es permanente: aunque edites la obra, el QR sigue funcionando.</li>
+                <li>Hacé clic sobre el QR para abrirlo en tamaño completo (SVG vectorial).</li>
+                <li>Guardalo e imprimilo sobre la obra física.</li>
+                <li>El QR codifica una <strong>URL firmada</strong> que dirige a la ficha pública de la obra.</li>
             </ol>
         </section>
 
         <!-- 6 -->
         <section id="ficha" class="mt-6 bg-white rounded-lg shadow-sm p-6">
             <h2 class="font-semibold text-xl">6. La ficha pública</h2>
-            <p class="mt-2 text-sm text-gray-600">Al escanear el QR se abre la <strong>ficha pública</strong> de la obra, alojada por ARTid (<span class="font-mono">arte.poordesigner.com/o/&lt;id&gt;</span>). Muestra:</p>
+            <p class="mt-2 text-sm text-gray-600">Al escanear el QR se abre la <strong>ficha pública</strong> de la obra, alojada por ARTid en <span class="font-mono">{{ config('artid.public_url') }}</span>. La ficha muestra:</p>
             <ul class="mt-2 text-sm space-y-1 list-disc list-inside">
-                <li>La <strong>imagen</strong> de la obra.</li>
-                <li>La <strong>metadata</strong>: título, año, edición, técnica, dimensiones y descripción.</li>
+                <li>La <strong>imagen</strong>, el <strong>título</strong> y el <strong>artista</strong>.</li>
+                <li>La <strong>metadata</strong> (año, edición, serie, técnica, dimensiones, descripción).</li>
                 <li>El <strong>historial</strong>: exposiciones y proveniencia.</li>
-                <li>El <strong>estado</strong> de la obra.</li>
+                <li>Un sello <strong>«Verificado por ARTid»</strong> que confirma que la información es auténtica y está firmada.</li>
             </ul>
-            <p class="mt-2 text-sm text-gray-600">La fichas solo se muestran si la <strong>firma</strong> es válida. Así, ARTid garantiza que la información pública proviene del artista.</p>
+            <p class="mt-2 text-sm text-gray-600">La ficha es de solo lectura y pública: cualquiera con el QR puede verla.</p>
         </section>
 
         <!-- 7 -->
         <section id="exposiciones" class="mt-6 bg-white rounded-lg shadow-sm p-6">
             <h2 class="font-semibold text-xl">7. Registrar exposiciones</h2>
             <ol class="mt-3 text-sm space-y-2 list-decimal list-inside">
-                <li>Abre la obra → sección <strong>Exhibitions</strong> → <strong>«+ Add exhibition»</strong>.</li>
-                <li>Completa: <strong>nombre</strong>, <strong>fecha</strong>, <strong>descripción</strong> y <strong>links</strong> (opcional).</li>
+                <li>Abre la obra → <strong>«+ Expo»</strong>.</li>
+                <li>Completá: nombre, <strong>fecha de inicio</strong>, <strong>fecha de fin</strong>, <strong>ubicación</strong> (ciudad y país) y una descripción.</li>
+                <li>Podés usar la lista de sugerencias de ciudades o escribir la vuestra.</li>
                 <li>Al guardar, la exposición aparece en la obra y en su <strong>ficha pública</strong>.</li>
             </ol>
         </section>
@@ -139,23 +132,24 @@
             <h2 class="font-semibold text-xl">8. Control de propiedad</h2>
             <p class="mt-2 text-sm text-gray-600">El <strong>historial de propiedad</strong> (proveniencia) registra quién es el dueño de la obra y cómo fue pasando de mano en mano.</p>
 
-            <h3 class="mt-4 font-semibold">Propietario inicial</h3>
+            <h3 class="mt-4 font-semibold">Primer propietario</h3>
             <ol class="mt-2 text-sm space-y-2 list-decimal list-inside">
-                <li>Abre la obra → <strong>Ownership / Provenance</strong> → <strong>«+ Add ownership»</strong>.</li>
-                <li>Tipo: <strong>«Initial owner (artist)»</strong> — registra al artista como dueño, con nombre, email opcional, fecha y notas.</li>
+                <li>Abre la obra → <strong>«+ Propiedad»</strong> → tipo <strong>«Initial owner (artist)»</strong>.</li>
+                <li>Indicá el nombre, email opcional, fecha y notas.</li>
+                <li>El primer propietario queda registrado vislumbrable.</li>
             </ol>
 
             <h3 class="mt-4 font-semibold">Transferencia / venta</h3>
             <ol class="mt-2 text-sm space-y-2 list-decimal list-inside">
-                <li>Abre la obra → <strong>«+ Add ownership»</strong> → tipo <strong>«Transfer / Sale»</strong>.</li>
-                <li>Completa los datos y guarda: se genera una <strong>llave secreta</strong> (se muestra una sola vez, ¡guárdala!).</li>
-                <li>Entrega la llave al <strong>nuevo propietario</strong>, junto con la obra.</li>
-                <li>Si el nuevo dueño necesita demostrar la propiedad, introduce la llave en <strong>«Secret key» → Reveal</strong> y verá los detalles del registro.</li>
+                <li>Abre la obra → <strong>«+ Propiedad»</strong> → tipo <strong>«Transfer / Sale»</strong>.</li>
+                <li>Completá los datos del nuevo propietario y guardá. ARTid genera una <strong>llave secreta</strong> (se muestra una sola vez, ¡guárdala!).</li>
+                <li>Entregá la llave al nuevo dueño junto con la obra.</li>
+                <li>El nuevo dueño (o vos) puede introducir la llave en <strong>«Secret key → Reveal»</strong> para ver los datos del propietario.</li>
             </ol>
-            <p class="mt-3 text-sm text-gray-600">Los datos del propietario en una transferencia están <strong>cifrados</strong>: ARTid guarda una marca de que ocurrió la transferencia, pero solo quien posee la llave puede conocer los datos de la persona.</p>
+            <p class="mt-3 text-sm text-gray-600">Los datos del propietario en una transferencia están <strong>cifrados</strong>: ARTid guarda la marca de que ocurrió la transferencia, pero solo quien posee la llave puede conocer quién es el dueño en ese momento.</p>
         </section>
 
-        <p class="mt-8 text-sm text-gray-500">{{ __('¿Dudas? Revisa las secciones de este guía o contacta con soporte.') }}</p>
+        <p class="mt-8 text-sm text-gray-500">{{ __('¿Dudas? Seguí estos pasos o contactá con soporte desde el panel.') }}</p>
     </div>
 </body>
 </html>

@@ -91,7 +91,15 @@
                                 <li class="py-3 flex items-start justify-between gap-4">
                                     <div class="min-w-0">
                                         <p class="text-sm font-medium text-gray-900">{{ $exhibition->name }}</p>
-                                        @if ($exhibition->date)<p class="text-xs text-gray-500">{{ $exhibition->date->format('Y-m-d') }}</p>@endif
+                                        @if ($exhibition->start_date)
+                                            <p class="text-xs text-gray-500">{{ __('Fecha de inicio') }}: {{ $exhibition->start_date->format('Y-m-d') }}</p>
+                                        @endif
+                                        @if ($exhibition->end_date)
+                                            <p class="text-xs text-gray-500">{{ __('Fecha de fin') }}: {{ $exhibition->end_date->format('Y-m-d') }}</p>
+                                        @endif
+                                        @if ($exhibition->location)
+                                            <p class="text-xs text-gray-500">{{ __('Ubicación') }}: {{ $exhibition->location }}</p>
+                                        @endif
                                         @if ($exhibition->description)<p class="text-sm text-gray-600">{{ $exhibition->description }}</p>@endif
                                         @if ($exhibition->links)<p class="text-xs text-indigo-600 truncate">{{ $exhibition->links }}</p>@endif
                                     </div>

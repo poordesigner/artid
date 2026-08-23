@@ -31,7 +31,9 @@ class ExhibitionController extends Controller
 
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'date' => ['nullable', 'date'],
+            'start_date' => ['nullable', 'date'],
+            'end_date' => ['nullable', 'date', 'after_or_equal:start_date'],
+            'location' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'links' => ['nullable', 'string'],
         ]);
@@ -76,7 +78,9 @@ class ExhibitionController extends Controller
             $data = $artwork->exhibitions()->oldest()->get()
                 ->map(fn ($e) => [
                     'name' => $e->name,
-                    'date' => $e->date?->format('Y-m-d'),
+                    'start_date' => $e->start_date?->format('Y-m-d'),
+                    'end_date' => $e->end_date?->format('Y-m-d'),
+                    'location' => $e->location,
                     'description' => $e->description,
                     'links' => $e->links,
                 ])->values()->all();

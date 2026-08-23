@@ -7,12 +7,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Exhibition extends Model
 {
-    protected $fillable = ['name', 'date', 'description', 'links'];
+    protected $fillable = ['name', 'start_date', 'end_date', 'location', 'description', 'links'];
 
     protected function casts(): array
     {
         return [
-            'date' => 'date',
+            'start_date' => 'date',
+            'end_date' => 'date',
         ];
     }
 
