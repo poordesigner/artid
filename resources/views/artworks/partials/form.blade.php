@@ -67,7 +67,13 @@
         $selectedTechniques = array_map('trim', explode(',', $artwork->technique));
     }
 @endphp
-<div x-data="techniquePicker(@json($selectedTechniques), @js($techniques->map(fn ($t) => ['value' => $t->name, 'name' => $t->name, 'description' => $t->description])->values()->all()))"
+<script type="application/json" id="technique-options">
+    {!! json_encode($techniques->map(fn ($t) => ['value' => $t->name, 'name' => $t->name, 'description' => $t->description])->values()->all(), JSON_UNESCAPED_UNICODE) !!}
+</script>
+<script type="application/json" id="technique-selected">
+    {!! json_encode($selectedTechniques) !!}
+</script>
+<div x-data="techniquePicker(JSON.parse(document.getElementById('technique-selected').textContent), JSON.parse(document.getElementById('technique-options').textContent))"
      class="mt-2">
     <div class="flex flex-wrap items-center gap-2">
         <template x-for="tag in selected" :key="tag">

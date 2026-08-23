@@ -1,0 +1,1 @@
+DB::table('techniques')->orderBy('name')->pluck('name')->each(function($n){ echo $n . PHP_EOL; });
