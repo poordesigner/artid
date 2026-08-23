@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\ArtworkController;
-use App\Http\Controllers\Auth\GitHubController;
+use App\Http\Controllers\ConfigController;
 use App\Http\Controllers\ExhibitionController;
 use App\Http\Controllers\OwnershipController;
 use App\Http\Controllers\ProfileController;
@@ -30,15 +30,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::get('/auth/github/redirect', [GitHubController::class, 'redirect'])->name('auth.github.redirect');
-    Route::get('/auth/github/callback', [GitHubController::class, 'callback'])->name('auth.github.callback');
-
-    Route::get('/github', [GitHubController::class, 'settings'])->name('github.settings');
-    Route::post('/github/link', [GitHubController::class, 'linkRepo'])->name('github.link');
-    Route::post('/github/create', [GitHubController::class, 'createRepo'])->name('github.create');
-    Route::post('/github/sync', [GitHubController::class, 'sync'])->name('github.sync');
-    Route::post('/github/sync-ficha', [GitHubController::class, 'syncFicha'])->name('github.sync-ficha');
-    Route::post('/github/short-domain', [GitHubController::class, 'updateShortDomain'])->name('github.short-domain');
+    Route::get('/configuracion', [ConfigController::class, 'index'])->name('configuracion');
 
     Route::get('/artworks', [ArtworkController::class, 'index'])->name('artworks.index');
     Route::get('/artworks/create', [ArtworkController::class, 'create'])->name('artworks.create');

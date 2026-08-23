@@ -17,7 +17,7 @@
                 <x-nav-link :href="route('artworks.index')" :active="request()->routeIs('artworks.*')">
                     {{ __('Artworks') }}
                 </x-nav-link>
-                <x-nav-link :href="route('github.settings')" :active="request()->routeIs('github.*')">
+                <x-nav-link :href="route('configuracion')" :active="request()->routeIs('configuracion')">
                     {{ __('Configuración') }}
                 </x-nav-link>
                 <x-nav-link :href="route('ayuda')" :active="request()->routeIs('ayuda')">
@@ -40,7 +40,11 @@
 
                     <x-slot name="content">
                         <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Profile') }}
+                            {{ __('Perfil') }}
+                        </x-dropdown-link>
+
+                        <x-dropdown-link :href="route('configuracion')">
+                            {{ __('Configuración') }}
                         </x-dropdown-link>
 
                         <!-- Authentication -->
@@ -50,7 +54,7 @@
                             <x-dropdown-link :href="route('logout')"
                                     onclick="event.preventDefault();
                                                 this.closest('form').submit();">
-                                {{ __('Log Out') }}
+                                {{ __('Cerrar sesión') }}
                             </x-dropdown-link>
                         </form>
                     </x-slot>
@@ -75,7 +79,7 @@
             <x-responsive-nav-link :href="route('artworks.index')" :active="request()->routeIs('artworks.*')">
                 {{ __('Artworks') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('github.settings')" :active="request()->routeIs('github.*')">
+            <x-responsive-nav-link :href="route('configuracion')" :active="request()->routeIs('configuracion')">
                 {{ __('Configuración') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('ayuda')" :active="request()->routeIs('ayuda')">
@@ -92,7 +96,11 @@
 
             <div class="mt-3 space-y-1">
                 <x-responsive-nav-link :href="route('profile.edit')">
-                    {{ __('Profile') }}
+                    {{ __('Perfil') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link :href="route('configuracion')">
+                    {{ __('Configuración') }}
                 </x-responsive-nav-link>
 
                 <!-- Authentication -->
@@ -102,7 +110,7 @@
                     <x-responsive-nav-link :href="route('logout')"
                             onclick="event.preventDefault();
                                         this.closest('form').submit();">
-                        {{ __('Log Out') }}
+                        {{ __('Cerrar sesión') }}
                     </x-responsive-nav-link>
                 </form>
             </div>
