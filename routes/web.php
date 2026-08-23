@@ -13,19 +13,15 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/ayuda', function () {
-    return view('ayuda');
-})->name('ayuda');
-
 Route::get('/o/{publicId}', [PublicArtworkController::class, 'show'])->name('public.artwork');
 
 Route::get('/artist/{id}', [PublicArtworkController::class, 'artist'])->name('public.artist');
 
-Route::get('/dashboard', function () {
-    return redirect()->route('artworks.index');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::middleware('auth')->group(function () {
+    Route::get('/ayuda', function () {
+        return view('ayuda');
+    })->name('ayuda');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
