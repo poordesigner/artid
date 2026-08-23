@@ -12,16 +12,7 @@ class PlanController extends Controller
 {
     public function index()
     {
-        $plans = Plan::with(['periods', 'features', 'legalTerms'])
-            ->orderBy('sort_order')
-            ->get();
-
-        return view('plans.index', compact('plans'));
-    }
-
-    public function create()
-    {
-        return view('plans.create');
+        return redirect()->route('configuracion');
     }
 
     public function store(Request $request)
@@ -51,15 +42,8 @@ class PlanController extends Controller
 
         $this->syncRelations($plan, $validated);
 
-        return redirect()->route('plans.index')
+        return redirect()->route('configuracion', ['tab' => 'plans'])
             ->with('status', 'Plan creado exitosamente.');
-    }
-
-    public function edit(Plan $plan)
-    {
-        $plan->load(['periods', 'features', 'legalTerms']);
-
-        return view('plans.edit', compact('plan'));
     }
 
     public function update(Request $request, Plan $plan)
@@ -89,7 +73,7 @@ class PlanController extends Controller
 
         $this->syncRelations($plan, $validated);
 
-        return redirect()->route('plans.index')
+        return redirect()->route('configuracion', ['tab' => 'plans'])
             ->with('status', 'Plan actualizado exitosamente.');
     }
 
@@ -97,7 +81,7 @@ class PlanController extends Controller
     {
         $plan->delete();
 
-        return redirect()->route('plans.index')
+        return redirect()->route('configuracion', ['tab' => 'plans'])
             ->with('status', 'Plan eliminado exitosamente.');
     }
 

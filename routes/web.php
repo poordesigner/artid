@@ -35,9 +35,7 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware('admin')->group(function () {
         Route::get('/configuracion/plans', [PlanController::class, 'index'])->name('plans.index');
-        Route::get('/configuracion/plans/create', [PlanController::class, 'create'])->name('plans.create');
         Route::post('/configuracion/plans', [PlanController::class, 'store'])->name('plans.store');
-        Route::get('/configuracion/plans/{plan}/edit', [PlanController::class, 'edit'])->name('plans.edit');
         Route::patch('/configuracion/plans/{plan}', [PlanController::class, 'update'])->name('plans.update');
         Route::delete('/configuracion/plans/{plan}', [PlanController::class, 'destroy'])->name('plans.destroy');
     });
