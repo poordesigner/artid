@@ -1,18 +1,13 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Ayuda — ARTid</title>
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-<body class="font-sans antialiased bg-gray-100 text-gray-900">
-    <div class="max-w-3xl mx-auto py-10 px-4 sm:px-6">
-        <a href="{{ route('artworks.index') }}" class="text-sm text-indigo-600 hover:text-indigo-900">&larr; {{ __('Volver al panel') }}</a>
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Ayuda') }}
+        </h2>
+    </x-slot>
 
-        <h1 class="mt-4 text-3xl font-bold">{{ __('Guía de inicio') }}</h1>
+    <div class="py-12">
+        <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white shadow-sm sm:rounded-lg p-6 sm:p-8">
         <p class="mt-2 text-gray-600">{{ __('Conoce tu plataforma de identidad digital para obras de arte, paso a paso.') }}</p>
 
         <!-- Introducción -->
@@ -151,5 +146,5 @@
 
         <p class="mt-8 text-sm text-gray-500">{{ __('¿Dudas? Seguí estos pasos o contactá con soporte desde el panel.') }}</p>
     </div>
-</body>
-</html>
+    </div>
+</x-app-layout>
