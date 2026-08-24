@@ -83,5 +83,9 @@
     "QR Permanente": "Permanent QR",
     "Cada obra tiene un código QR único que nunca cambia. Se imprime sobre la obra y dirige a la ficha pública.": "Each artwork has a unique QR code that never changes. It is printed on the artwork and points to its public record.",
     "Llaves Cifradas": "Encrypted Keys",
-    "La relación entre ficha y QR está firmada criptográficamente. Solo la obra auténtica accede a su ficha.": "The relationship between the record and the QR is cryptographically signed. Only the authentic artwork accesses its record."
+    "La relación entre ficha y QR está firmada criptográficamente. Solo la obra auténtica accede a su ficha.": "The relationship between the record and the QR is cryptographically signed. Only the authentic artwork accesses its record.",
+    "Identidad digital para tus obras de arte.": "Digital identity for your artworks.",
+    "Genera una ficha técnica permanente para cada obra. Código QR único, metadata verificada y control de propiedad cifrado.": "Generate a permanent technical record for each artwork. Unique QR code, verified metadata and encrypted ownership control.",
+    "QR permanente y firmado criptográficamente. Solo la obra auténtica accede a su ficha pública.": "Permanent and cryptographically signed QR. Only the authentic artwork accesses its public record.",
+    "Identidad Digital para Obras de Arte": "Digital Identity for Artworks"
 }

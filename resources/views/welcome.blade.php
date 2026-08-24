@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>ARTid — Identidad Digital para Obras de Arte</title>
+    <title>{{ __('Identidad Digital para Obras de Arte') }} — ARTid</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -42,10 +42,10 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <div>
                     <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-[1.1] tracking-tight">
-                        Identidad digital para tus obras de arte.
+                        {{ __('Identidad digital para tus obras de arte.') }}
                     </h1>
                     <p class="mt-6 text-lg text-gray-600 leading-relaxed">
-                        Genera una ficha técnica permanente para cada obra. Código QR único, metadata verificada y control de propiedad cifrado.
+                        {{ __('Genera una ficha técnica permanente para cada obra. Código QR único, metadata verificada y control de propiedad cifrado.') }}
                     </p>
                     <div class="mt-8 flex flex-wrap items-center gap-4">
                         <a href="{{ route('register') }}" class="inline-flex items-center px-6 py-3 bg-gray-900 hover:bg-gray-800 text-white text-sm font-semibold rounded-lg transition">
@@ -59,7 +59,7 @@
                         </a>
                     </div>
                     <p class="mt-6 text-xs text-gray-400 max-w-md">
-                        QR permanente y firmado criptográficamente. Solo la obra auténtica accede a su ficha pública.
+                        {{ __('QR permanente y firmado criptográficamente. Solo la obra auténtica accede a su ficha pública.') }}
                     </p>
                 </div>
                 <div class="hidden lg:block">

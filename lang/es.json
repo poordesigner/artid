@@ -146,5 +146,9 @@
     "QR Permanente": "QR Permanente",
     "Cada obra tiene un código QR único que nunca cambia. Se imprime sobre la obra y dirige a la ficha pública.": "Cada obra tiene un código QR único que nunca cambia. Se imprime sobre la obra y dirige a la ficha pública.",
     "Llaves Cifradas": "Llaves Cifradas",
-    "La relación entre ficha y QR está firmada criptográficamente. Solo la obra auténtica accede a su ficha.": "La relación entre ficha y QR está firmada criptográficamente. Solo la obra auténtica accede a su ficha."
+    "La relación entre ficha y QR está firmada criptográficamente. Solo la obra auténtica accede a su ficha.": "La relación entre ficha y QR está firmada criptográficamente. Solo la obra auténtica accede a su ficha.",
+    "Identidad digital para tus obras de arte.": "Identidad digital para tus obras de arte.",
+    "Genera una ficha técnica permanente para cada obra. Código QR único, metadata verificada y control de propiedad cifrado.": "Genera una ficha técnica permanente para cada obra. Código QR único, metadata verificada y control de propiedad cifrado.",
+    "QR permanente y firmado criptográficamente. Solo la obra auténtica accede a su ficha pública.": "QR permanente y firmado criptográficamente. Solo la obra auténtica accede a su ficha pública.",
+    "Identidad Digital para Obras de Arte": "Identidad Digital para Obras de Arte"
 }
