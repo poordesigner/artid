@@ -48,9 +48,9 @@
         </div>
 
         <p class="mt-6 text-center text-sm text-gray-600">
-            {{ __('¿No tenés cuenta?') }}
+            {{ __('¿No tienes cuenta?') }}
             <a class="underline text-gray-900 hover:text-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('register') }}">
-                {{ __('Registrate') }}
+                {{ __('Regístrate') }}
             </a>
         </p>
 

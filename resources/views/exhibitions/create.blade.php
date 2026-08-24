@@ -47,7 +47,7 @@
                                    placeholder="Ej: Buenos Aires, Argentina" />
                             <x-input-error :messages="$errors->get('location')" class="mt-2" />
                             <x-locations-datalist id="artid-locations" />
-                            <p class="mt-1 text-xs text-gray-500">{{ __('Escribí o seleccioná una ciudad y país. Podés usar la lista de sugerencias.') }}</p>
+                            <p class="mt-1 text-xs text-gray-500">{{ __('Escribe o selecciona una ciudad y país. Puedes usar la lista de sugerencias.') }}</p>
                         </div>
 
                         <!-- Description -->

@@ -33,7 +33,7 @@
                                         {{ __('Email y contraseña') }}
                                     </h2>
                                     <p class="mt-1 text-sm text-gray-600">
-                                        {{ __('Gestioná tu email y contraseña.') }}
+                                        {{ __('Gestiona tu email y contraseña.') }}
                                     </p>
                                 </header>
 

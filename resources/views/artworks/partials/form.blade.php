@@ -58,7 +58,7 @@
 <!-- Technique -->
 <div class="mt-4">
     <x-input-label :value="__('Technique')" />
-    <p class="mt-1 text-xs text-gray-500">{{ __('Seleccioná una o más técnicas. Escribí para filtrar y usá el botón de borrar para quitar.') }}</p>
+    <p class="mt-1 text-xs text-gray-500">{{ __('Selecciona una o más técnicas. Escribe para filtrar y usa el botón de borrar para quitar.') }}</p>
 
 {{-- técnicas seleccionadas (edición) --}}
 @php

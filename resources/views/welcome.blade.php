@@ -44,7 +44,7 @@
                         Identidad digital para tus obras de arte.
                     </h1>
                     <p class="mt-6 text-lg text-gray-600 leading-relaxed">
-                        Generá una ficha técnica permanente para cada obra. Código QR único, metadata verificada y control de propiedad cifrado.
+                        Genera una ficha técnica permanente para cada obra. Código QR único, metadata verificada y control de propiedad cifrado.
                     </p>
                     <div class="mt-8 flex flex-wrap items-center gap-4">
                         <a href="{{ route('register') }}" class="inline-flex items-center px-6 py-3 bg-gray-900 hover:bg-gray-800 text-white text-sm font-semibold rounded-lg transition">
@@ -110,8 +110,8 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-14">
                     <p class="text-sm font-semibold text-indigo-600 uppercase tracking-wider">{{ __('Planes') }}</p>
-                    <h2 class="mt-3 text-3xl sm:text-4xl font-bold text-gray-900">{{ __('Elegí el plan que mejor se adapte a vos.') }}</h2>
-                    <p class="mt-4 text-gray-600 max-w-xl mx-auto">{{ __('Todos los planes incluyen acceso a la plataforma. Seleccioná el que se ajuste a tus necesidades.') }}</p>
+                    <h2 class="mt-3 text-3xl sm:text-4xl font-bold text-gray-900">{{ __('Elige el plan que mejor se adapte a ti.') }}</h2>
+                    <p class="mt-4 text-gray-600 max-w-xl mx-auto">{{ __('Todos los planes incluyen acceso a la plataforma. Selecciona el que se ajuste a tus necesidades.') }}</p>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-{{ min($plans->count(), 3) }} gap-8 max-w-5xl mx-auto">
@@ -189,7 +189,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-14">
                 <p class="text-sm font-semibold text-indigo-600 uppercase tracking-wider">{{ __('Cómo funciona') }}</p>
-                <h2 class="mt-3 text-3xl sm:text-4xl font-bold text-gray-900">{{ __('Todo lo que necesitás para autenticar tus obras.') }}</h2>
+                <h2 class="mt-3 text-3xl sm:text-4xl font-bold text-gray-900">{{ __('Todo lo que necesitas para autenticar tus obras.') }}</h2>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div class="p-8 bg-white rounded-2xl border border-gray-200 shadow-sm">
@@ -199,7 +199,7 @@
                         </svg>
                     </div>
                     <h3 class="mt-5 text-lg font-semibold text-gray-900">Ficha de Datos</h3>
-                    <p class="mt-2 text-sm text-gray-600 leading-relaxed">Creá una ficha técnica completa: título, año, edición, serie, técnicas, dimensiones, descripción e imagen.</p>
+                    <p class="mt-2 text-sm text-gray-600 leading-relaxed">Crea una ficha técnica completa: título, año, edición, serie, técnicas, dimensiones, descripción e imagen.</p>
                 </div>
                 <div class="p-8 bg-white rounded-2xl border border-gray-200 shadow-sm">
                     <div class="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center">
@@ -226,8 +226,8 @@
     {{-- CTA Footer --}}
     <section class="py-20 bg-gray-900">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-3xl sm:text-4xl font-bold text-white">{{ __('Empezá a proteger tus obras hoy.') }}</h2>
-            <p class="mt-4 text-lg text-gray-300 max-w-xl mx-auto">{{ __('Creá tu cuenta y generá la identidad digital de tu primera obra en minutos.') }}</p>
+            <h2 class="text-3xl sm:text-4xl font-bold text-white">{{ __('Empieza a proteger tus obras hoy.') }}</h2>
+            <p class="mt-4 text-lg text-gray-300 max-w-xl mx-auto">{{ __('Crea tu cuenta y genera la identidad digital de tu primera obra en minutos.') }}</p>
             <div class="mt-8">
                 <a href="{{ route('register') }}" class="inline-flex items-center px-8 py-3 bg-white hover:bg-gray-100 text-gray-900 text-sm font-semibold rounded-lg transition">
                     {{ __('Crear mi cuenta') }}
