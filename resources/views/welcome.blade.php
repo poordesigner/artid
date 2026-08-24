@@ -10,76 +10,95 @@
 </head>
 <body class="font-sans text-gray-900 antialiased bg-white">
 
-    {{-- Header --}}
-    <header class="border-b border-gray-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-            <div class="flex items-center gap-6">
+    {{-- Navbar --}}
+    <header class="bg-white border-b border-gray-100 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-8">
                 <a href="{{ url('/') }}">
-                    <img src="{{ asset('img/logo.png') }}" alt="ARTid" class="h-10 w-auto">
+                    <img src="{{ asset('img/logo_simple.png') }}" alt="ARTid" class="h-9 w-auto">
                 </a>
-                <a href="{{ route('ayuda') }}" class="text-sm text-gray-500 hover:text-gray-700">{{ __('Ayuda') }}</a>
+                <nav class="hidden md:flex items-center gap-8">
+                    <a href="#planes" class="text-sm text-gray-500 hover:text-gray-700 transition">{{ __('Planes') }}</a>
+                    <a href="#caracteristicas" class="text-sm text-gray-500 hover:text-gray-700 transition">{{ __('Características') }}</a>
+                    <a href="{{ route('ayuda') }}" class="text-sm text-gray-500 hover:text-gray-700 transition">{{ __('Ayuda') }}</a>
+                </nav>
             </div>
             <div class="flex items-center gap-3">
-                <a href="{{ route('login') }}" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                    {{ __('Iniciar sesión') }}
-                </a>
-                <a href="{{ route('register') }}" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                    {{ __('Registrarse') }}
+                <a href="{{ route('login') }}" class="text-sm font-medium text-gray-700 hover:text-gray-900 transition">{{ __('Login') }}</a>
+                <a href="{{ route('register') }}" class="inline-flex items-center px-5 py-2.5 bg-gray-900 hover:bg-gray-800 text-white text-sm font-semibold rounded-lg transition">
+                    {{ __('Empezar') }}
+                    <svg class="w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
                 </a>
             </div>
         </div>
     </header>
 
     {{-- Hero --}}
-    <section class="py-16 sm:py-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 class="text-4xl sm:text-5xl font-bold text-gray-900 leading-tight">
-                Identidad Digital para tus Obras de Arte
-            </h1>
-            <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
-                Generá una ficha técnica permanente para cada obra. Código QR único, metadata verificada y control de propiedad cifrado.
-            </p>
-            <div class="mt-8 flex justify-center gap-4">
-                <a href="{{ route('register') }}" class="inline-flex items-center px-6 py-3 bg-gray-800 border border-transparent rounded-md font-semibold text-sm text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                    {{ __('Empezar ahora') }}
-                </a>
-                <a href="{{ route('ayuda') }}" class="inline-flex items-center px-6 py-3 bg-white border border-gray-300 rounded-md font-semibold text-sm text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                    {{ __('Ver guía') }}
-                </a>
-            </div>
-        </div>
-    </section>
-
-    {{-- Features --}}
-    <section class="py-16 bg-gray-50">
+    <section class="py-20 sm:py-28">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="text-center p-6">
-                    <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mx-auto">
-                        <svg class="w-6 h-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-[1.1] tracking-tight">
+                        Identidad digital para tus obras de arte.
+                    </h1>
+                    <p class="mt-6 text-lg text-gray-600 leading-relaxed">
+                        Generá una ficha técnica permanente para cada obra. Código QR único, metadata verificada y control de propiedad cifrado.
+                    </p>
+                    <div class="mt-8 flex flex-wrap items-center gap-4">
+                        <a href="{{ route('register') }}" class="inline-flex items-center px-6 py-3 bg-gray-900 hover:bg-gray-800 text-white text-sm font-semibold rounded-lg transition">
+                            {{ __('Empezar ahora') }}
+                            <svg class="w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </a>
+                        <a href="{{ route('ayuda') }}" class="inline-flex items-center px-6 py-3 bg-white border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg hover:bg-gray-50 transition">
+                            {{ __('Ver guía') }}
+                        </a>
                     </div>
-                    <h3 class="mt-4 text-lg font-semibold text-gray-900">Ficha de Datos</h3>
-                    <p class="mt-2 text-sm text-gray-600">Creá una ficha técnica completa: título, año, edición, serie, técnicas, dimensiones, descripción e imagen.</p>
+                    <p class="mt-6 text-xs text-gray-400 max-w-md">
+                        QR permanente y firmado criptográficamente. Solo la obra auténtica accede a su ficha pública.
+                    </p>
                 </div>
-                <div class="text-center p-6">
-                    <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mx-auto">
-                        <svg class="w-6 h-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
-                        </svg>
+                <div class="hidden lg:block">
+                    <div class="relative">
+                        <div class="absolute -inset-4 bg-gradient-to-r from-indigo-100 to-purple-100 rounded-3xl blur-2xl opacity-60"></div>
+                        <div class="relative bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
+                            <div class="flex items-center justify-between pb-4 border-b border-gray-100">
+                                <span class="text-sm font-semibold text-gray-900">{{ __('Obra autenticada') }}</span>
+                                <span class="px-2 py-1 text-xs font-medium text-emerald-700 bg-emerald-50 rounded-full">✓ {{ __('Verificado') }}</span>
+                            </div>
+                            <div class="mt-6 space-y-5">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-500">{{ __('Serie') }}</span>
+                                    <span class="text-sm font-medium text-gray-900">Paisajes Urbanos</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-500">{{ __('Editorial') }}</span>
+                                    <span class="text-sm font-medium text-gray-900">2 / 5</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-500">{{ __('Técnica') }}</span>
+                                    <span class="text-sm font-medium text-gray-900">Óleo sobre lienzo</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-500">{{ __('Dimensiones') }}</span>
+                                    <span class="text-sm font-medium text-gray-900">50 x 70 cm</span>
+                                </div>
+                            </div>
+                            <div class="mt-8 p-4 bg-gray-50 rounded-lg">
+                                <div class="w-16 h-16 bg-white mx-auto flex items-center justify-center border border-gray-200 rounded-lg">
+                                    <div class="grid grid-cols-5 gap-0.5">
+                                        @for ($i = 0; $i < 25; $i++)
+                                            <div class="{{ in_array($i % 7, [0, 1, 3, 5]) ? 'bg-gray-900' : 'bg-white' }} w-1.5 h-1.5"></div>
+                                        @endfor
+                                    </div>
+                                </div>
+                                <p class="mt-3 text-center text-xs text-gray-500">{{ __('Ficha pública verificada') }}</p>
+                            </div>
+                        </div>
                     </div>
-                    <h3 class="mt-4 text-lg font-semibold text-gray-900">QR Permanente</h3>
-                    <p class="mt-2 text-sm text-gray-600">Cada obra tiene un código QR único que nunca cambia. Se imprime sobre la obra y dirige a la ficha pública.</p>
-                </div>
-                <div class="text-center p-6">
-                    <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mx-auto">
-                        <svg class="w-6 h-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                        </svg>
-                    </div>
-                    <h3 class="mt-4 text-lg font-semibold text-gray-900">Llaves Cifradas</h3>
-                    <p class="mt-2 text-sm text-gray-600">La relación entre ficha y QR está firmada criptográficamente. Solo la obra auténtica accede a su ficha.</p>
                 </div>
             </div>
         </div>
@@ -87,11 +106,12 @@
 
     {{-- Plans --}}
     @if ($plans->count())
-        <section class="py-16">
+        <section id="planes" class="py-20 bg-gray-50">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl font-bold text-gray-900">{{ __('Planes de Suscripción') }}</h2>
-                    <p class="mt-2 text-gray-600">{{ __('Elegí el plan que mejor se adapte a tus necesidades.') }}</p>
+                <div class="text-center mb-14">
+                    <p class="text-sm font-semibold text-indigo-600 uppercase tracking-wider">{{ __('Planes') }}</p>
+                    <h2 class="mt-3 text-3xl sm:text-4xl font-bold text-gray-900">{{ __('Elegí el plan que mejor se adapte a vos.') }}</h2>
+                    <p class="mt-4 text-gray-600 max-w-xl mx-auto">{{ __('Todos los planes incluyen acceso a la plataforma. Seleccioná el que se ajuste a tus necesidades.') }}</p>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-{{ min($plans->count(), 3) }} gap-8 max-w-5xl mx-auto">
@@ -100,54 +120,63 @@
                             $monthlyPeriod = $plan->periods->firstWhere('period', 'monthly');
                             $price = $monthlyPeriod ? $monthlyPeriod->price : null;
                         @endphp
-                        <div class="bg-white rounded-2xl shadow-sm border {{ $loop->first ? 'border-indigo-500 ring-2 ring-indigo-500' : 'border-gray-200' }} p-8 flex flex-col">
+                        <div class="bg-white rounded-2xl shadow-sm border {{ $loop->first ? 'border-indigo-500 ring-2 ring-indigo-500' : 'border-gray-200' }} flex flex-col overflow-hidden">
                             @if ($loop->first)
-                                <span class="self-start px-3 py-1 bg-indigo-100 text-indigo-700 text-xs font-semibold rounded-full uppercase tracking-wider">{{ __('Popular') }}</span>
-                            @endif
-
-                            <h3 class="text-xl font-bold text-gray-900 mt-{{ $loop->first ? '4' : '0' }}">{{ $plan->name }}</h3>
-
-                            @if ($plan->description)
-                                <p class="mt-2 text-sm text-gray-600">{{ $plan->description }}</p>
-                            @endif
-
-                            <div class="mt-6">
-                                @if ($price !== null)
-                                    <span class="text-4xl font-bold text-gray-900">${{ number_format($price, 2) }}</span>
-                                    <span class="text-gray-500">/ {{ __('mes') }}</span>
-                                @else
-                                    <span class="text-4xl font-bold text-gray-900">—</span>
-                                @endif
-                            </div>
-
-                            {{-- Períodos --}}
-                            @if ($plan->periods->count() > 1)
-                                <div class="mt-4 flex flex-wrap gap-2">
-                                    @foreach ($plan->periods->where('period', '!=', 'monthly') as $period)
-                                        <span class="px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded">
-                                            {{ $period->number }} {{ $period->period_label }} · ${{ number_format($period->price, 2) }}
-                                        </span>
-                                    @endforeach
+                                <div class="px-8 pt-6">
+                                    <span class="inline-block px-3 py-1 bg-indigo-50 text-indigo-700 text-xs font-semibold rounded-full uppercase tracking-wider">{{ __('Popular') }}</span>
                                 </div>
                             @endif
 
-                            {{-- Características --}}
-                            @if ($plan->features->count())
-                                <ul class="mt-6 space-y-3 flex-1">
-                                    @foreach ($plan->features as $feature)
-                                        <li class="flex items-start gap-3 text-sm text-gray-700">
-                                            <svg class="w-5 h-5 text-indigo-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                            </svg>
-                                            {{ $feature->description }}
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            @endif
+                            <div class="p-8 {{ $loop->first ? 'pt-4' : '' }}">
+                                <h3 class="text-xl font-bold text-gray-900">{{ $plan->name }}</h3>
 
-                            <a href="{{ route('register') }}" class="mt-8 block text-center px-6 py-3 {{ $loop->first ? 'bg-indigo-600 hover:bg-indigo-700 text-white' : 'bg-gray-800 hover:bg-gray-700 text-white' }} rounded-md font-semibold text-sm uppercase tracking-wider transition ease-in-out duration-150">
-                                {{ __('Empezar') }}
-                            </a>
+                                @if ($plan->description)
+                                    <p class="mt-2 text-sm text-gray-600">{{ $plan->description }}</p>
+                                @endif
+
+                                <div class="mt-6">
+                                    @if ($price !== null)
+                                        <div class="flex items-end gap-1">
+                                            <span class="text-4xl font-bold text-gray-900">${{ number_format($price, 0) }}</span>
+                                            <span class="text-lg text-gray-500 pb-1.5">/ {{ __('mes') }}</span>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <div class="px-8 pb-8 flex-1">
+                                {{-- Períodos únicos como listado --}}
+                                @if ($plan->periods->count())
+                                    <div class="border-t border-gray-100 pt-6 space-y-4">
+                                        @foreach ($plan->periods as $period)
+                                            <div class="flex items-center justify-between">
+                                                <span class="text-sm text-gray-500">{{ $period->number }} {{ $period->period_label }}</span>
+                                                <span class="text-sm font-semibold text-gray-900">${{ number_format($period->price, 2) }}</span>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @endif
+
+                                {{-- Características --}}
+                                @if ($plan->features->count())
+                                    <ul class="mt-6 space-y-3">
+                                        @foreach ($plan->features as $feature)
+                                            <li class="flex items-start gap-3 text-sm text-gray-700">
+                                                <svg class="w-5 h-5 text-indigo-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                                </svg>
+                                                {{ $feature->description }}
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                @endif
+                            </div>
+
+                            <div class="px-8 pb-8">
+                                <a href="{{ route('register') }}" class="block w-full text-center px-6 py-3 {{ $loop->first ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-gray-900 hover:bg-gray-800' }} text-white rounded-lg font-semibold text-sm transition">
+                                    {{ __('Empezar') }}
+                                </a>
+                            </div>
                         </div>
                     @endforeach
                 </div>
@@ -155,12 +184,80 @@
         </section>
     @endif
 
-    {{-- Footer --}}
-    <footer class="py-8 bg-gray-50 border-t border-gray-200">
+    {{-- Features --}}
+    <section id="caracteristicas" class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-14">
+                <p class="text-sm font-semibold text-indigo-600 uppercase tracking-wider">{{ __('Cómo funciona') }}</p>
+                <h2 class="mt-3 text-3xl sm:text-4xl font-bold text-gray-900">{{ __('Todo lo que necesitás para autenticar tus obras.') }}</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="p-8 bg-white rounded-2xl border border-gray-200 shadow-sm">
+                    <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                    </div>
+                    <h3 class="mt-5 text-lg font-semibold text-gray-900">Ficha de Datos</h3>
+                    <p class="mt-2 text-sm text-gray-600 leading-relaxed">Creá una ficha técnica completa: título, año, edición, serie, técnicas, dimensiones, descripción e imagen.</p>
+                </div>
+                <div class="p-8 bg-white rounded-2xl border border-gray-200 shadow-sm">
+                    <div class="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+                        </svg>
+                    </div>
+                    <h3 class="mt-5 text-lg font-semibold text-gray-900">QR Permanente</h3>
+                    <p class="mt-2 text-sm text-gray-600 leading-relaxed">Cada obra tiene un código QR único que nunca cambia. Se imprime sobre la obra y dirige a la ficha pública.</p>
+                </div>
+                <div class="p-8 bg-white rounded-2xl border border-gray-200 shadow-sm">
+                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                    </div>
+                    <h3 class="mt-5 text-lg font-semibold text-gray-900">Llaves Cifradas</h3>
+                    <p class="mt-2 text-sm text-gray-600 leading-relaxed">La relación entre ficha y QR está firmada criptográficamente. Solo la obra auténtica accede a su ficha.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {{-- CTA Footer --}}
+    <section class="py-20 bg-gray-900">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p class="text-sm text-gray-500">
-                &copy; {{ date('Y') }} <a href="https://poordesigner.com" class="text-indigo-600 hover:underline" target="_blank" rel="noopener">POORdesigner.com</a>. {{ __('Todos los derechos reservados.') }}
-            </p>
+            <h2 class="text-3xl sm:text-4xl font-bold text-white">{{ __('Empezá a proteger tus obras hoy.') }}</h2>
+            <p class="mt-4 text-lg text-gray-300 max-w-xl mx-auto">{{ __('Creá tu cuenta y generá la identidad digital de tu primera obra en minutos.') }}</p>
+            <div class="mt-8">
+                <a href="{{ route('register') }}" class="inline-flex items-center px-8 py-3 bg-white hover:bg-gray-100 text-gray-900 text-sm font-semibold rounded-lg transition">
+                    {{ __('Crear mi cuenta') }}
+                    <svg class="w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    {{-- Footer --}}
+    <footer class="py-12 bg-gray-950">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+                <div class="flex items-center gap-3">
+                    <img src="{{ asset('img/logo_simple.png') }}" alt="ARTid" class="h-8 w-auto">
+                    <span class="text-sm text-gray-400">by <a href="https://poordesigner.com" class="text-gray-300 hover:text-white" target="_blank" rel="noopener">POORdesigner.com</a></span>
+                </div>
+                <div class="flex items-center gap-8 text-sm text-gray-400">
+                    <a href="{{ route('ayuda') }}" class="hover:text-white transition">{{ __('Ayuda') }}</a>
+                    <a href="#planes" class="hover:text-white transition">{{ __('Planes') }}</a>
+                    <a href="#caracteristicas" class="hover:text-white transition">{{ __('Características') }}</a>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-gray-800 text-center">
+                <p class="text-sm text-gray-500">
+                    &copy; {{ date('Y') }} POORdesigner.com. {{ __('Todos los derechos reservados.') }}
+                </p>
+            </div>
         </div>
     </footer>
 </body>
