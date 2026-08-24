@@ -24,6 +24,7 @@
                 </nav>
             </div>
             <div class="flex items-center gap-3">
+                <x-language-switcher />
                 <a href="{{ route('login') }}" class="text-sm font-medium text-gray-700 hover:text-gray-900 transition">{{ __('Login') }}</a>
                 <a href="{{ route('register') }}" class="inline-flex items-center px-5 py-2.5 bg-gray-900 hover:bg-gray-800 text-white text-sm font-semibold rounded-lg transition">
                     {{ __('Empezar') }}
@@ -198,8 +199,8 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                         </svg>
                     </div>
-                    <h3 class="mt-5 text-lg font-semibold text-gray-900">Ficha de Datos</h3>
-                    <p class="mt-2 text-sm text-gray-600 leading-relaxed">Crea una ficha técnica completa: título, año, edición, serie, técnicas, dimensiones, descripción e imagen.</p>
+                    <h3 class="mt-5 text-lg font-semibold text-gray-900">{{ __('Ficha de Datos') }}</h3>
+                    <p class="mt-2 text-sm text-gray-600 leading-relaxed">{{ __('Crea una ficha técnica completa: título, año, edición, serie, técnicas, dimensiones, descripción e imagen.') }}</p>
                 </div>
                 <div class="p-8 bg-white rounded-2xl border border-gray-200 shadow-sm">
                     <div class="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center">
@@ -207,8 +208,8 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
                         </svg>
                     </div>
-                    <h3 class="mt-5 text-lg font-semibold text-gray-900">QR Permanente</h3>
-                    <p class="mt-2 text-sm text-gray-600 leading-relaxed">Cada obra tiene un código QR único que nunca cambia. Se imprime sobre la obra y dirige a la ficha pública.</p>
+                    <h3 class="mt-5 text-lg font-semibold text-gray-900">{{ __('QR Permanente') }}</h3>
+                    <p class="mt-2 text-sm text-gray-600 leading-relaxed">{{ __('Cada obra tiene un código QR único que nunca cambia. Se imprime sobre la obra y dirige a la ficha pública.') }}</p>
                 </div>
                 <div class="p-8 bg-white rounded-2xl border border-gray-200 shadow-sm">
                     <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
@@ -216,8 +217,8 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                         </svg>
                     </div>
-                    <h3 class="mt-5 text-lg font-semibold text-gray-900">Llaves Cifradas</h3>
-                    <p class="mt-2 text-sm text-gray-600 leading-relaxed">La relación entre ficha y QR está firmada criptográficamente. Solo la obra auténtica accede a su ficha.</p>
+                    <h3 class="mt-5 text-lg font-semibold text-gray-900">{{ __('Llaves Cifradas') }}</h3>
+                    <p class="mt-2 text-sm text-gray-600 leading-relaxed">{{ __('La relación entre ficha y QR está firmada criptográficamente. Solo la obra auténtica accede a su ficha.') }}</p>
                 </div>
             </div>
         </div>

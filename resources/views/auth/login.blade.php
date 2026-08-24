@@ -1,4 +1,7 @@
 <x-guest-layout>
+    <div class="flex justify-end mb-4">
+        <x-language-switcher />
+    </div>
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 

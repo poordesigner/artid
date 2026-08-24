@@ -24,6 +24,8 @@
                     {{ __('Ayuda') }}
                 </x-nav-link>
 
+                <x-language-switcher />
+
                 <!-- Settings Dropdown -->
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">

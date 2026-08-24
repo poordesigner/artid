@@ -9,7 +9,16 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicArtworkController;
 use App\Http\Controllers\SeriesController;
 use App\Models\Plan;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Route;
+
+Route::get('/locale/{locale}', function (string $locale) {
+    $locale = in_array($locale, ['es', 'en']) ? $locale : 'es';
+
+    Cookie::queue('locale', $locale, 60 * 24 * 365);
+
+    return redirect()->back();
+})->name('locale');
 
 Route::get('/', function () {
     $plans = Plan::with(['periods', 'features'])
