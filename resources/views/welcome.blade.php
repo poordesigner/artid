@@ -145,10 +145,13 @@
                                             <span class="text-4xl font-bold text-gray-900">${{ number_format($mainPrice, 2) }}</span>
                                             <span class="text-lg text-gray-500 pb-1.5">/ {{ __('mes') }}</span>
                                         </div>
-                                        @if ($annualUnit && $monthlyPerPeriod !== null)
-                                            <p class="mt-1 text-xs text-gray-400">
-                                                ${{ number_format($monthlyPerPeriod, 2) }}/mes · {{ __('pago mensual') }}
-                                            </p>
+                                        @if ($annualUnit)
+                                            <p class="mt-1 text-sm font-medium text-gray-600">{{ __('pago anual') }}</p>
+                                            @if ($monthlyPerPeriod !== null)
+                                                <p class="mt-1 text-xs text-gray-400">
+                                                    ${{ number_format($monthlyPerPeriod, 2) }}/mes · {{ __('pago mensual') }}
+                                                </p>
+                                            @endif
                                         @endif
                                     @endif
                                 </div>
