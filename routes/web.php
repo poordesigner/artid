@@ -8,10 +8,16 @@ use App\Http\Controllers\PlanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicArtworkController;
 use App\Http\Controllers\SeriesController;
+use App\Models\Plan;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    $plans = Plan::with(['periods', 'features'])
+        ->where('is_active', true)
+        ->orderBy('sort_order')
+        ->get();
+
+    return view('welcome', compact('plans'));
 });
 
 Route::get('/o/{publicId}', [PublicArtworkController::class, 'show'])->name('public.artwork');
