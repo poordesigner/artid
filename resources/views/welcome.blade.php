@@ -118,8 +118,12 @@
                 <div class="grid grid-cols-1 md:grid-cols-{{ min($plans->count(), 3) }} gap-8 max-w-5xl mx-auto">
                     @foreach ($plans as $plan)
                         @php
-                            $monthlyPeriod = $plan->periods->firstWhere('period', 'monthly');
-                            $price = $monthlyPeriod ? $monthlyPeriod->price : null;
+                            $annualPeriod = $plan->periods->firstWhere('period', 'annual');
+                            $annualUnit = $plan->periods->first(fn ($p) => $p->period === 'annual' && $p->number === 1);
+                            $monthlyPeriod = $plan->periods->first(fn ($p) => $p->period === 'monthly' && $p->number === 1);
+
+                            $mainPrice = $annualUnit ? $annualUnit->monthlyEquivalent() : ($monthlyPeriod?->price ?? 0);
+                            $monthlyPerPeriod = $monthlyPeriod ? (float) $monthlyPeriod->price : null;
                         @endphp
                         <div class="bg-white rounded-2xl shadow-sm border {{ $loop->first ? 'border-indigo-500 ring-2 ring-indigo-500' : 'border-gray-200' }} flex flex-col overflow-hidden">
                             @if ($loop->first)
@@ -136,22 +140,27 @@
                                 @endif
 
                                 <div class="mt-6">
-                                    @if ($price !== null)
+                                    @if ($mainPrice)
                                         <div class="flex items-end gap-1">
-                                            <span class="text-4xl font-bold text-gray-900">${{ number_format($price, 0) }}</span>
+                                            <span class="text-4xl font-bold text-gray-900">${{ number_format($mainPrice, 2) }}</span>
                                             <span class="text-lg text-gray-500 pb-1.5">/ {{ __('mes') }}</span>
                                         </div>
+                                        @if ($annualUnit && $monthlyPerPeriod !== null)
+                                            <p class="mt-1 text-xs text-gray-400">
+                                                ${{ number_format($monthlyPerPeriod, 2) }}/mes · {{ __('pago mensual') }}
+                                            </p>
+                                        @endif
                                     @endif
                                 </div>
                             </div>
 
                             <div class="px-8 pb-8 flex-1">
-                                {{-- Períodos únicos como listado --}}
+                                {{-- Períodos como listado --}}
                                 @if ($plan->periods->count())
                                     <div class="border-t border-gray-100 pt-6 space-y-4">
                                         @foreach ($plan->periods as $period)
                                             <div class="flex items-center justify-between">
-                                                <span class="text-sm text-gray-500">{{ $period->number }} {{ $period->period_label }}</span>
+                                                <span class="text-sm text-gray-500">{{ $period->recurrenceLabel() }}</span>
                                                 <span class="text-sm font-semibold text-gray-900">${{ number_format($period->price, 2) }}</span>
                                             </div>
                                         @endforeach

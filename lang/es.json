@@ -150,5 +150,14 @@
     "Identidad digital para tus obras de arte.": "Identidad digital para tus obras de arte.",
     "Genera una ficha técnica permanente para cada obra. Código QR único, metadata verificada y control de propiedad cifrado.": "Genera una ficha técnica permanente para cada obra. Código QR único, metadata verificada y control de propiedad cifrado.",
     "QR permanente y firmado criptográficamente. Solo la obra auténtica accede a su ficha pública.": "QR permanente y firmado criptográficamente. Solo la obra auténtica accede a su ficha pública.",
-    "Identidad Digital para Obras de Arte": "Identidad Digital para Obras de Arte"
+    "Identidad Digital para Obras de Arte": "Identidad Digital para Obras de Arte",
+    "Cada mes": "Cada mes",
+    "Cada :count meses": "Cada :count meses",
+    "Cada trimestre": "Cada trimestre",
+    "Cada :count trimestres": "Cada :count trimestres",
+    "Cada semestre": "Cada semestre",
+    "Cada :count semestres": "Cada :count semestres",
+    "Cada año": "Cada año",
+    "Cada :count años": "Cada :count años",
+    "pago mensual": "pago mensual"
 }

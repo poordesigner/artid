@@ -35,4 +35,51 @@ class PlanPeriod extends Model
     {
         return self::PERIODS[$this->period] ?? $this->period;
     }
+
+    /**
+     * Texto de recurrencia gramaticalmente correcto.
+     * Ej: 1 mensual -> "Cada mes", 2 anual -> "Cada 2 años"
+     */
+    public function recurrenceLabel(): string
+    {
+        return match ($this->period) {
+            'monthly' => $this->number <= 1
+                ? __('Cada mes')
+                : __('Cada :count meses', ['count' => $this->number]),
+            'quarterly' => $this->number <= 1
+                ? __('Cada trimestre')
+                : __('Cada :count trimestres', ['count' => $this->number]),
+            'semiannual' => $this->number <= 1
+                ? __('Cada semestre')
+                : __('Cada :count semestres', ['count' => $this->number]),
+            'annual' => $this->number <= 1
+                ? __('Cada año')
+                : __('Cada :count años', ['count' => $this->number]),
+            default => $this->period_label,
+        };
+    }
+
+    /**
+     * Cantidad de meses que representa el periodo.
+     */
+    public function months(): int
+    {
+        return match ($this->period) {
+            'monthly' => $this->number,
+            'quarterly' => $this->number * 3,
+            'semiannual' => $this->number * 6,
+            'annual' => $this->number * 12,
+            default => $this->number,
+        };
+    }
+
+    /**
+     * Precio equivalente mensual (total del periodo / meses).
+     */
+    public function monthlyEquivalent(): float
+    {
+        $months = $this->months();
+
+        return $months > 0 ? round((float) $this->price / $months, 2) : 0.0;
+    }
 }

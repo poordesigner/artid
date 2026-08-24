@@ -87,5 +87,14 @@
     "Identidad digital para tus obras de arte.": "Digital identity for your artworks.",
     "Genera una ficha técnica permanente para cada obra. Código QR único, metadata verificada y control de propiedad cifrado.": "Generate a permanent technical record for each artwork. Unique QR code, verified metadata and encrypted ownership control.",
     "QR permanente y firmado criptográficamente. Solo la obra auténtica accede a su ficha pública.": "Permanent and cryptographically signed QR. Only the authentic artwork accesses its public record.",
-    "Identidad Digital para Obras de Arte": "Digital Identity for Artworks"
+    "Identidad Digital para Obras de Arte": "Digital Identity for Artworks",
+    "Cada mes": "Every month",
+    "Cada :count meses": "Every :count months",
+    "Cada trimestre": "Every quarter",
+    "Cada :count trimestres": "Every :count quarters",
+    "Cada semestre": "Every half-year",
+    "Cada :count semestres": "Every :count half-years",
+    "Cada año": "Every year",
+    "Cada :count años": "Every :count years",
+    "pago mensual": "monthly payment"
 }

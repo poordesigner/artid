@@ -129,9 +129,9 @@
                                                     @if ($plan->periods->count())
                                                         <div class="flex flex-wrap gap-2 mt-2">
                                                             @foreach ($plan->periods as $period)
-                                                                <span class="px-2 py-1 text-xs bg-indigo-50 text-indigo-700 rounded">
-                                                                    {{ $period->number }} {{ $period->period_label }} · ${{ number_format($period->price, 2) }} USD
-                                                                </span>
+                                                                 <span class="px-2 py-1 text-xs bg-indigo-50 text-indigo-700 rounded">
+                                                                     {{ $period->recurrenceLabel() }} · ${{ number_format($period->price, 2) }} USD
+                                                                 </span>
                                                             @endforeach
                                                         </div>
                                                     @endif
