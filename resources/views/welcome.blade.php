@@ -8,15 +8,16 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="font-sans text-gray-900 antialiased bg-gray-50">
+<body class="font-sans text-gray-900 antialiased bg-white">
+
     {{-- Header --}}
-    <header class="bg-white shadow-sm">
+    <header class="border-b border-gray-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-            <div class="flex items-center gap-4">
+            <div class="flex items-center gap-6">
                 <a href="{{ url('/') }}">
-                    <img src="{{ asset('img/logo.png') }}" alt="ARTid" class="h-12 w-auto">
+                    <img src="{{ asset('img/logo.png') }}" alt="ARTid" class="h-10 w-auto">
                 </a>
-                <a href="{{ route('ayuda') }}" class="text-sm text-gray-500 hover:text-gray-700 underline">{{ __('Ayuda') }}</a>
+                <a href="{{ route('ayuda') }}" class="text-sm text-gray-500 hover:text-gray-700">{{ __('Ayuda') }}</a>
             </div>
             <div class="flex items-center gap-3">
                 <a href="{{ route('login') }}" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
@@ -30,7 +31,7 @@
     </header>
 
     {{-- Hero --}}
-    <section class="py-16 sm:py-24">
+    <section class="py-16 sm:py-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h1 class="text-4xl sm:text-5xl font-bold text-gray-900 leading-tight">
                 Identidad Digital para tus Obras de Arte
@@ -50,7 +51,7 @@
     </section>
 
     {{-- Features --}}
-    <section class="py-16 bg-white">
+    <section class="py-16 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div class="text-center p-6">
@@ -155,7 +156,7 @@
     @endif
 
     {{-- Footer --}}
-    <footer class="py-8 bg-white border-t border-gray-200">
+    <footer class="py-8 bg-gray-50 border-t border-gray-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <p class="text-sm text-gray-500">
                 &copy; {{ date('Y') }} <a href="https://poordesigner.com" class="text-indigo-600 hover:underline" target="_blank" rel="noopener">POORdesigner.com</a>. {{ __('Todos los derechos reservados.') }}
