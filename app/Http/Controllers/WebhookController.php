@@ -1,0 +1,155 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Artist;
+use App\Models\Plan;
+use App\Models\PlanPeriod;
+use App\Models\Subscription;
+use App\Services\PaddleService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+
+class WebhookController extends Controller
+{
+    public function handle(Request $request, PaddleService $paddle): JsonResponse
+    {
+        $body = $request->getContent();
+        $signature = $request->header('Paddle-Signature');
+
+        if (! $paddle->verifyWebhook($body, $signature)) {
+            return response()->json(['error' => 'Invalid signature'], 401);
+        }
+
+        $payload = json_decode($body, true);
+        $eventType = $payload['event_type'] ?? null;
+        $data = $payload['data'] ?? [];
+
+        Log::info('Paddle webhook recibido', ['event_type' => $eventType, 'id' => $data['id'] ?? null]);
+
+        try {
+            $this->dispatch($eventType, $data);
+        } catch (\Throwable $e) {
+            Log::error('Error procesando webhook de Paddle', [
+                'event_type' => $eventType,
+                'error' => $e->getMessage(),
+            ]);
+        }
+
+        return response()->json(['success' => true]);
+    }
+
+    private function dispatch(?string $eventType, array $data): void
+    {
+        match ($eventType) {
+            'subscription.created',
+            'subscription.activated',
+            'subscription.updated' => $this->handleSubscriptionUpsert($data),
+            'subscription.trialing' => $this->handleSubscriptionStatus($data, 'trialing'),
+            'subscription.canceled' => $this->handleSubscriptionStatus($data, 'canceled'),
+            'subscription.paused' => $this->handleSubscriptionStatus($data, 'paused'),
+            'subscription.resumed' => $this->handleSubscriptionStatus($data, 'active'),
+            'subscription.past_due' => $this->handleSubscriptionStatus($data, 'past_due'),
+            default => null,
+        };
+    }
+
+    private function handleSubscriptionUpsert(array $data): void
+    {
+        $subscriptionId = $data['id'] ?? null;
+        if (! $subscriptionId) {
+            return;
+        }
+
+        // Encontrar el artist por custom_data o por customer_id.
+        $customData = $data['custom_data'] ?? [];
+        $artist = null;
+
+        if (! empty($customData['artist_id'])) {
+            $artist = Artist::find($customData['artist_id']);
+        }
+
+        if (! $artist) {
+            $customerId = $data['customer_id'] ?? null;
+            $sub = Subscription::where('paddle_customer_id', $customerId)->first();
+            $artist = $sub?->artist;
+        }
+
+        if (! $artist) {
+            Log::warning('Webhook de Paddle sin artista asociado', ['subscription_id' => $subscriptionId]);
+
+            return;
+        }
+
+        // Determinar plan/periodo desde los items de la suscripción.
+        [$plan, $period] = $this->resolvePlanFromItems($data);
+
+        $status = match ($data['status'] ?? null) {
+            'trialing' => 'trialing',
+            'paused' => 'paused',
+            'canceled' => 'canceled',
+            'active' => 'active',
+            'past_due' => 'past_due',
+            default => 'active',
+        };
+
+        $subscription = Subscription::updateOrCreate(
+            ['paddle_subscription_id' => $subscriptionId],
+            [
+                'artist_id' => $artist->id,
+                'plan_id' => $plan?->id,
+                'plan_period_id' => $period?->id,
+                'paddle_customer_id' => $data['customer_id'] ?? null,
+                'status' => $status,
+                'next_billed_at' => $data['next_billed_at'] ?? null,
+            ]
+        );
+
+        // Cancelar automáticamente suscripciones viejas del mismo artista.
+        if (in_array($status, ['active', 'trialing'])) {
+            Subscription::where('artist_id', $artist->id)
+                ->where('id', '!=', $subscription->id)
+                ->whereIn('status', ['active', 'trialing', 'past_due'])
+                ->update(['status' => 'canceled']);
+        }
+    }
+
+    private function handleSubscriptionStatus(array $data, string $status): void
+    {
+        $subscriptionId = $data['id'] ?? null;
+        if (! $subscriptionId) {
+            return;
+        }
+
+        Subscription::where('paddle_subscription_id', $subscriptionId)
+            ->update([
+                'status' => $status,
+                'next_billed_at' => $data['next_billed_at'] ?? null,
+            ]);
+    }
+
+    /**
+     * @return array{0: ?Plan, 1: ?PlanPeriod}
+     */
+    private function resolvePlanFromItems(array $data): array
+    {
+        $items = $data['items'] ?? [];
+
+        foreach ($items as $item) {
+            $priceId = $item['price']['id'] ?? $item['price_id'] ?? null;
+
+            if (! $priceId) {
+                continue;
+            }
+
+            $period = PlanPeriod::where('paddle_price_id', $priceId)->first();
+
+            if ($period) {
+                return [$period->plan, $period];
+            }
+        }
+
+        return [null, null];
+    }
+}

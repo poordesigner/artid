@@ -97,5 +97,15 @@
     "Cada año": "Every year",
     "Cada :count años": "Every :count years",
     "pago mensual": "monthly payment",
-    "pago anual": "annual payment"
+    "pago anual": "annual payment",
+    "Mi Plan": "My Plan",
+    "Tu plan actual": "Your current plan",
+    "Free": "Free",
+    "Estás en el plan gratuito.": "You are on the free plan.",
+    "Planes disponibles": "Available plans",
+    "Elige un plan y un período para suscribirte.": "Choose a plan and a period to subscribe.",
+    "Actual": "Current",
+    "Suscribirse": "Subscribe",
+    "Este plan no está sincronizado con Paddle aún.": "This plan is not synced with Paddle yet.",
+    "No se pudo generar el checkout.": "Could not generate the checkout."
 }

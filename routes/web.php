@@ -8,6 +8,8 @@ use App\Http\Controllers\PlanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicArtworkController;
 use App\Http\Controllers\SeriesController;
+use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\WebhookController;
 use App\Models\Plan;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Route;
@@ -33,6 +35,8 @@ Route::get('/o/{publicId}', [PublicArtworkController::class, 'show'])->name('pub
 
 Route::get('/artist/{id}', [PublicArtworkController::class, 'artist'])->name('public.artist');
 
+Route::post('/webhooks/paddle', [WebhookController::class, 'handle'])->name('webhooks.paddle');
+
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
         return redirect()->route('artworks.index');
@@ -47,6 +51,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/configuracion', [ConfigController::class, 'index'])->name('configuracion');
+
+    Route::post('/subscribe/{period}', [SubscriptionController::class, 'checkout'])->name('subscribe.checkout');
 
     Route::middleware('admin')->group(function () {
         Route::get('/configuracion/plans', [PlanController::class, 'index'])->name('plans.index');

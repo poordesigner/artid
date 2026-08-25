@@ -87,12 +87,21 @@ class PlanController extends Controller
 
     private function syncRelations(Plan $plan, array $validated): void
     {
+        // Preservar paddle ids existentes al actualizar periodos.
+        $existingPeriods = $plan->periods()->get()->keyBy(fn ($p) => $p->number.'-'.$p->period);
+
         $plan->periods()->delete();
-        foreach ($validated['periods'] ?? [] as $period) {
-            if (empty($period['number']) || empty($period['period'])) {
+        foreach ($validated['periods'] ?? [] as $periodData) {
+            if (empty($periodData['number']) || empty($periodData['period'])) {
                 continue;
             }
-            $plan->periods()->create($period);
+            $key = $periodData['number'].'-'.$periodData['period'];
+            $old = $existingPeriods->get($key);
+
+            $plan->periods()->create(array_merge($periodData, [
+                'paddle_product_id' => $old?->paddle_product_id,
+                'paddle_price_id' => $old?->paddle_price_id,
+            ]));
         }
 
         $plan->features()->delete();

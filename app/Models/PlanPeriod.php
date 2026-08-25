@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class PlanPeriod extends Model
 {
@@ -12,6 +13,8 @@ class PlanPeriod extends Model
         'number',
         'period',
         'price',
+        'paddle_product_id',
+        'paddle_price_id',
     ];
 
     protected $casts = [
@@ -29,6 +32,11 @@ class PlanPeriod extends Model
     public function plan(): BelongsTo
     {
         return $this->belongsTo(Plan::class);
+    }
+
+    public function subscriptions(): HasMany
+    {
+        return $this->hasMany(Subscription::class, 'plan_period_id');
     }
 
     public function getPeriodLabelAttribute(): string
@@ -81,5 +89,27 @@ class PlanPeriod extends Model
         $months = $this->months();
 
         return $months > 0 ? round((float) $this->price / $months, 2) : 0.0;
+    }
+
+    /**
+     * Mapeo al billing_cycle de Paddle.
+     */
+    public function billingCycle(): array
+    {
+        return match ($this->period) {
+            'monthly' => ['interval' => 'month', 'frequency' => $this->number],
+            'quarterly' => ['interval' => 'month', 'frequency' => $this->number * 3],
+            'semiannual' => ['interval' => 'month', 'frequency' => $this->number * 6],
+            'annual' => ['interval' => 'year', 'frequency' => $this->number],
+            default => ['interval' => 'month', 'frequency' => 1],
+        };
+    }
+
+    /**
+     * Precio en centavos (denominación mínima) para Paddle.
+     */
+    public function priceInCents(): int
+    {
+        return (int) round((float) $this->price * 100);
     }
 }

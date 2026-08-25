@@ -160,5 +160,15 @@
     "Cada año": "Cada año",
     "Cada :count años": "Cada :count años",
     "pago mensual": "pago mensual",
-    "pago anual": "pago anual"
+    "pago anual": "pago anual",
+    "Mi Plan": "Mi Plan",
+    "Tu plan actual": "Tu plan actual",
+    "Free": "Free",
+    "Estás en el plan gratuito.": "Estás en el plan gratuito.",
+    "Planes disponibles": "Planes disponibles",
+    "Elige un plan y un período para suscribirte.": "Elige un plan y un período para suscribirte.",
+    "Actual": "Actual",
+    "Suscribirse": "Suscribirse",
+    "Este plan no está sincronizado con Paddle aún.": "Este plan no está sincronizado con Paddle aún.",
+    "No se pudo generar el checkout.": "No se pudo generar el checkout."
 }

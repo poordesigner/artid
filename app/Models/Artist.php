@@ -27,6 +27,27 @@ class Artist extends Authenticatable
         return $this->hasMany(Series::class);
     }
 
+    public function subscriptions(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Subscription::class);
+    }
+
+    /**
+     * Suscripción paga activa actual (o null si está en plan Free).
+     */
+    public function activeSubscription(): ?Subscription
+    {
+        return $this->subscriptions()
+            ->whereIn('status', ['trialing', 'active', 'past_due'])
+            ->latest('id')
+            ->first();
+    }
+
+    public function isOnFreePlan(): bool
+    {
+        return $this->activeSubscription() === null;
+    }
+
     public function avatarUrl(): ?string
     {
         if (! $this->avatar) {

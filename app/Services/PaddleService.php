@@ -1,0 +1,167 @@
+<?php
+
+namespace App\Services;
+
+use App\Models\Artist;
+use App\Models\Plan;
+use App\Models\PlanPeriod;
+use Illuminate\Http\Client\PendingRequest;
+use Illuminate\Support\Facades\Http;
+
+class PaddleService
+{
+    private string $baseUrl;
+
+    private string $apiKey;
+
+    public function __construct()
+    {
+        $this->baseUrl = rtrim((string) config('paddle.base_url'), '/');
+        $this->apiKey = (string) config('paddle.api_key');
+    }
+
+    private function client(): PendingRequest
+    {
+        return Http::baseUrl($this->baseUrl)
+            ->withToken($this->apiKey)
+            ->acceptJson();
+    }
+
+    /**
+     * Crea un producto en el catálogo de Paddle.
+     *
+     * @return array<string, mixed>
+     */
+    public function createProduct(Plan $plan): array
+    {
+        $response = $this->client()->post('/products', [
+            'name' => $plan->name,
+            'description' => $plan->description ?? $plan->name,
+            'tax_category' => 'saas',
+            'type' => 'standard',
+        ]);
+
+        $response->throw();
+
+        return $response->json('data');
+    }
+
+    /**
+     * Crea un precio recurrente para un período de plan.
+     *
+     * @return array<string, mixed>
+     */
+    public function createPrice(PlanPeriod $period): array
+    {
+        $response = $this->client()->post('/prices', [
+            'description' => $period->plan->name.' — '.$period->period_label,
+            'name' => $period->plan->name.' ('.$period->recurrenceLabel().')',
+            'product_id' => $period->paddle_product_id,
+            'billing_cycle' => $period->billingCycle(),
+            'unit_price' => [
+                'amount' => (string) $period->priceInCents(),
+                'currency_code' => 'USD',
+            ],
+            'tax_mode' => 'account_setting',
+        ]);
+
+        $response->throw();
+
+        return $response->json('data');
+    }
+
+    /**
+     * Encuentra el Customer de Paddle por email, o lo crea si no existe.
+     *
+     * @return array<string, mixed>
+     */
+    public function findOrCreateCustomer(Artist $artist): array
+    {
+        $list = $this->client()
+            ->get('/customers', ['email' => $artist->email])
+            ->throw()
+            ->json('data');
+
+        if (! empty($list)) {
+            return $list[0];
+        }
+
+        $created = $this->client()->post('/customers', [
+            'name' => $artist->name,
+            'email' => $artist->email,
+        ]);
+
+        $created->throw();
+
+        return $created->json('data');
+    }
+
+    /**
+     * Crea una transacción de checkout automático para un período de plan
+     * y devuelve el objeto con la URL de checkout.
+     *
+     * @return array<string, mixed>
+     */
+    public function createCheckout(Artist $artist, PlanPeriod $period): array
+    {
+        $customer = $this->findOrCreateCustomer($artist);
+
+        $transaction = $this->client()->post('/transactions', [
+            'customer_id' => $customer['id'],
+            'items' => [
+                [
+                    'price_id' => $period->paddle_price_id,
+                    'quantity' => 1,
+                ],
+            ],
+            'collection_mode' => 'automatic',
+            'custom_data' => [
+                'artist_id' => $artist->id,
+                'plan_period_id' => $period->id,
+            ],
+        ]);
+
+        $transaction->throw();
+
+        return $transaction->json('data');
+    }
+
+    /**
+     * Verifica la firma de un webhook de Paddle.
+     *
+     * El header viene como: Paddle-Signature: ts=...;h1=...
+     */
+    public function verifyWebhook(string $body, ?string $signatureHeader): bool
+    {
+        $secret = (string) config('paddle.webhook_secret');
+        if (! $secret || ! $signatureHeader) {
+            return false;
+        }
+
+        $parts = [];
+        foreach (explode(';', $signatureHeader) as $pair) {
+            [$key, $value] = array_pad(explode('=', $pair, 2), 2, null);
+            if ($value !== null) {
+                $parts[$key] = $value;
+            }
+        }
+
+        $ts = $parts['ts'] ?? null;
+        $h1 = $parts['h1'] ?? null;
+
+        if ($ts === null || $h1 === null) {
+            return false;
+        }
+
+        // Tolerancia de replay de 5 segundos.
+        $eventTime = (int) $ts;
+        if (time() - $eventTime > 5) {
+            return false;
+        }
+
+        $signedPayload = $ts.':'.$body;
+        $expected = hash_hmac('sha256', $signedPayload, $secret);
+
+        return hash_equals($expected, $h1);
+    }
+}

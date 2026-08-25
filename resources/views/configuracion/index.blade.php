@@ -13,6 +13,9 @@
                     <button @click="tab = 'seguridad'" :class="tab === 'seguridad' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition">
                         {{ __('Seguridad') }}
                     </button>
+                    <button @click="tab = 'mi-plan'" :class="tab === 'mi-plan' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition">
+                        {{ __('Mi Plan') }}
+                    </button>
                     @if ($user->isAdmin())
                         <button @click="tab = 'planes'" :class="tab === 'planes' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition">
                             {{ __('Planes') }}
@@ -96,6 +99,95 @@
                 </div>
             </div>
 
+            {{-- Tab: Mi Plan --}}
+            <div x-show="tab === 'mi-plan'" x-transition>
+                <div class="space-y-6">
+                    {{-- Plan actual --}}
+                    <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
+                        <div class="max-w-xl">
+                            <section>
+                                <header>
+                                    <h2 class="text-lg font-medium text-gray-900">
+                                        {{ __('Tu plan actual') }}
+                                    </h2>
+                                </header>
+                                <div class="mt-4 flex items-center gap-3">
+                                    @if ($activeSubscription && $activeSubscription->plan)
+                                        <span class="px-3 py-1 bg-indigo-50 text-indigo-700 text-sm font-semibold rounded-full">
+                                            {{ $activeSubscription->plan->name }}
+                                        </span>
+                                        <span class="text-sm text-gray-600">
+                                            {{ $activeSubscription->status }}
+                                            @if ($activeSubscription->period)
+                                                · {{ $activeSubscription->period->recurrenceLabel() }} · ${{ number_format($activeSubscription->period->price, 2) }} USD
+                                            @endif
+                                        </span>
+                                    @else
+                                        <span class="px-3 py-1 bg-gray-100 text-gray-600 text-sm font-semibold rounded-full">
+                                            {{ __('Free') }}
+                                        </span>
+                                        <span class="text-sm text-gray-600">{{ __('Estás en el plan gratuito.') }}</span>
+                                    @endif
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+
+                    {{-- Planes disponibles --}}
+                    @if ($plans->count())
+                        <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
+                            <div class="max-w-3xl">
+                                <section>
+                                    <header>
+                                        <h2 class="text-lg font-medium text-gray-900">
+                                            {{ __('Planes disponibles') }}
+                                        </h2>
+                                        <p class="mt-1 text-sm text-gray-600">
+                                            {{ __('Elige un plan y un período para suscribirte.') }}
+                                        </p>
+                                    </header>
+
+                                    <div class="mt-6 space-y-6">
+                                        @foreach ($plans as $plan)
+                                            <div class="border border-gray-200 rounded-lg p-5">
+                                                <div class="flex items-center justify-between">
+                                                    <h3 class="font-semibold text-gray-900">{{ $plan->name }}</h3>
+                                                    @if ($activeSubscription && $activeSubscription->plan_id === $plan->id)
+                                                        <span class="px-2 py-1 text-xs bg-emerald-50 text-emerald-700 rounded-full">{{ __('Actual') }}</span>
+                                                    @endif
+                                                </div>
+                                                @if ($plan->description)
+                                                    <p class="mt-1 text-sm text-gray-600">{{ $plan->description }}</p>
+                                                @endif
+
+                                                @if ($plan->periods->count())
+                                                    <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                                        @foreach ($plan->periods as $period)
+                                                            <div class="flex items-center justify-between border border-gray-100 rounded-lg px-4 py-3">
+                                                                <div>
+                                                                    <p class="text-sm font-medium text-gray-900">{{ $period->recurrenceLabel() }}</p>
+                                                                    <p class="text-xs text-gray-500">${{ number_format($period->price, 2) }} USD</p>
+                                                                </div>
+                                                                <form method="POST" action="{{ route('subscribe.checkout', $period) }}">
+                                                                    @csrf
+                                                                    <x-primary-button>
+                                                                        {{ __('Suscribirse') }}
+                                                                    </x-primary-button>
+                                                                </form>
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+                    @endif
+                </div>
+            </div>
+
             {{-- Tab: Planes (admin) --}}
             @if ($user->isAdmin())
                 <div x-show="tab === 'planes'" x-transition>
@@ -108,11 +200,11 @@
                                 </button>
                             </div>
 
-                            @if ($plans->isEmpty())
+                            @if ($adminPlans->isEmpty())
                                 <p class="text-gray-500 text-center py-4">{{ __('No hay planes creados.') }}</p>
                             @else
                                 <div class="space-y-4">
-                                    @foreach ($plans as $plan)
+                                    @foreach ($adminPlans as $plan)
                                         <div class="border border-gray-200 rounded-lg p-4">
                                             <div class="flex items-start justify-between gap-4">
                                                 <div class="min-w-0 flex-1">

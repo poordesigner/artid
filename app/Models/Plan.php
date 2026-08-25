@@ -12,6 +12,7 @@ class Plan extends Model
         'description',
         'is_active',
         'sort_order',
+        'paddle_product_id',
     ];
 
     protected $casts = [
@@ -31,5 +32,10 @@ class Plan extends Model
     public function legalTerms(): HasMany
     {
         return $this->hasMany(PlanLegalTerm::class);
+    }
+
+    public function subscriptions(): HasMany
+    {
+        return $this->hasMany(Subscription::class);
     }
 }
