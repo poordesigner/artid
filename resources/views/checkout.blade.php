@@ -43,7 +43,7 @@
             animation: spin 0.8s linear infinite;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
-        .error { color: #dc2626; font-size: 0.9rem; }
+        .error { color: #dc2626; font-size: 0.9rem; display: none; }
     </style>
 </head>
 <body>
@@ -52,7 +52,7 @@
         <h1>{{ __('Procesando tu pago...') }}</h1>
         <p>{{ __('Te estamos redirigiendo a un pago seguro.') }}</p>
         <div class="spinner" id="spinner"></div>
-        <p class="error" id="error" style="display:none;">{{ __('No se pudo iniciar el checkout.') }}</p>
+        <p class="error" id="error">{{ __('No se pudo iniciar el checkout.') }}</p>
     </div>
 
     <script>
@@ -60,15 +60,32 @@
         const params = new URLSearchParams(window.location.search);
         const transactionId = params.get('_ptxn');
 
-        if (!token || !transactionId) {
+        function showError() {
             document.getElementById('spinner').style.display = 'none';
             document.getElementById('error').style.display = 'block';
+        }
+
+        if (!token || !transactionId) {
+            showError();
         } else {
-            Paddle.Initialize({ token, environment: 'sandbox' }).then(() => {
-                return Paddle.Checkout.open({ transactionId });
-            }).catch(() => {
-                document.getElementById('spinner').style.display = 'none';
-                document.getElementById('error').style.display = 'block';
+            Paddle.Environment.set('sandbox');
+
+            Paddle.Initialize({
+                token: token,
+                eventCallback: function (data) {
+                    if (data && data.name) {
+                        console.log('Paddle event:', data.name, data);
+                    } else {
+                        console.log('Paddle callback:', data);
+                    }
+                },
+            }).then(function () {
+                return Paddle.Checkout.open({
+                    transactionId: transactionId,
+                });
+            }).catch(function (err) {
+                console.error('Paddle error:', err);
+                showError();
             });
         }
     </script>
