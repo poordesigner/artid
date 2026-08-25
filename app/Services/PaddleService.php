@@ -131,6 +131,22 @@ class PaddleService
     }
 
     /**
+     * Cancela una suscripción al final del período contratado.
+     *
+     * @return array<string, mixed>
+     */
+    public function cancelSubscription(string $subscriptionId): array
+    {
+        $response = $this->client()->post("/subscriptions/{$subscriptionId}/cancel", [
+            'effective_from' => 'next_billing_period',
+        ]);
+
+        $response->throw();
+
+        return $response->json('data');
+    }
+
+    /**
      * Verifica la firma de un webhook de Paddle.
      *
      * El header viene como: Paddle-Signature: ts=...;h1=...

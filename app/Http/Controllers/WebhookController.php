@@ -94,6 +94,16 @@ class WebhookController extends Controller
             default => 'active',
         };
 
+        $currentPeriod = $data['current_billing_period'] ?? [];
+        $scheduledChange = $data['scheduled_change'] ?? null;
+        $canceledAt = null;
+
+        if ($status === 'canceled') {
+            $canceledAt = $canceledAt ?? $scheduledChange['effective_at'] ?? null;
+        } elseif ($scheduledChange && ($scheduledChange['action'] ?? null) === 'cancel') {
+            $canceledAt = $scheduledChange['effective_at'] ?? null;
+        }
+
         $subscription = Subscription::updateOrCreate(
             ['paddle_subscription_id' => $subscriptionId],
             [
@@ -103,6 +113,9 @@ class WebhookController extends Controller
                 'paddle_customer_id' => $data['customer_id'] ?? null,
                 'status' => $status,
                 'next_billed_at' => $data['next_billed_at'] ?? null,
+                'current_period_start' => $currentPeriod['starts_at'] ?? null,
+                'current_period_end' => $currentPeriod['ends_at'] ?? null,
+                'canceled_at' => $canceledAt,
             ]
         );
 

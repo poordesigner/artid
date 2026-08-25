@@ -107,5 +107,12 @@
     "Actual": "Current",
     "Suscribirse": "Subscribe",
     "Este plan no está sincronizado con Paddle aún.": "This plan is not synced with Paddle yet.",
-    "No se pudo generar el checkout.": "Could not generate the checkout."
+    "No se pudo generar el checkout.": "Could not generate the checkout.",
+    "No tienes una suscripción activa para cancelar.": "You don't have an active subscription to cancel.",
+    "Tu plan quedará cancelado al final del período contratado.": "Your plan will be canceled at the end of the contracted period.",
+    "Cancelación programada: el plan vence el :date.": "Scheduled cancellation: your plan ends on :date.",
+    "Fecha de inicio": "Start date",
+    "Fecha de terminación": "End date",
+    "Cancelar plan": "Cancel plan",
+    "¿Estás seguro de cancelar tu plan? Quedará vigente hasta la fecha de terminación contratada.": "Are you sure you want to cancel your plan? It will remain active until the contracted end date."
 }

@@ -5,8 +5,18 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8" x-data="{ tab: '{{ $user->isAdmin() ? request('tab', 'seguridad') : 'seguridad' }}' }">
+    @php
+    $initialTab = request('tab', 'seguridad');
+    $allowedTabs = ['seguridad', 'mi-plan'];
+    if ($user->isAdmin()) {
+        $allowedTabs[] = 'planes';
+    }
+    if (! in_array($initialTab, $allowedTabs)) {
+        $initialTab = 'seguridad';
+    }
+@endphp
+<div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8" x-data="{ tab: '{{ $initialTab }}' }">
             {{-- Tabs --}}
             <div class="border-b border-gray-200 mb-6">
                 <nav class="-mb-px flex gap-6">
@@ -111,22 +121,52 @@
                                         {{ __('Tu plan actual') }}
                                     </h2>
                                 </header>
-                                <div class="mt-4 flex items-center gap-3">
+                                <div class="mt-4">
                                     @if ($activeSubscription && $activeSubscription->plan)
-                                        <span class="px-3 py-1 bg-indigo-50 text-indigo-700 text-sm font-semibold rounded-full">
-                                            {{ $activeSubscription->plan->name }}
-                                        </span>
-                                        <span class="text-sm text-gray-600">
-                                            {{ $activeSubscription->status }}
-                                            @if ($activeSubscription->period)
-                                                · {{ $activeSubscription->period->recurrenceLabel() }} · ${{ number_format($activeSubscription->period->price, 2) }} USD
-                                            @endif
-                                        </span>
+                                        <div class="flex items-center gap-3">
+                                            <span class="px-3 py-1 bg-indigo-50 text-indigo-700 text-sm font-semibold rounded-full">
+                                                {{ $activeSubscription->plan->name }}
+                                            </span>
+                                            <span class="text-sm text-gray-600">
+                                                {{ $activeSubscription->status }}
+                                                @if ($activeSubscription->period)
+                                                    · {{ $activeSubscription->period->recurrenceLabel() }} · ${{ number_format($activeSubscription->period->price, 2) }} USD
+                                                @endif
+                                            </span>
+                                        </div>
+
+                                        @if ($activeSubscription->hasScheduledCancellation())
+                                            <p class="mt-3 text-sm text-amber-600">
+                                                {{ __('Cancelación programada: el plan vence el :date.', ['date' => $activeSubscription->endsAt()?->format('d/m/Y')]) }}
+                                            </p>
+                                        @endif
+
+                                        <dl class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                                            <div>
+                                                <dt class="text-gray-500">{{ __('Fecha de inicio') }}</dt>
+                                                <dd class="font-medium text-gray-900">{{ $activeSubscription->startedAt()?->format('d/m/Y') }}</dd>
+                                            </div>
+                                            <div>
+                                                <dt class="text-gray-500">{{ __('Fecha de terminación') }}</dt>
+                                                <dd class="font-medium text-gray-900">{{ $activeSubscription->endsAt()?->format('d/m/Y') }}</dd>
+                                            </div>
+                                        </dl>
+
+                                        @if (! $activeSubscription->hasScheduledCancellation() && $activeSubscription->isActive())
+                                            <form method="POST" action="{{ route('subscribe.cancel') }}" class="mt-6" onsubmit="return confirm('{{ __('¿Estás seguro de cancelar tu plan? Quedará vigente hasta la fecha de terminación contratada.') }}');">
+                                                @csrf
+                                                <button type="submit" class="inline-flex items-center px-4 py-2 bg-white border border-red-300 text-red-600 rounded-md font-semibold text-xs uppercase tracking-widest hover:bg-red-50 transition">
+                                                    {{ __('Cancelar plan') }}
+                                                </button>
+                                            </form>
+                                        @endif
                                     @else
-                                        <span class="px-3 py-1 bg-gray-100 text-gray-600 text-sm font-semibold rounded-full">
-                                            {{ __('Free') }}
-                                        </span>
-                                        <span class="text-sm text-gray-600">{{ __('Estás en el plan gratuito.') }}</span>
+                                        <div class="flex items-center gap-3">
+                                            <span class="px-3 py-1 bg-gray-100 text-gray-600 text-sm font-semibold rounded-full">
+                                                {{ __('Free') }}
+                                            </span>
+                                            <span class="text-sm text-gray-600">{{ __('Estás en el plan gratuito.') }}</span>
+                                        </div>
                                     @endif
                                 </div>
                             </section>
