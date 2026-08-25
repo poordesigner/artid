@@ -62,6 +62,10 @@ class PaddleService
                 'amount' => (string) $period->priceInCents(),
                 'currency_code' => 'USD',
             ],
+            'quantity' => [
+                'minimum' => 1,
+                'maximum' => 1,
+            ],
             'tax_mode' => 'account_setting',
         ]);
 
