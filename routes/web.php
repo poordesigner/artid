@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ArtworkController;
+use App\Http\Controllers\CheckoutPageController;
 use App\Http\Controllers\ConfigController;
 use App\Http\Controllers\ExhibitionController;
 use App\Http\Controllers\OwnershipController;
@@ -21,6 +22,8 @@ Route::get('/locale/{locale}', function (string $locale) {
 
     return redirect()->back();
 })->name('locale');
+
+Route::get('/pay', CheckoutPageController::class)->name('checkout.page');
 
 Route::get('/', function () {
     $plans = Plan::with(['periods', 'features'])
