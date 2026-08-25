@@ -32,6 +32,11 @@ class Artist extends Authenticatable
         return $this->hasMany(Subscription::class);
     }
 
+    public function payments(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Payment::class);
+    }
+
     /**
      * Suscripción paga activa actual (o null si está en plan Free).
      */

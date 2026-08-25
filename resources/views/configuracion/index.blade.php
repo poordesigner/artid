@@ -153,12 +153,17 @@
                                         </dl>
 
                                         @if (! $activeSubscription->hasScheduledCancellation() && $activeSubscription->isActive())
-                                            <form method="POST" action="{{ route('subscribe.cancel') }}" class="mt-6" onsubmit="return confirm('{{ __('¿Estás seguro de cancelar tu plan? Quedará vigente hasta la fecha de terminación contratada.') }}');">
-                                                @csrf
-                                                <button type="submit" class="inline-flex items-center px-4 py-2 bg-white border border-red-300 text-red-600 rounded-md font-semibold text-xs uppercase tracking-widest hover:bg-red-50 transition">
-                                                    {{ __('Cancelar plan') }}
-                                                </button>
-                                            </form>
+                                            <div class="mt-6 flex flex-wrap items-center gap-3">
+                                                <a href="{{ route('subscribe.portal') }}" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent text-white rounded-md font-semibold text-xs uppercase tracking-widest hover:bg-gray-700 transition">
+                                                    {{ __('Gestionar suscripción') }}
+                                                </a>
+                                                <form method="POST" action="{{ route('subscribe.cancel') }}" onsubmit="return confirm('{{ __('¿Estás seguro de cancelar tu plan? Quedará vigente hasta la fecha de terminación contratada.') }}');">
+                                                    @csrf
+                                                    <button type="submit" class="inline-flex items-center px-4 py-2 bg-white border border-red-300 text-red-600 rounded-md font-semibold text-xs uppercase tracking-widest hover:bg-red-50 transition">
+                                                        {{ __('Cancelar plan') }}
+                                                    </button>
+                                                </form>
+                                            </div>
                                         @endif
                                     @else
                                         <div class="flex items-center gap-3">
@@ -221,6 +226,47 @@
                                             </div>
                                         @endforeach
                                     </div>
+                                </section>
+                            </div>
+                        </div>
+                    @endif
+
+                    {{-- Historial de pagos --}}
+                    @if ($payments->isNotEmpty())
+                        <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
+                            <div class="max-w-xl">
+                                <section>
+                                    <header>
+                                        <h2 class="text-lg font-medium text-gray-900">
+                                            {{ __('Historial de pagos') }}
+                                        </h2>
+                                        <p class="mt-1 text-sm text-gray-600">
+                                            {{ __('Tus últimos cobros de suscripción.') }}
+                                        </p>
+                                    </header>
+
+                                    <ul class="mt-6 divide-y divide-gray-100">
+                                        @foreach ($payments as $payment)
+                                            <li class="py-3 flex items-center justify-between gap-4">
+                                                <div class="min-w-0">
+                                                    <p class="text-sm font-medium text-gray-900">
+                                                        {{ $payment->status === 'completed' ? __('Pago') : __(ucfirst($payment->status)) }}
+                                                    </p>
+                                                    @if ($payment->billed_at)
+                                                        <p class="text-xs text-gray-500">{{ $payment->billed_at->format('d/m/Y H:i') }}</p>
+                                                    @endif
+                                                </div>
+                                                <div class="text-right shrink-0">
+                                                    <p class="text-sm font-semibold text-gray-900">
+                                                        ${{ number_format($payment->amount, 2) }} {{ $payment->currency_code }}
+                                                    </p>
+                                                    <span class="text-xs {{ $payment->status === 'completed' ? 'text-emerald-600' : 'text-red-600' }}">
+                                                        {{ $payment->status }}
+                                                    </span>
+                                                </div>
+                                            </li>
+                                        @endforeach
+                                    </ul>
                                 </section>
                             </div>
                         </div>

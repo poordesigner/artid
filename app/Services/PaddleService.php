@@ -147,6 +147,25 @@ class PaddleService
     }
 
     /**
+     * Crea una sesión del customer portal para un abonado.
+     *
+     * @param string      $customerId     ID del customer en Paddle
+     * @param array<string> $subscriptionIds subscriptions para deep links
+     *
+     * @return array<string, mixed>
+     */
+    public function createPortalSession(string $customerId, array $subscriptionIds = []): array
+    {
+        $body = $subscriptionIds ? ['subscription_ids' => $subscriptionIds] : [];
+
+        $response = $this->client()->post("/customers/{$customerId}/portal-sessions", $body);
+
+        $response->throw();
+
+        return $response->json('data');
+    }
+
+    /**
      * Verifica la firma de un webhook de Paddle.
      *
      * El header viene como: Paddle-Signature: ts=...;h1=...

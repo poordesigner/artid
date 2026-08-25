@@ -177,5 +177,15 @@
     "Fecha de inicio": "Fecha de inicio",
     "Fecha de terminación": "Fecha de terminación",
     "Cancelar plan": "Cancelar plan",
-    "¿Estás seguro de cancelar tu plan? Quedará vigente hasta la fecha de terminación contratada.": "¿Estás seguro de cancelar tu plan? Quedará vigente hasta la fecha de terminación contratada."
+    "¿Estás seguro de cancelar tu plan? Quedará vigente hasta la fecha de terminación contratada.": "¿Estás seguro de cancelar tu plan? Quedará vigente hasta la fecha de terminación contratada.",
+    "No tienes una suscripción activa para gestionar.": "No tienes una suscripción activa para gestionar.",
+    "No se pudo generar el portal de suscripción.": "No se pudo generar el portal de suscripción.",
+    "Gestionar suscripción": "Gestionar suscripción",
+    "Historial de pagos": "Historial de pagos",
+    "Tus últimos cobros de suscripción.": "Tus últimos cobros de suscripción.",
+    "Pago": "Pago",
+    "Failed": "Fallido",
+    "Past due": "Vencido",
+    "Completed": "Completado",
+    "Paid": "Pagado"
 }

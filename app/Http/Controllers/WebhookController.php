@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Artist;
+use App\Models\Payment;
 use App\Models\Plan;
 use App\Models\PlanPeriod;
 use App\Models\Subscription;
@@ -51,8 +52,58 @@ class WebhookController extends Controller
             'subscription.paused' => $this->handleSubscriptionStatus($data, 'paused'),
             'subscription.resumed' => $this->handleSubscriptionStatus($data, 'active'),
             'subscription.past_due' => $this->handleSubscriptionStatus($data, 'past_due'),
+            'transaction.completed',
+            'transaction.paid' => $this->handleTransaction($data, 'completed'),
+            'transaction.payment_failed' => $this->handleTransaction($data, 'failed'),
+            'transaction.past_due' => $this->handleTransaction($data, 'past_due'),
             default => null,
         };
+    }
+
+    private function handleTransaction(array $data, string $status): void
+    {
+        $transactionId = $data['id'] ?? null;
+        $subscriptionId = $data['subscription_id'] ?? null;
+        $customerId = $data['customer_id'] ?? null;
+
+        if (! $transactionId) {
+            return;
+        }
+
+        $artist = null;
+        $subscription = null;
+
+        if ($subscriptionId) {
+            $subscription = Subscription::where('paddle_subscription_id', $subscriptionId)->first();
+            $artist = $subscription?->artist;
+        }
+
+        if (! $artist && $customerId) {
+            $subscription = Subscription::where('paddle_customer_id', $customerId)->latest('id')->first();
+            $artist = $subscription?->artist;
+        }
+
+        if (! $artist) {
+            Log::warning('Transacción de Paddle sin artista asociado', ['transaction_id' => $transactionId]);
+
+            return;
+        }
+
+        $totals = $data['totals'] ?? $data['details']['totals'] ?? [];
+        $grandTotal = $totals['grand_total'] ?? $totals['total'] ?? 0;
+        $currency = $data['currency_code'] ?? 'USD';
+
+        Payment::updateOrCreate(
+            ['paddle_transaction_id' => $transactionId],
+            [
+                'artist_id' => $artist->id,
+                'subscription_id' => $subscription?->id,
+                'status' => $status,
+                'currency_code' => $currency,
+                'amount' => is_numeric($grandTotal) ? $grandTotal / 100 : 0,
+                'billed_at' => $data['billed_at'] ?? $data['updated_at'] ?? $data['created_at'] ?? null,
+            ]
+        );
     }
 
     private function handleSubscriptionUpsert(array $data): void

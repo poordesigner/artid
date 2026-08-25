@@ -114,5 +114,15 @@
     "Fecha de inicio": "Start date",
     "Fecha de terminación": "End date",
     "Cancelar plan": "Cancel plan",
-    "¿Estás seguro de cancelar tu plan? Quedará vigente hasta la fecha de terminación contratada.": "Are you sure you want to cancel your plan? It will remain active until the contracted end date."
+    "¿Estás seguro de cancelar tu plan? Quedará vigente hasta la fecha de terminación contratada.": "Are you sure you want to cancel your plan? It will remain active until the contracted end date.",
+    "No tienes una suscripción activa para gestionar.": "You don't have an active subscription to manage.",
+    "No se pudo generar el portal de suscripción.": "Could not generate the subscription portal.",
+    "Gestionar suscripción": "Manage subscription",
+    "Historial de pagos": "Payment history",
+    "Tus últimos cobros de suscripción.": "Your latest subscription charges.",
+    "Pago": "Payment",
+    "Failed": "Failed",
+    "Past due": "Past due",
+    "Completed": "Completed",
+    "Paid": "Paid"
 }
