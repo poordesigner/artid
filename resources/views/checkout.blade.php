@@ -59,6 +59,13 @@
         const token = '{{ config('paddle.client_token') }}';
         const params = new URLSearchParams(window.location.search);
         const transactionId = params.get('_ptxn');
+        let completed = false;
+
+        function redirectAfterSuccess() {
+            if (completed) {
+                window.location.href = '/configuracion?tab=mi-plan';
+            }
+        }
 
         function showError() {
             document.getElementById('spinner').style.display = 'none';
@@ -73,10 +80,9 @@
             Paddle.Initialize({
                 token: token,
                 eventCallback: function (data) {
-                    if (data && data.name) {
-                        console.log('Paddle event:', data.name, data);
-                    } else {
-                        console.log('Paddle callback:', data);
+                    if (data && data.name === 'checkout.completed') {
+                        completed = true;
+                        setTimeout(redirectAfterSuccess, 1500);
                     }
                 },
             }).then(function () {
