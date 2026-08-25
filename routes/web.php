@@ -55,9 +55,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/configuracion', [ConfigController::class, 'index'])->name('configuracion');
 
-    Route::post('/subscribe/{period}', [SubscriptionController::class, 'checkout'])->name('subscribe.checkout');
     Route::post('/subscribe/cancel', [SubscriptionController::class, 'cancel'])->name('subscribe.cancel');
     Route::get('/subscribe/portal', [SubscriptionController::class, 'portal'])->name('subscribe.portal');
+    Route::post('/subscribe/{period}', [SubscriptionController::class, 'checkout'])->name('subscribe.checkout');
 
     Route::middleware('admin')->group(function () {
         Route::get('/configuracion/plans', [PlanController::class, 'index'])->name('plans.index');
