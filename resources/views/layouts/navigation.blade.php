@@ -5,7 +5,7 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('artworks.index') }}">
+                    <a href="{{ Auth::user()?->isAdmin() ? route('admin.dashboard') : route('artworks.index') }}">
                         <img src="{{ asset('img/logo_simple.png') }}" alt="artid" class="block h-9 w-auto">
                     </a>
                 </div>
@@ -14,9 +14,15 @@
             <!-- Right side: menu + settings dropdown -->
             <div class="hidden sm:flex sm:items-center sm:gap-8">
                 <!-- Navigation Links -->
-                <x-nav-link :href="route('artworks.index')" :active="request()->routeIs('artworks.*')">
-                    {{ __('Artworks') }}
-                </x-nav-link>
+                @if (Auth::user()?->isAdmin())
+                    <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.*')">
+                        {{ __('Panel') }}
+                    </x-nav-link>
+                @else
+                    <x-nav-link :href="route('artworks.index')" :active="request()->routeIs('artworks.*')">
+                        {{ __('Artworks') }}
+                    </x-nav-link>
+                @endif
                 <x-nav-link :href="route('configuracion')" :active="request()->routeIs('configuracion')">
                     {{ __('Configuración') }}
                 </x-nav-link>
@@ -78,9 +84,15 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('artworks.index')" :active="request()->routeIs('artworks.*')">
-                {{ __('Artworks') }}
-            </x-responsive-nav-link>
+            @if (Auth::user()?->isAdmin())
+                <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.*')">
+                    {{ __('Panel') }}
+                </x-responsive-nav-link>
+            @else
+                <x-responsive-nav-link :href="route('artworks.index')" :active="request()->routeIs('artworks.*')">
+                    {{ __('Artworks') }}
+                </x-responsive-nav-link>
+            @endif
             <x-responsive-nav-link :href="route('configuracion')" :active="request()->routeIs('configuracion')">
                 {{ __('Configuración') }}
             </x-responsive-nav-link>

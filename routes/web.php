@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ArtworkController;
 use App\Http\Controllers\CheckoutPageController;
 use App\Http\Controllers\ConfigController;
@@ -43,8 +44,12 @@ Route::post('/webhooks/paddle', [WebhookController::class, 'handle'])->name('web
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
-        return redirect()->route('artworks.index');
+        return auth()->user()->isAdmin()
+            ? redirect()->route('admin.dashboard')
+            : redirect()->route('artworks.index');
     })->name('dashboard');
+
+    Route::get('/admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 
     Route::get('/ayuda', function () {
         return view('ayuda');

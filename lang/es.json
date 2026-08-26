@@ -228,5 +228,17 @@
     "Grant revocado a :name.": "Grant revocado a :name.",
     "No puedes cambiar tu propio rol de administrador.": "No puedes cambiar tu propio rol de administrador.",
     ":name ahora es administrador.": ":name ahora es administrador.",
-    ":name ya no es administrador.": ":name ya no es administrador."
+    ":name ya no es administrador.": ":name ya no es administrador.",
+    "Panel": "Panel",
+    "Panel de administración": "Panel de administración",
+    "Artistas": "Artistas",
+    "Planes de pago": "Planes de pago",
+    "Suscripciones activas": "Suscripciones activas",
+    "Cobrado (USD)": "Cobrado (USD)",
+    "Gestión": "Gestión",
+    "Abrir panel": "Abrir panel",
+    "Otorga planes, revoca accesos, gestiona administradores y revisa cada artista.": "Otorga planes, revoca accesos, gestiona administradores y revisa cada artista.",
+    "Crea y edita los planes de suscripción, sus períodos y límites.": "Crea y edita los planes de suscripción, sus períodos y límites.",
+    "Seguridad de tu cuenta, email y contraseña.": "Seguridad de tu cuenta, email y contraseña.",
+    "Artistas recientes": "Artistas recientes"
 }

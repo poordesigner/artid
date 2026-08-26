@@ -165,5 +165,17 @@
     "Grant revocado a :name.": "Grant revoked for :name.",
     "No puedes cambiar tu propio rol de administrador.": "You cannot change your own administrator role.",
     ":name ahora es administrador.": ":name is now an administrator.",
-    ":name ya no es administrador.": ":name is no longer an administrator."
+    ":name ya no es administrador.": ":name is no longer an administrator.",
+    "Panel": "Admin Panel",
+    "Panel de administración": "Admin dashboard",
+    "Artistas": "Artists",
+    "Planes de pago": "Paid plans",
+    "Suscripciones activas": "Active subscriptions",
+    "Cobrado (USD)": "Collected (USD)",
+    "Gestión": "Management",
+    "Abrir panel": "Open panel",
+    "Otorga planes, revoca accesos, gestiona administradores y revisa cada artista.": "Grant plans, revoke access, manage administrators, and review each artist.",
+    "Crea y edita los planes de suscripción, sus períodos y límites.": "Create and edit subscription plans, their periods, and limits.",
+    "Seguridad de tu cuenta, email y contraseña.": "Your account security, email, and password.",
+    "Artistas recientes": "Recent artists"
 }

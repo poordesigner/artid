@@ -7,8 +7,10 @@
 
     @php
     $initialTab = request('tab', 'seguridad');
-    $allowedTabs = ['seguridad', 'mi-plan'];
-    if ($user->isAdmin()) {
+    $allowedTabs = ['seguridad'];
+    if (! $user->isAdmin()) {
+        $allowedTabs[] = 'mi-plan';
+    } else {
         $allowedTabs[] = 'planes';
     }
     if (! in_array($initialTab, $allowedTabs)) {
@@ -23,10 +25,11 @@
                     <button @click="tab = 'seguridad'" :class="tab === 'seguridad' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition">
                         {{ __('Seguridad') }}
                     </button>
-                    <button @click="tab = 'mi-plan'" :class="tab === 'mi-plan' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition">
-                        {{ __('Mi Plan') }}
-                    </button>
-                    @if ($user->isAdmin())
+                    @if (! $user->isAdmin())
+                        <button @click="tab = 'mi-plan'" :class="tab === 'mi-plan' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition">
+                            {{ __('Mi Plan') }}
+                        </button>
+                    @else
                         <button @click="tab = 'planes'" :class="tab === 'planes' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition">
                             {{ __('Planes') }}
                         </button>
