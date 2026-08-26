@@ -128,5 +128,9 @@
     "Plan gratuito": "Free plan",
     "Máximo de obras": "Max artworks",
     "Dejalo vacío para obras ilimitadas.": "Leave empty for unlimited artworks.",
-    "Límite de :max obras alcanzado en tu plan actual. Mejora tu plan para registrar más obras.": "You reached the :max artworks limit on your current plan. Upgrade your plan to register more artworks."
+    "Límite de :max obras alcanzado en tu plan actual. Mejora tu plan para registrar más obras.": "You reached the :max artworks limit on your current plan. Upgrade your plan to register more artworks.",
+    "Ya tienes este plan y período.": "You already have this plan and period.",
+    "Cambiaste tu plan correctamente.": "Your plan was changed successfully.",
+    "Plan actual": "Current plan",
+    "Cambiar a este plan": "Switch to this plan"
 }

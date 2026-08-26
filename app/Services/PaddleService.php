@@ -166,6 +166,53 @@ class PaddleService
     }
 
     /**
+     * Previza un cambio de plan/periodo en una suscripción existente.
+     *
+     * @return array<string, mixed>
+     */
+    public function previewSubscriptionChange(string $subscriptionId, PlanPeriod $period): array
+    {
+        $response = $this->client()->patch("/subscriptions/{$subscriptionId}/preview", [
+            'proration_billing_mode' => 'prorated_immediately',
+            'items' => [
+                [
+                    'price_id' => $period->paddle_price_id,
+                    'quantity' => 1,
+                ],
+            ],
+            'on_payment_failure' => 'prevent_change',
+        ]);
+
+        $response->throw();
+
+        return $response->json('data');
+    }
+
+    /**
+     * Aplica un cambio de plan/periodo en una suscripción existente
+     * (upgrade/downgrade con prorrateo).
+     *
+     * @return array<string, mixed>
+     */
+    public function changeSubscriptionPlan(string $subscriptionId, PlanPeriod $period): array
+    {
+        $response = $this->client()->patch("/subscriptions/{$subscriptionId}", [
+            'proration_billing_mode' => 'prorated_immediately',
+            'items' => [
+                [
+                    'price_id' => $period->paddle_price_id,
+                    'quantity' => 1,
+                ],
+            ],
+            'on_payment_failure' => 'prevent_change',
+        ]);
+
+        $response->throw();
+
+        return $response->json('data');
+    }
+
+    /**
      * Verifica la firma de un webhook de Paddle.
      *
      * El header viene como: Paddle-Signature: ts=...;h1=...

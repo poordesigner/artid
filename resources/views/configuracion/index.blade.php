@@ -208,17 +208,24 @@
                                                 @if ($plan->periods->count())
                                                     <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
                                                         @foreach ($plan->periods as $period)
+                                                            @php
+                                                                $isCurrent = $activeSubscription && $activeSubscription->plan_period_id === $period->id;
+                                                            @endphp
                                                             <div class="flex items-center justify-between border border-gray-100 rounded-lg px-4 py-3">
                                                                 <div>
                                                                     <p class="text-sm font-medium text-gray-900">{{ $period->recurrenceLabel() }}</p>
                                                                     <p class="text-xs text-gray-500">${{ number_format($period->price, 2) }} USD</p>
                                                                 </div>
-                                                                <form method="POST" action="{{ route('subscribe.checkout', $period) }}">
-                                                                    @csrf
-                                                                    <x-primary-button>
-                                                                        {{ __('Suscribirse') }}
-                                                                    </x-primary-button>
-                                                                </form>
+                                                                @if ($isCurrent)
+                                                                    <span class="px-3 py-1 text-xs bg-emerald-50 text-emerald-700 rounded-full font-medium">{{ __('Plan actual') }}</span>
+                                                                @else
+                                                                    <form method="POST" action="{{ route('subscribe.checkout', $period) }}">
+                                                                        @csrf
+                                                                        <x-primary-button>
+                                                                            {{ $activeSubscription ? __('Cambiar a este plan') : __('Suscribirse') }}
+                                                                        </x-primary-button>
+                                                                    </form>
+                                                                @endif
                                                             </div>
                                                         @endforeach
                                                     </div>
