@@ -18,7 +18,20 @@
     }
 @endphp
 <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8" x-data="{ tab: '{{ $initialTab }}' }">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8" x-data="{ tab: '{{ $initialTab }}', portalLoading: false, openPortal() {
+            this.portalLoading = true;
+            fetch('{{ route('subscribe.portal') }}', { headers: { 'Accept': 'application/json' } })
+                .then(r => r.json())
+                .then(data => {
+                    this.portalLoading = false;
+                    if (data.url) {
+                        window.open(data.url, '_blank');
+                    } else if (data.error) {
+                        alert(data.error);
+                    }
+                })
+                .catch(() => { this.portalLoading = false; });
+        } }">
             {{-- Tabs --}}
             <div class="border-b border-gray-200 mb-6">
                 <nav class="-mb-px flex gap-6">
@@ -159,9 +172,12 @@
 
                                         @if (! $activeSubscription->hasScheduledCancellation() && $activeSubscription->isActive())
                                             <div class="mt-6 flex flex-wrap items-center gap-3">
-                                                <a href="{{ route('subscribe.portal') }}" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent text-white rounded-md font-semibold text-xs uppercase tracking-widest hover:bg-gray-700 transition">
+                                                <button type="button"
+                                                        x-on:click="openPortal()"
+                                                        class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent text-white rounded-md font-semibold text-xs uppercase tracking-widest hover:bg-gray-700 transition">
                                                     {{ __('Gestionar suscripción') }}
-                                                </a>
+                                                </button>
+                                                <span x-show="portalLoading" class="text-sm text-gray-500">{{ __('Abriendo portal...') }}</span>
                                                 <form method="POST" action="{{ route('subscribe.cancel') }}" onsubmit="return confirm('{{ __('¿Estás seguro de cancelar tu plan? Quedará vigente hasta la fecha de terminación contratada.') }}');">
                                                     @csrf
                                                     <button type="submit" class="inline-flex items-center px-4 py-2 bg-white border border-red-300 text-red-600 rounded-md font-semibold text-xs uppercase tracking-widest hover:bg-red-50 transition">

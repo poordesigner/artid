@@ -243,5 +243,6 @@
     "Método de pago guardado en tu suscripción.": "Payment method saved on your subscription.",
     "El cargo se hará automáticamente a este método de pago al confirmar.": "The charge will be made automatically to this payment method on confirm.",
     "El cargo se hará a este método de pago en tu próxima factura.": "The charge will be made to this payment method on your next invoice.",
-    "No pudimos cobrar la diferencia a tu método de pago y el plan no cambió. Actualizá tu método de pago desde \"Gestionar suscripción\" e intentá de nuevo.": "We couldn't charge the difference to your payment method and the plan didn't change. Update your payment method from \"Manage subscription\" and try again."
+    "No pudimos cobrar la diferencia a tu método de pago y el plan no cambió. Actualizá tu método de pago desde \"Gestionar suscripción\" e intentá de nuevo.": "We couldn't charge the difference to your payment method and the plan didn't change. Update your payment method from \"Manage subscription\" and try again.",
+    "Abriendo portal...": "Opening portal..."
 }

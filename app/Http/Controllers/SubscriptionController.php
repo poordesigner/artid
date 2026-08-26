@@ -207,13 +207,13 @@ class SubscriptionController extends Controller
         return back()->with('status', __('Tu plan quedará cancelado al final del período contratado.'));
     }
 
-    public function portal(PaddleService $paddle): RedirectResponse
+    public function portal(PaddleService $paddle): \Illuminate\Http\JsonResponse
     {
         $user = Auth::user();
         $subscription = $user->activeSubscription();
 
         if (! $subscription || ! $subscription->paddle_customer_id) {
-            return back()->with('error', __('No tienes una suscripción activa para gestionar.'));
+            return response()->json(['error' => __('No tienes una suscripción activa para gestionar.')], 422);
         }
 
         $session = $paddle->createPortalSession(
@@ -224,9 +224,9 @@ class SubscriptionController extends Controller
         $url = $session['urls']['general']['overview'] ?? null;
 
         if (! $url) {
-            return back()->with('error', __('No se pudo generar el portal de suscripción.'));
+            return response()->json(['error' => __('No se pudo generar el portal de suscripción.')], 422);
         }
 
-        return redirect()->away($url);
+        return response()->json(['url' => $url]);
     }
 }
