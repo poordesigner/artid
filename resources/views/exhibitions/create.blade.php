@@ -1,6 +1,10 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <x-breadcrumb :crumbs="[
+            ['label' => __('Obras'), 'route' => route('artworks.index')],
+            ['label' => $artwork->title, 'route' => route('artworks.show', $artwork)],
+        ]" :current="__('Add exhibition')" />
+        <h2 class="mt-2 font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Add exhibition') }} — {{ $artwork->title }}
         </h2>
     </x-slot>

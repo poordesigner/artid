@@ -42,6 +42,14 @@
             margin: 0 auto;
             animation: spin 0.8s linear infinite;
         }
+        .spinner-lg {
+            width: 40px; height: 40px;
+            border: 4px solid #e0e7ff;
+            border-top-color: #4f46e5;
+            border-radius: 50%;
+            margin: 0 auto;
+            animation: spin 0.8s linear infinite;
+        }
         @keyframes spin { to { transform: rotate(360deg); } }
         .error { color: #dc2626; font-size: 0.9rem; display: none; }
     </style>
@@ -49,9 +57,16 @@
 <body>
     <div class="container">
         <img src="{{ asset('img/logo_simple.png') }}" alt="ARTid" class="logo">
-        <h1>{{ __('Procesando tu pago...') }}</h1>
-        <p>{{ __('Te estamos redirigiendo a un pago seguro.') }}</p>
-        <div class="spinner" id="spinner"></div>
+        <div id="start">
+            <h1>{{ __('Procesando tu pago...') }}</h1>
+            <p>{{ __('Te estamos redirigiendo a un pago seguro.') }}</p>
+            <div class="spinner" id="spinner"></div>
+        </div>
+        <div id="done" style="display:none;">
+            <h1>✓ {{ __('¡Pago completado!') }}</h1>
+            <p>{{ __('Verificando tu suscripción... te redirigimos a tu plan.') }}</p>
+            <div class="spinner-lg"></div>
+        </div>
         <p class="error" id="error">{{ __('No se pudo iniciar el checkout.') }}</p>
     </div>
 
@@ -72,6 +87,11 @@
             document.getElementById('error').style.display = 'block';
         }
 
+        function showCompleted() {
+            document.getElementById('start').style.display = 'none';
+            document.getElementById('done').style.display = 'block';
+        }
+
         if (!token || !transactionId) {
             showError();
         } else {
@@ -82,7 +102,8 @@
                 eventCallback: function (data) {
                     if (data && data.name === 'checkout.completed') {
                         completed = true;
-                        setTimeout(redirectAfterSuccess, 1500);
+                        showCompleted();
+                        setTimeout(redirectAfterSuccess, 3000);
                     }
                 },
             }).then(function () {
