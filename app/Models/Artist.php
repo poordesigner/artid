@@ -110,8 +110,9 @@ class Artist extends Authenticatable
     }
 
     /**
-     * Aplica los límites del plan: si hay más obras activas que el máximo,
-     * archiva las más antiguas (conservando las últimas registradas).
+     * Aplica los límites del plan:
+     * - Si hay más obras activas que el máximo, archiva las más antiguas.
+     * - Si hay cupo libre, reactiva obras archivadas (las más recientes primero).
      */
     public function enforcePlanLimits(): void
     {
@@ -121,17 +122,28 @@ class Artist extends Authenticatable
             return;
         }
 
-        // Obtener las obras activas ordenadas de más reciente a más antigua.
         $activeIds = $this->artworks()
             ->where('status', '!=', 'archived')
             ->latest('id')
             ->pluck('id');
 
-        // Archivar las que superan el máximo, conservando las últimas registradas.
+        // Archivar exceso (obras más antiguas).
         $excess = $activeIds->slice($max);
-
         if ($excess->isNotEmpty()) {
             Artwork::whereIn('id', $excess->toArray())->update(['status' => 'archived']);
+        }
+
+        // Reactivar obras archivadas si hay cupo (las más recientes primero).
+        if ($activeIds->count() < $max) {
+            $toRestore = $this->artworks()
+                ->where('status', 'archived')
+                ->latest('id')
+                ->limit($max - $activeIds->count())
+                ->pluck('id');
+
+            if ($toRestore->isNotEmpty()) {
+                Artwork::whereIn('id', $toRestore->toArray())->update(['status' => 'created']);
+            }
         }
     }
 
