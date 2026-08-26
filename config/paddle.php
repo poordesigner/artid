@@ -42,4 +42,13 @@ return [
     'base_url' => env('PADDLE_ENV', 'sandbox') === 'production'
         ? 'https://api.paddle.com'
         : 'https://sandbox-api.paddle.com',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Monto mínimo para cobro inmediato (USD)
+    |--------------------------------------------------------------------------
+    | Si el prorrateo a cobrar es menor a este valor, se difiere a la próxima
+    | factura para evitar tarifas mínimas o rechazos de Paddle.
+    */
+    'min_immediate_charge' => (float) env('PADDLE_MIN_IMMEDIATE_CHARGE', 10),
 ];

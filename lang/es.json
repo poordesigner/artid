@@ -295,5 +295,11 @@
     "Fin": "Fin",
     "Hoy": "Hoy",
     "Usado": "Usado",
-    "Restante": "Restante"
+    "Restante": "Restante",
+    "Total a cobrar en la próxima factura": "Total a cobrar en la próxima factura",
+    "La diferencia es menor a $:min de cobro mínimo.": "La diferencia es menor a $:min de cobro mínimo.",
+    "Tu upgrade se aplica de inmediato, pero la diferencia de $:amount se sumará a tu próxima factura del nuevo plan. No se te cobra nada hoy.": "Tu upgrade se aplica de inmediato, pero la diferencia de $:amount se sumará a tu próxima factura del nuevo plan. No se te cobra nada hoy.",
+    "Al confirmar, tu plan cambia ya. El monto prorrateado se cobrará en la próxima fecha de facturación.": "Al confirmar, tu plan cambia ya. El monto prorrateado se cobrará en la próxima fecha de facturación.",
+    "Confirmar (se cobrará en la próxima factura)": "Confirmar (se cobrará en la próxima factura)",
+    "Confirmar (sin cargo hoy)": "Confirmar (sin cargo hoy)"
 }

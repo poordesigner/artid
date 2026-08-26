@@ -232,5 +232,11 @@
     "Fin": "End",
     "Hoy": "Today",
     "Usado": "Used",
-    "Restante": "Remaining"
+    "Restante": "Remaining",
+    "Total a cobrar en la próxima factura": "Total to charge on the next invoice",
+    "La diferencia es menor a $:min de cobro mínimo.": "The difference is below the $:min minimum charge.",
+    "Tu upgrade se aplica de inmediato, pero la diferencia de $:amount se sumará a tu próxima factura del nuevo plan. No se te cobra nada hoy.": "Your upgrade applies immediately, but the $:amount difference will be added to your next invoice on the new plan. You won't be charged anything today.",
+    "Al confirmar, tu plan cambia ya. El monto prorrateado se cobrará en la próxima fecha de facturación.": "By confirming, your plan changes now. The prorated amount will be charged on your next billing date.",
+    "Confirmar (se cobrará en la próxima factura)": "Confirm (will be charged on the next invoice)",
+    "Confirmar (sin cargo hoy)": "Confirm (no charge today)"
 }

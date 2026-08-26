@@ -78,8 +78,10 @@
                         </div>
                         <div class="flex items-center justify-between border-t border-gray-100 pt-3">
                             <dt class="font-semibold text-gray-900">
-                                @if ($amounts['action'] === 'charge')
+                                @if ($amounts['action'] === 'charge' && ! $amounts['deferred'])
                                     {{ __('Total a cobrar ahora') }}
+                                @elseif ($amounts['action'] === 'charge' && $amounts['deferred'])
+                                    {{ __('Total a cobrar en la próxima factura') }}
                                 @elseif ($amounts['action'] === 'credit')
                                     {{ __('Crédito a favor') }}
                                 @else
@@ -92,8 +94,19 @@
                         </div>
                     </dl>
 
+                    @if ($amounts['action'] === 'charge' && $amounts['deferred'])
+                        <div class="mt-4 p-3 bg-amber-50 border border-amber-200 rounded-lg text-sm text-amber-800">
+                            <p class="font-medium">{{ __('La diferencia es menor a $:min de cobro mínimo.', ['min' => $amounts['min_immediate']]) }}</p>
+                            <p class="mt-1">{{ __('Tu upgrade se aplica de inmediato, pero la diferencia de $:amount se sumará a tu próxima factura del nuevo plan. No se te cobra nada hoy.', ['amount' => $amounts['to_action']]) }}</p>
+                        </div>
+                    @endif
+
                     <p class="mt-4 text-xs text-gray-500">
-                        {{ __('El prorrateo se calcula al minuto. Si hay un monto a cobrar, se cargará automáticamente a tu método de pago guardado en Paddle.') }}
+                        @if ($amounts['action'] === 'charge' && $amounts['deferred'])
+                            {{ __('Al confirmar, tu plan cambia ya. El monto prorrateado se cobrará en la próxima fecha de facturación.') }}
+                        @else
+                            {{ __('El prorrateo se calcula al minuto. Si hay un monto a cobrar, se cargará automáticamente a tu método de pago guardado en Paddle.') }}
+                        @endif
                     </p>
                 </div>
 
@@ -101,7 +114,7 @@
                     <a href="{{ route('configuracion', ['tab' => 'mi-plan']) }}" class="underline text-sm text-gray-600 hover:text-gray-900">
                         {{ __('Cancelar') }}
                     </a>
-                    @if ($amounts['action'] === 'charge' || $amounts['action'] === 'none')
+                    @if ($amounts['action'] === 'charge' && ! $amounts['deferred'])
                         <form method="POST" action="{{ route('subscribe.change', $newPeriod) }}">
                             @csrf
                             <x-primary-button>
@@ -111,8 +124,12 @@
                     @else
                         <form method="POST" action="{{ route('subscribe.change', $newPeriod) }}">
                             @csrf
-                            <x-primary-button class="!bg-emerald-600 hover:!bg-emerald-700">
-                                {{ __('Confirmar (sin cargo)') }}
+                            <x-primary-button class="{{ $amounts['action'] === 'credit' ? '!bg-emerald-600 hover:!bg-emerald-700' : '' }}">
+                                @if ($amounts['action'] === 'charge' && $amounts['deferred'])
+                                    {{ __('Confirmar (se cobrará en la próxima factura)') }}
+                                @else
+                                    {{ __('Confirmar (sin cargo hoy)') }}
+                                @endif
                             </x-primary-button>
                         </form>
                     @endif

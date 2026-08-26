@@ -48,20 +48,37 @@ class SubscriptionController extends Controller
             return back()->with('error', __('Ya tienes este plan y período.'));
         }
 
+        // Hacer el preview con cobro inmediato para saber el monto.
         $preview = $paddle->previewSubscriptionChange($subscription->paddle_subscription_id, $newPeriod);
 
         $summary = $preview['update_summary'] ?? [];
         $immediate = $preview['immediate_transaction'] ?? null;
 
-        // Monto real a cobrar: el grand_total de la transacción inmediata (incluye impuestos).
         $immediateTotals = $immediate['details']['totals'] ?? [];
-        $charge = $this->toDollars($immediateTotals['grand_total'] ?? $summary['charge']['amount'] ?? 0);
+        $chargeCents = $immediateTotals['grand_total'] ?? $summary['charge']['amount'] ?? 0;
+        $action = $summary['result']['action'] ?? 'none'; // charge | credit | none
+
+        // Decidir si el cobro se difiere a la próxima factura (monto < mínimo).
+        $minImmediate = (float) config('paddle.min_immediate_charge', 10);
+        $deferred = $action === 'charge' && ((float) $chargeCents / 100) < $minImmediate;
+        $mode = $deferred ? 'prorated_next_billing_period' : 'prorated_immediately';
+
+        // Si se difiere, re-preview con ese modo para mostrar el monto real futuro.
+        if ($deferred) {
+            $preview = $paddle->previewSubscriptionChange($subscription->paddle_subscription_id, $newPeriod, $mode);
+            $summary = $preview['update_summary'] ?? [];
+            $immediate = $preview['immediate_transaction'] ?? null;
+            $immediateTotals = $immediate['details']['totals'] ?? [];
+            $chargeCents = $immediateTotals['grand_total'] ?? $summary['charge']['amount'] ?? 0;
+        }
 
         $amounts = [
             'credit' => $this->toDollars($summary['credit']['amount'] ?? 0),
-            'charge' => $charge,
-            'to_action' => $this->toDollars($immediateTotals['grand_total'] ?? $summary['result']['amount'] ?? 0),
-            'action' => $summary['result']['action'] ?? 'none', // charge | credit | none
+            'charge' => $this->toDollars($chargeCents),
+            'to_action' => $this->toDollars($chargeCents),
+            'action' => $action,
+            'deferred' => $deferred,
+            'min_immediate' => number_format($minImmediate, 2),
         ];
 
         // Rango del período actual y días restantes para explicar el prorrateo.
@@ -110,7 +127,10 @@ class SubscriptionController extends Controller
             return back()->with('error', __('Ya tienes este plan y período.'));
         }
 
-        $data = $paddle->changeSubscriptionPlan($subscription->paddle_subscription_id, $period);
+        // Degregar el modo de prorrateo según el monto de la diferencia.
+        $mode = $this->resolveProrationMode($subscription, $period, $paddle);
+
+        $data = $paddle->changeSubscriptionPlan($subscription->paddle_subscription_id, $period, $mode);
 
         $subscription->update([
             'plan_id' => $period->plan_id,
@@ -123,6 +143,26 @@ class SubscriptionController extends Controller
 
         return redirect()->route('configuracion', ['tab' => 'mi-plan'])
             ->with('status', __('Cambiaste tu plan correctamente.'));
+    }
+
+    /**
+     * Decide el modo de prorrateo según el monto de la diferencia:
+     * si el cargo es menor al mínimo, se difiere a la próxima factura.
+     */
+    private function resolveProrationMode(\App\Models\Subscription $subscription, PlanPeriod $newPeriod, PaddleService $paddle): string
+    {
+        $preview = $paddle->previewSubscriptionChange($subscription->paddle_subscription_id, $newPeriod);
+
+        $summary = $preview['update_summary'] ?? [];
+        $immediate = $preview['immediate_transaction'] ?? null;
+        $immediateTotals = $immediate['details']['totals'] ?? [];
+        $chargeCents = $immediateTotals['grand_total'] ?? $summary['charge']['amount'] ?? 0;
+        $action = $summary['result']['action'] ?? 'none';
+
+        $minImmediate = (float) config('paddle.min_immediate_charge', 10);
+        $deferred = $action === 'charge' && ((float) $chargeCents / 100) < $minImmediate;
+
+        return $deferred ? 'prorated_next_billing_period' : 'prorated_immediately';
     }
 
     private function toDollars($cents): string

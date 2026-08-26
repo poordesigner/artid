@@ -170,10 +170,10 @@ class PaddleService
      *
      * @return array<string, mixed>
      */
-    public function previewSubscriptionChange(string $subscriptionId, PlanPeriod $period): array
+    public function previewSubscriptionChange(string $subscriptionId, PlanPeriod $period, string $prorationMode = 'prorated_immediately'): array
     {
         $response = $this->client()->patch("/subscriptions/{$subscriptionId}/preview", [
-            'proration_billing_mode' => 'prorated_immediately',
+            'proration_billing_mode' => $prorationMode,
             'items' => [
                 [
                     'price_id' => $period->paddle_price_id,
@@ -194,10 +194,10 @@ class PaddleService
      *
      * @return array<string, mixed>
      */
-    public function changeSubscriptionPlan(string $subscriptionId, PlanPeriod $period): array
+    public function changeSubscriptionPlan(string $subscriptionId, PlanPeriod $period, string $prorationMode = 'prorated_immediately'): array
     {
         $response = $this->client()->patch("/subscriptions/{$subscriptionId}", [
-            'proration_billing_mode' => 'prorated_immediately',
+            'proration_billing_mode' => $prorationMode,
             'items' => [
                 [
                     'price_id' => $period->paddle_price_id,
