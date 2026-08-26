@@ -251,5 +251,10 @@
     "Reactivate tu plan correctamente. Seguís vigente sin cambios.": "Your plan was reactivated. It remains active without changes.",
     "Saldo a favor": "Credit balance",
     "Se usará automáticamente en tu próxima factura o cargo de suscripción.": "It will be used automatically on your next invoice or subscription charge.",
-    "Saldo a favor aplicado": "Credit balance applied"
+    "Saldo a favor aplicado": "Credit balance applied",
+    "Plan otorgado": "Granted plan",
+    "Acceso especial sin costo.": "Special access at no cost.",
+    "Mejora sobre :plan": "Upgrade over :plan",
+    "Tu plan otorgado venció el :date.": "Your granted plan expired on :date.",
+    "Plan otorgado vigente hasta el :date.": "Granted plan valid until :date."
 }

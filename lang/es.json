@@ -314,5 +314,10 @@
     "Reactivate tu plan correctamente. Seguís vigente sin cambios.": "Reactivaste tu plan correctamente. Seguís vigente sin cambios.",
     "Saldo a favor": "Saldo a favor",
     "Se usará automáticamente en tu próxima factura o cargo de suscripción.": "Se usará automáticamente en tu próxima factura o cargo de suscripción.",
-    "Saldo a favor aplicado": "Saldo a favor aplicado"
+    "Saldo a favor aplicado": "Saldo a favor aplicado",
+    "Plan otorgado": "Plan otorgado",
+    "Acceso especial sin costo.": "Acceso especial sin costo.",
+    "Mejora sobre :plan": "Mejora sobre :plan",
+    "Tu plan otorgado venció el :date.": "Tu plan otorgado venció el :date.",
+    "Plan otorgado vigente hasta el :date.": "Plan otorgado vigente hasta el :date."
 }

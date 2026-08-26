@@ -138,25 +138,55 @@
                                     </h2>
                                 </header>
                                 <div class="mt-4">
-                                    @if ($activeSubscription && $activeSubscription->plan)
+                                    @php
+                                        $effective = $user->effectivePlan();
+                                        $granted = $user->activeGrantedPlan();
+                                        $sub = $activeSubscription;
+                                    @endphp
+                                    @if ($effective)
                                         <div class="flex flex-wrap items-center gap-3">
                                             <span class="px-3 py-1 bg-indigo-50 text-indigo-700 text-sm font-semibold rounded-full">
-                                                {{ $activeSubscription->plan->name }}
+                                                {{ $effective->name }}
                                             </span>
-                                            <span class="px-3 py-1 text-sm font-semibold rounded-full {{ $activeSubscription->statusBadgeClass() }}">
-                                                {{ $activeSubscription->statusLabel() }}
-                                            </span>
-                                            @if ($activeSubscription->period)
-                                                <span class="text-sm text-gray-600">
-                                                    {{ $activeSubscription->period->recurrenceLabel() }} · ${{ number_format($activeSubscription->period->price, 2) }} USD
+                                            @if ($granted)
+                                                <span class="px-3 py-1 text-sm font-semibold rounded-full bg-purple-50 text-purple-700">
+                                                    {{ __('Plan otorgado') }}
                                                 </span>
+                                            @elseif ($sub)
+                                                <span class="px-3 py-1 text-sm font-semibold rounded-full {{ $sub->statusBadgeClass() }}">
+                                                    {{ $sub->statusLabel() }}
+                                                </span>
+                                            @endif
+                                            @if ($sub && $sub->period)
+                                                <span class="text-sm text-gray-600">
+                                                    {{ $sub->period->recurrenceLabel() }} · ${{ number_format($sub->period->price, 2) }} {{ __('USD') }}
+                                                </span>
+                                            @elseif ($granted && ! $sub)
+                                                <span class="text-sm text-gray-600">{{ __('Acceso especial sin costo.') }}</span>
+                                            @endif
+                                            @if ($granted && $granted->id !== $effective->id)
+                                                <span class="text-sm text-gray-600">{{ __('Mejora sobre :plan', ['plan' => $effective->name]) }}</span>
                                             @endif
                                         </div>
 
-                                        @if ($activeSubscription->hasScheduledCancellation())
+                                        @if ($user->granted_plan_id && ! $granted && $user->granted_expires_at)
+                                            <div class="mt-3 rounded-lg bg-gray-100 border border-gray-200 p-3">
+                                                <p class="text-sm text-gray-600">
+                                                    {{ __('Tu plan otorgado venció el :date.', ['date' => $user->granted_expires_at->format('d/m/Y')]) }}
+                                                </p>
+                                            </div>
+                                        @endif
+
+                                        @if ($user->granted_expires_at && $granted)
+                                            <p class="mt-2 text-xs text-purple-500">
+                                                {{ __('Plan otorgado vigente hasta el :date.', ['date' => $user->granted_expires_at->format('d/m/Y')]) }}
+                                            </p>
+                                        @endif
+
+                                        @if ($sub && $sub->hasScheduledCancellation())
                                             <div class="mt-3 rounded-lg bg-amber-50 border border-amber-200 p-4">
                                                 <p class="text-sm text-amber-700">
-                                                    {{ __('Cancelación programada: el plan vence el :date.', ['date' => $activeSubscription->endsAt()?->format('d/m/Y')]) }}
+                                                    {{ __('Cancelación programada: el plan vence el :date.', ['date' => $sub->endsAt()?->format('d/m/Y')]) }}
                                                 </p>
                                                 <form method="POST" action="{{ route('subscribe.reactivate') }}" class="mt-3">
                                                     @csrf
@@ -170,11 +200,11 @@
                                         <dl class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
                                             <div>
                                                 <dt class="text-gray-500">{{ __('Fecha de inicio') }}</dt>
-                                                <dd class="font-medium text-gray-900">{{ $activeSubscription->startedAt()?->format('d/m/Y') }}</dd>
+                                                <dd class="font-medium text-gray-900">{{ $sub?->startedAt()?->format('d/m/Y') ?? $user->created_at->format('d/m/Y') }}</dd>
                                             </div>
                                             <div>
                                                 <dt class="text-gray-500">{{ __('Fecha de terminación') }}</dt>
-                                                <dd class="font-medium text-gray-900">{{ $activeSubscription->endsAt()?->format('d/m/Y') }}</dd>
+                                                <dd class="font-medium text-gray-900">{{ $sub?->endsAt()?->format('d/m/Y') ?? '—' }}</dd>
                                             </div>
                                         </dl>
 
@@ -190,7 +220,7 @@
                                             </div>
                                         @endif
 
-                                        @if (! $activeSubscription->hasScheduledCancellation() && $activeSubscription->isActive())
+                                        @if ($sub && ! $sub->hasScheduledCancellation() && $sub->isActive())
                                             <div class="mt-6 flex flex-wrap items-center gap-3">
                                                 <button type="button"
                                                         x-on:click="openPortal()"
