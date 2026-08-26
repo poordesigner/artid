@@ -10,11 +10,6 @@ use Illuminate\View\View;
 
 class AccountController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('admin');
-    }
-
     public function index(): View
     {
         $artists = Artist::with(['activeSubscription' => fn ($q) => $q->with('plan')])
