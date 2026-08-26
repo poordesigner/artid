@@ -47,8 +47,15 @@
                                                 <span class="ml-1 px-1.5 py-0.5 text-[10px] bg-indigo-50 text-indigo-700 rounded-full font-semibold">{{ __('otorgado') }}</span>
                                             @endif
                                         </p>
-                                        @if ($granted?->id !== $effective?->id && $artist->activeSubscription)
-                                            <p class="text-xs text-gray-500">{{ __('Suscripción: :plan', ['plan' => $artist->activeSubscription->plan?->name]) }}</p>
+                                        @if ($granted?->id !== $effective?->id && $artist->subscriptions->isNotEmpty())
+                                            @php
+                                                $activeSub = $artist->subscriptions
+                                                    ->sortByDesc('id')
+                                                    ->first(fn ($s) => in_array($s->status, ['active', 'trialing', 'past_due']));
+                                            @endphp
+                                            @if ($activeSub && $activeSub->plan)
+                                                <p class="text-xs text-gray-500">{{ __('Suscripción: :plan', ['plan' => $activeSub->plan->name]) }}</p>
+                                            @endif
                                         @endif
                                         @if ($artist->granted_expires_at)
                                             <p class="text-xs text-gray-400 mt-0.5">{{ __('Vence el :date', ['date' => $artist->granted_expires_at->format('d/m/Y')]) }}</p>
