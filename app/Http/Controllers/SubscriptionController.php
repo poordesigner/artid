@@ -86,8 +86,9 @@ class SubscriptionController extends Controller
         $periodEnd = $subscription->current_period_end ?? $subscription->next_billed_at;
         $now = now();
 
-        $totalDays = $periodStart && $periodEnd ? max(1, $periodStart->diffInDays($periodEnd)) : 0;
-        $restDays = $periodEnd ? max(0, $now->diffInDays($periodEnd)) : 0;
+        $usedDays = $periodStart ? (int) round($periodStart->diffInDays($now)) : 0;
+        $restDays = $periodEnd ? (int) round($now->diffInDays($periodEnd)) : 0;
+        $totalDays = max(1, $usedDays + $restDays);
 
         $proration = [
             'period_start' => $periodStart?->format('d/m/Y'),
@@ -95,7 +96,7 @@ class SubscriptionController extends Controller
             'today' => $now->format('d/m/Y'),
             'total_days' => $totalDays,
             'rest_days' => $restDays,
-            'used_days' => $periodStart ? max(0, $periodStart->diffInDays($now)) : 0,
+            'used_days' => $usedDays,
         ];
 
         $currentPlan = $subscription->plan;
