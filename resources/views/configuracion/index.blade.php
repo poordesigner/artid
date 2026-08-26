@@ -178,6 +178,18 @@
                                             </div>
                                         </dl>
 
+                                        @if ($creditBalance > 0)
+                                            <div class="mt-4 p-3 bg-emerald-50 border border-emerald-200 rounded-lg">
+                                                <div class="flex items-center justify-between">
+                                                    <div>
+                                                        <p class="text-sm font-medium text-emerald-800">{{ __('Saldo a favor') }}</p>
+                                                        <p class="text-xs text-emerald-600">{{ __('Se usará automáticamente en tu próxima factura o cargo de suscripción.') }}</p>
+                                                    </div>
+                                                    <span class="text-xl font-bold text-emerald-700">${{ number_format($creditBalance, 2) }}</span>
+                                                </div>
+                                            </div>
+                                        @endif
+
                                         @if (! $activeSubscription->hasScheduledCancellation() && $activeSubscription->isActive())
                                             <div class="mt-6 flex flex-wrap items-center gap-3">
                                                 <button type="button"

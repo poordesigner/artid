@@ -311,5 +311,7 @@
     "Reactivar plan": "Reactivar plan",
     "No tienes una suscripción activa para reactivar.": "No tienes una suscripción activa para reactivar.",
     "Tu plan no tiene una cancelación programada.": "Tu plan no tiene una cancelación programada.",
-    "Reactivate tu plan correctamente. Seguís vigente sin cambios.": "Reactivaste tu plan correctamente. Seguís vigente sin cambios."
+    "Reactivate tu plan correctamente. Seguís vigente sin cambios.": "Reactivaste tu plan correctamente. Seguís vigente sin cambios.",
+    "Saldo a favor": "Saldo a favor",
+    "Se usará automáticamente en tu próxima factura o cargo de suscripción.": "Se usará automáticamente en tu próxima factura o cargo de suscripción."
 }

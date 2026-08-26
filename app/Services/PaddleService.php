@@ -255,6 +255,25 @@ class PaddleService
     }
 
     /**
+     * Obtiene el saldo a favor (crédito disponible) del customer en USD.
+     */
+    public function getCreditBalance(string $customerId): float
+    {
+        $response = $this->client()->get("/customers/{$customerId}/credit-balances");
+        $response->throw();
+
+        $balances = $response->json('data');
+
+        foreach ($balances as $balance) {
+            if (($balance['currency_code'] ?? '') === 'USD') {
+                return (float) ($balance['balance']['available'] ?? 0) / 100;
+            }
+        }
+
+        return 0.0;
+    }
+
+    /**
      * Verifica la firma de un webhook de Paddle.
      *
      * El header viene como: Paddle-Signature: ts=...;h1=...

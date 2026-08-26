@@ -248,5 +248,7 @@
     "Reactivar plan": "Reactivate plan",
     "No tienes una suscripción activa para reactivar.": "You don't have an active subscription to reactivate.",
     "Tu plan no tiene una cancelación programada.": "Your plan doesn't have a scheduled cancellation.",
-    "Reactivate tu plan correctamente. Seguís vigente sin cambios.": "Your plan was reactivated. It remains active without changes."
+    "Reactivate tu plan correctamente. Seguís vigente sin cambios.": "Your plan was reactivated. It remains active without changes.",
+    "Saldo a favor": "Credit balance",
+    "Se usará automáticamente en tu próxima factura o cargo de suscripción.": "It will be used automatically on your next invoice or subscription charge."
 }
