@@ -319,5 +319,18 @@
     "Acceso especial sin costo.": "Acceso especial sin costo.",
     "Mejora sobre :plan": "Mejora sobre :plan",
     "Tu plan otorgado venció el :date.": "Tu plan otorgado venció el :date.",
-    "Plan otorgado vigente hasta el :date.": "Plan otorgado vigente hasta el :date."
+    "Plan otorgado vigente hasta el :date.": "Plan otorgado vigente hasta el :date.",
+    "Todas": "Todas",
+    "Activas": "Activas",
+    "Inactivas": "Inactivas",
+    "Más recientes": "Más recientes",
+    "Más antiguas": "Más antiguas",
+    "Título A-Z": "Título A-Z",
+    "Las obras inactivas se muestran atenuadas.": "Las obras inactivas se muestran atenuadas.",
+    "No hay obras inactivas.": "No hay obras inactivas.",
+    "No hay obras activas.": "No hay obras activas.",
+    "Año": "Año",
+    "Registrada": "Registrada",
+    "Inactiva": "Inactiva",
+    "Activa": "Activa"
 }

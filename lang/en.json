@@ -256,5 +256,18 @@
     "Acceso especial sin costo.": "Special access at no cost.",
     "Mejora sobre :plan": "Upgrade over :plan",
     "Tu plan otorgado venció el :date.": "Your granted plan expired on :date.",
-    "Plan otorgado vigente hasta el :date.": "Granted plan valid until :date."
+    "Plan otorgado vigente hasta el :date.": "Granted plan valid until :date.",
+    "Todas": "All",
+    "Activas": "Active",
+    "Inactivas": "Inactive",
+    "Más recientes": "Most recent",
+    "Más antiguas": "Oldest",
+    "Título A-Z": "Title A-Z",
+    "Las obras inactivas se muestran atenuadas.": "Inactive artworks are shown dimmed.",
+    "No hay obras inactivas.": "No inactive artworks.",
+    "No hay obras activas.": "No active artworks.",
+    "Año": "Year",
+    "Registrada": "Registered",
+    "Inactiva": "Inactive",
+    "Activa": "Active"
 }

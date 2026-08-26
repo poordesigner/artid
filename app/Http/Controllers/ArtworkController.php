@@ -17,12 +17,33 @@ class ArtworkController extends Controller
     /**
      * List the authenticated artist's artworks.
      */
-    public function index(): View
+    public function index(Request $request): View
     {
-        $artworks = Auth::user()->artworks()->latest()->paginate(20);
         $artist = Auth::user();
 
-        return view('artworks.index', compact('artworks', 'artist'));
+        $query = $artist->artworks();
+
+        // Filtro por status: all | active | inactive
+        $status = $request->query('status', 'all');
+        if ($status === 'active') {
+            $query->where('status', '!=', 'archived');
+        } elseif ($status === 'inactive') {
+            $query->where('status', 'archived');
+        }
+
+        // Ordenamiento: recent (default) | oldest | title
+        $sort = $request->query('sort', 'recent');
+        if ($sort === 'oldest') {
+            $query->orderBy('created_at', 'asc');
+        } elseif ($sort === 'title') {
+            $query->orderBy('title', 'asc');
+        } else {
+            $query->orderBy('created_at', 'desc');
+        }
+
+        $artworks = $query->paginate(20)->withQueryString();
+
+        return view('artworks.index', compact('artworks', 'artist', 'status', 'sort'));
     }
 
     /**
