@@ -195,5 +195,11 @@
     "Ya tienes este plan y período.": "Ya tienes este plan y período.",
     "Cambiaste tu plan correctamente.": "Cambiaste tu plan correctamente.",
     "Plan actual": "Plan actual",
-    "Cambiar a este plan": "Cambiar a este plan"
+    "Cambiar a este plan": "Cambiar a este plan",
+    "Período de prueba": "Período de prueba",
+    "Activa": "Activa",
+    "Pago vencido": "Pago vencido",
+    "Pausada": "Pausada",
+    "Cancelada": "Cancelada",
+    "Expirada": "Expirada"
 }

@@ -132,5 +132,11 @@
     "Ya tienes este plan y período.": "You already have this plan and period.",
     "Cambiaste tu plan correctamente.": "Your plan was changed successfully.",
     "Plan actual": "Current plan",
-    "Cambiar a este plan": "Switch to this plan"
+    "Cambiar a este plan": "Switch to this plan",
+    "Período de prueba": "Trial period",
+    "Activa": "Active",
+    "Pago vencido": "Past due",
+    "Pausada": "Paused",
+    "Cancelada": "Canceled",
+    "Expirada": "Expired"
 }

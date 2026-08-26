@@ -70,4 +70,36 @@ class Subscription extends Model
     {
         return $this->canceled_at ?? $this->current_period_end ?? $this->next_billed_at;
     }
+
+    /**
+     * Etiqueta localizada del estado de la suscripción.
+     */
+    public function statusLabel(): string
+    {
+        return match ($this->status) {
+            'trialing' => __('Período de prueba'),
+            'active' => __('Activa'),
+            'past_due' => __('Pago vencido'),
+            'paused' => __('Pausada'),
+            'canceled' => __('Cancelada'),
+            'expired' => __('Expirada'),
+            default => ucfirst($this->status),
+        };
+    }
+
+    /**
+     * Clases de color para mostrar el estado como badge.
+     */
+    public function statusBadgeClass(): string
+    {
+        return match ($this->status) {
+            'trialing' => 'bg-blue-50 text-blue-700',
+            'active' => 'bg-emerald-50 text-emerald-700',
+            'past_due' => 'bg-red-50 text-red-700',
+            'paused' => 'bg-amber-50 text-amber-700',
+            'canceled' => 'bg-gray-100 text-gray-600',
+            'expired' => 'bg-gray-100 text-gray-600',
+            default => 'bg-gray-100 text-gray-600',
+        };
+    }
 }

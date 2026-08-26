@@ -123,16 +123,18 @@
                                 </header>
                                 <div class="mt-4">
                                     @if ($activeSubscription && $activeSubscription->plan)
-                                        <div class="flex items-center gap-3">
+                                        <div class="flex flex-wrap items-center gap-3">
                                             <span class="px-3 py-1 bg-indigo-50 text-indigo-700 text-sm font-semibold rounded-full">
                                                 {{ $activeSubscription->plan->name }}
                                             </span>
-                                            <span class="text-sm text-gray-600">
-                                                {{ $activeSubscription->status }}
-                                                @if ($activeSubscription->period)
-                                                    · {{ $activeSubscription->period->recurrenceLabel() }} · ${{ number_format($activeSubscription->period->price, 2) }} USD
-                                                @endif
+                                            <span class="px-3 py-1 text-sm font-semibold rounded-full {{ $activeSubscription->statusBadgeClass() }}">
+                                                {{ $activeSubscription->statusLabel() }}
                                             </span>
+                                            @if ($activeSubscription->period)
+                                                <span class="text-sm text-gray-600">
+                                                    {{ $activeSubscription->period->recurrenceLabel() }} · ${{ number_format($activeSubscription->period->price, 2) }} USD
+                                                </span>
+                                            @endif
                                         </div>
 
                                         @if ($activeSubscription->hasScheduledCancellation())
