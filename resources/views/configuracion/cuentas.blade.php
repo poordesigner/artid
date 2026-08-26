@@ -33,7 +33,7 @@
                             @foreach ($artists as $artist)
                                 @php
                                     $effective = $artist->effectivePlan();
-                                    $granted = $artist->grantedPlan();
+                                    $granted = $artist->activeGrantedPlan();
                                 @endphp
                                 <tr class="align-top">
                                     <td class="px-4 py-3">

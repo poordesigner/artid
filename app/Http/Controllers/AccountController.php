@@ -12,7 +12,7 @@ class AccountController extends Controller
 {
     public function index(): View
     {
-        $artists = Artist::with(['activeSubscription' => fn ($q) => $q->with('plan')])
+        $artists = Artist::with(['subscriptions.plan', 'grantedPlan'])
             ->withCount('artworks')
             ->orderBy('name')
             ->get();

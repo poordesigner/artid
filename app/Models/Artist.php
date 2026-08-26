@@ -50,21 +50,28 @@ class Artist extends Authenticatable
 
     public function isOnFreePlan(): bool
     {
-        return $this->activeSubscription() === null && $this->grantedPlan() === null;
+        return $this->activeSubscription() === null && $this->activeGrantedPlan() === null;
     }
 
-    public function grantedPlan(): ?Plan
+    public function grantedPlan(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Plan::class, 'granted_plan_id');
+    }
+
+    /**
+     * Plan otorgado vigente (si no expiró), o null.
+     */
+    public function activeGrantedPlan(): ?Plan
     {
         if (! $this->granted_plan_id) {
             return null;
         }
 
-        // Si expiró, no aplica (el límite vuelve a Free).
         if ($this->granted_expires_at && $this->granted_expires_at->isPast()) {
             return null;
         }
 
-        return Plan::find($this->granted_plan_id);
+        return $this->grantedPlan;
     }
 
     /**
@@ -73,7 +80,7 @@ class Artist extends Authenticatable
      */
     public function effectivePlan(): ?Plan
     {
-        $granted = $this->grantedPlan();
+        $granted = $this->activeGrantedPlan();
         if ($granted) {
             return $granted;
         }
