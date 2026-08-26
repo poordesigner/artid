@@ -77,15 +77,15 @@
                         </p>
                     @else
                         <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200">
+                            <table class="min-w-full w-full table-fixed divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('QR') }}</th>
+                                        <th class="w-20 px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('QR') }}</th>
                                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Title') }}</th>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Año') }}</th>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Registrada') }}</th>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Status') }}</th>
-                                        <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Actions') }}</th>
+                                        <th class="w-16 px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Año') }}</th>
+                                        <th class="w-28 px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Registrada') }}</th>
+                                        <th class="w-24 px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Status') }}</th>
+                                        <th class="w-48 px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Actions') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-200">
@@ -94,12 +94,12 @@
                                         <tr class="{{ $inactive ? 'bg-gray-50 opacity-60' : '' }}">
                                             <td class="px-4 py-3">
                                                 <a href="{{ route('artworks.qr', $artwork) }}" target="_blank" title="{{ $artwork->artwork_id }}">
-                                                    <img src="{{ route('artworks.qr', $artwork) }}" alt="QR {{ $artwork->artwork_id }}" class="h-16 w-16 object-contain" />
+                                                    <img src="{{ route('artworks.qr', $artwork) }}" alt="QR {{ $artwork->artwork_id }}" class="h-12 w-12 object-contain" />
                                                 </a>
                                             </td>
                                             <td class="px-4 py-3 text-sm text-gray-900">
                                                 <a href="{{ route('artworks.show', $artwork) }}" class="hover:text-indigo-600 font-medium">{{ $artwork->title }}</a>
-                                                <span class="block font-mono text-xs text-gray-400">{{ $artwork->artwork_id }}</span>
+                                                <span class="block font-mono text-xs text-gray-400 truncate">{{ $artwork->artwork_id }}</span>
                                             </td>
                                             <td class="px-4 py-3 text-sm text-gray-600">{{ $artwork->year ?? '—' }}</td>
                                             <td class="px-4 py-3 text-sm text-gray-600 whitespace-nowrap">{{ $artwork->created_at->format('d/m/Y') }}</td>
@@ -112,12 +112,12 @@
                                             </td>
                                             <td class="px-4 py-3 text-sm text-right whitespace-nowrap">
                                                 <a href="{{ route('exhibitions.create', $artwork) }}" class="text-gray-600 hover:text-gray-900">{{ __('+ Expo') }}</a>
-                                                <a href="{{ route('ownerships.create', $artwork) }}" class="ms-3 text-gray-600 hover:text-gray-900">{{ __('+ Propiedad') }}</a>
-                                                <a href="{{ route('artworks.edit', $artwork) }}" class="ms-3 text-indigo-600 hover:text-indigo-900">{{ __('Edit') }}</a>
+                                                <a href="{{ route('ownerships.create', $artwork) }}" class="ms-2 text-gray-600 hover:text-gray-900">{{ __('+ Propiedad') }}</a>
+                                                <a href="{{ route('artworks.edit', $artwork) }}" class="ms-2 text-indigo-600 hover:text-indigo-900">{{ __('Edit') }}</a>
                                                 <form method="POST" action="{{ route('artworks.destroy', $artwork) }}" class="inline" onsubmit="return confirm('{{ __('Are you sure?') }}');">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="ms-3 text-red-600 hover:text-red-900">{{ __('Delete') }}</button>
+                                                    <button type="submit" class="ms-2 text-red-600 hover:text-red-900">{{ __('Delete') }}</button>
                                                 </form>
                                             </td>
                                         </tr>
