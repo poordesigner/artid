@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\ArtworkController;
 use App\Http\Controllers\CheckoutPageController;
 use App\Http\Controllers\ConfigController;
@@ -60,6 +61,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/subscribe/{period}', [SubscriptionController::class, 'checkout'])->name('subscribe.checkout');
 
     Route::middleware('admin')->group(function () {
+        Route::get('/configuracion/cuentas', [AccountController::class, 'index'])->name('accounts.index');
+        Route::post('/configuracion/cuentas/{artist}/grant', [AccountController::class, 'grant'])->name('accounts.grant');
+        Route::post('/configuracion/cuentas/{artist}/revoke', [AccountController::class, 'revoke'])->name('accounts.revoke');
+        Route::post('/configuracion/cuentas/{artist}/toggle-admin', [AccountController::class, 'toggleAdmin'])->name('accounts.toggle-admin');
+
         Route::get('/configuracion/plans', [PlanController::class, 'index'])->name('plans.index');
         Route::post('/configuracion/plans', [PlanController::class, 'store'])->name('plans.store');
         Route::patch('/configuracion/plans/{plan}', [PlanController::class, 'update'])->name('plans.update');

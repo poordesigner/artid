@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password', 'google_id', 'github_id', 'github_token', 'github_nickname', 'github_repo', 'short_domain', 'avatar', 'statement', 'cv_pdf', 'website_url', 'instagram', 'behance', 'artstation', 'youtube', 'tiktok', 'is_admin'])]
+#[Fillable(['name', 'email', 'password', 'google_id', 'github_id', 'github_token', 'github_nickname', 'github_repo', 'short_domain', 'avatar', 'statement', 'cv_pdf', 'website_url', 'instagram', 'behance', 'artstation', 'youtube', 'tiktok', 'is_admin', 'granted_plan_id', 'granted_expires_at'])]
 #[Hidden(['password', 'remember_token'])]
 class Artist extends Authenticatable
 {
@@ -50,22 +50,48 @@ class Artist extends Authenticatable
 
     public function isOnFreePlan(): bool
     {
-        return $this->activeSubscription() === null;
+        return $this->activeSubscription() === null && $this->grantedPlan() === null;
+    }
+
+    public function grantedPlan(): ?Plan
+    {
+        if (! $this->granted_plan_id) {
+            return null;
+        }
+
+        // Si expiró, no aplica (el límite vuelve a Free).
+        if ($this->granted_expires_at && $this->granted_expires_at->isPast()) {
+            return null;
+        }
+
+        return Plan::find($this->granted_plan_id);
     }
 
     /**
-     * Límite de obras del plan actual del artista.
-     * Si está en un plan pago, usa su max_artworks; si es Free, usa el plan free.
+     * Plan efectivo que determina los límites y features.
+     * Prioridad: grant otorgado > suscripción paga > plan Free.
+     */
+    public function effectivePlan(): ?Plan
+    {
+        $granted = $this->grantedPlan();
+        if ($granted) {
+            return $granted;
+        }
+
+        $subscriptionPlan = $this->activeSubscription()?->plan;
+        if ($subscriptionPlan) {
+            return $subscriptionPlan;
+        }
+
+        return Plan::where('is_free', true)->first();
+    }
+
+    /**
+     * Límite de obras del plan efectivo del artista.
      */
     public function currentMaxArtworks(): ?int
     {
-        $subscription = $this->activeSubscription();
-
-        if ($subscription && $subscription->plan) {
-            return $subscription->plan->max_artworks;
-        }
-
-        return Plan::where('is_free', true)->value('max_artworks');
+        return $this->effectivePlan()?->max_artworks ?? null;
     }
 
     /**
@@ -149,6 +175,7 @@ class Artist extends Authenticatable
             'password' => 'hashed',
             'github_token' => 'encrypted',
             'is_admin' => 'boolean',
+            'granted_expires_at' => 'datetime',
         ];
     }
 
