@@ -212,5 +212,19 @@
     "Tu cuenta no tiene contraseña definida. Podés crear una para entrar manualmente (sin Google).": "Your account has no password set. You can create one to sign in manually (without Google).",
     "Confirma que querés eliminar tu cuenta escribiendo la palabra:": "Confirm you want to delete your account by typing the word:",
     "Escribí la palabra": "Type the word",
-    "Please enter your password to confirm.": "Please enter your password to confirm."
+    "Please enter your password to confirm.": "Please enter your password to confirm.",
+    "Cambiar plan": "Change plan",
+    "Confirmar cambio de plan": "Confirm plan change",
+    "Resumen del cambio": "Change summary",
+    "Revisá los montos antes de confirmar tu cambio de plan.": "Review the amounts before confirming your plan change.",
+    "Plan actual": "Current plan",
+    "Plan nuevo": "New plan",
+    "Crédito por el tiempo no usado": "Credit for unused time",
+    "Cargo por el nuevo plan": "Charge for the new plan",
+    "Total a cobrar ahora": "Total to charge now",
+    "Crédito a favor": "Credit balance",
+    "Total": "Total",
+    "El prorrateo se calcula al minuto. Si hay un monto a cobrar, se cargará automáticamente a tu método de pago guardado en Paddle.": "Proration is calculated by the minute. If there's an amount to charge, it will be automatically charged to your saved payment method in Paddle.",
+    "Confirmar y cobrar $:amount": "Confirm and charge $:amount",
+    "Confirmar (sin cargo)": "Confirm (no charge)"
 }

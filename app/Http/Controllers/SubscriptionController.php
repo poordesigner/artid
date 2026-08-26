@@ -6,10 +6,11 @@ use App\Models\PlanPeriod;
 use App\Services\PaddleService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class SubscriptionController extends Controller
 {
-    public function checkout(PlanPeriod $period, PaddleService $paddle): RedirectResponse
+    public function checkout(PlanPeriod $period, PaddleService $paddle): RedirectResponse|View
     {
         $user = Auth::user();
 
@@ -17,10 +18,10 @@ class SubscriptionController extends Controller
             return back()->with('error', __('Este plan no está sincronizado con Paddle aún.'));
         }
 
-        // Si el usuario ya tiene una suscripción activa, es un cambio de plan/periodo.
+        // Si el usuario ya tiene una suscripción activa, mostrar confirmación de cambio.
         $active = $user->activeSubscription();
         if ($active && $active->paddle_subscription_id) {
-            return $this->change($active, $period, $paddle);
+            return $this->showChangeConfirmation($active, $period, $paddle);
         }
 
         $transaction = $paddle->createCheckout($user, $period);
@@ -35,38 +36,58 @@ class SubscriptionController extends Controller
     }
 
     /**
-     * Cambia el plan/periodo de una suscripción activa con prorrateo.
+     * Muestra la confirmación del cambio de plan con los montos prorrateados.
      */
-    public function change(\App\Models\Subscription $subscription, PlanPeriod $period, PaddleService $paddle): RedirectResponse
+    public function showChangeConfirmation(\App\Models\Subscription $subscription, PlanPeriod $newPeriod, PaddleService $paddle): View
     {
-        if (! $period->paddle_price_id) {
-            return back()->with('error', __('Este plan no está sincronizado con Paddle aún.'));
-        }
-
-        // Si el usuario no es dueño de la suscripción, rechazar.
         if ($subscription->artist_id !== Auth::id()) {
             abort(403);
         }
 
-        // Mismo plan y mismo período -> nada que cambiar.
+        if ($subscription->plan_period_id === $newPeriod->id) {
+            return back()->with('error', __('Ya tienes este plan y período.'));
+        }
+
+        $preview = $paddle->previewSubscriptionChange($subscription->paddle_subscription_id, $newPeriod);
+
+        $summary = $preview['update_summary'] ?? [];
+        $immediate = $preview['immediate_transaction'] ?? null;
+
+        $amounts = [
+            'credit' => $this->toDollars($summary['credit']['amount'] ?? 0),
+            'charge' => $this->toDollars($summary['charge']['amount'] ?? 0),
+            'to_action' => $this->toDollars($summary['result']['amount'] ?? 0),
+            'action' => $summary['result']['action'] ?? 'none', // charge | credit | none
+        ];
+
+        $currentPlan = $subscription->plan;
+        $targetPlan = $newPeriod->plan;
+
+        return view('subscriptions.confirm-change', compact(
+            'subscription',
+            'currentPlan',
+            'newPeriod',
+            'targetPlan',
+            'amounts',
+        ));
+    }
+
+    /**
+     * Aplica el cambio de plan (upgrade/downgrade) tras la confirmación.
+     */
+    public function change(PlanPeriod $period, PaddleService $paddle): RedirectResponse
+    {
+        $user = Auth::user();
+        $subscription = $user->activeSubscription();
+
+        if (! $subscription || ! $subscription->paddle_subscription_id) {
+            return back()->with('error', __('No tienes una suscripción activa.'));
+        }
+
         if ($subscription->plan_period_id === $period->id) {
             return back()->with('error', __('Ya tienes este plan y período.'));
         }
 
-        $preview = $paddle->previewSubscriptionChange($subscription->paddle_subscription_id, $period);
-
-        // Si hay cargo inmediato por la diferencia, pasar por checkout.
-        $immediate = $preview['immediate_transaction'] ?? null;
-        if ($immediate && isset($immediate['checkout']['url'])) {
-            $url = $immediate['checkout']['url'];
-            if (str_contains($url, '_ptxn=')) {
-                return redirect()->away($url);
-            }
-
-            return redirect()->route('checkout.page').'?_ptxn='.$immediate['id'];
-        }
-
-        // Si no hay cargo inmediato (downgrade/crédito), aplicar directamente.
         $data = $paddle->changeSubscriptionPlan($subscription->paddle_subscription_id, $period);
 
         $subscription->update([
@@ -80,6 +101,11 @@ class SubscriptionController extends Controller
 
         return redirect()->route('configuracion', ['tab' => 'mi-plan'])
             ->with('status', __('Cambiaste tu plan correctamente.'));
+    }
+
+    private function toDollars($cents): string
+    {
+        return number_format((float) $cents / 100, 2);
     }
 
     public function cancel(PaddleService $paddle): RedirectResponse
