@@ -121,14 +121,17 @@ class Artist extends Authenticatable
             return;
         }
 
-        $excess = $this->artworks()
+        // Obtener las obras activas ordenadas de más reciente a más antigua.
+        $activeIds = $this->artworks()
             ->where('status', '!=', 'archived')
             ->latest('id')
-            ->skip($max)
             ->pluck('id');
 
+        // Archivar las que superan el máximo, conservando las últimas registradas.
+        $excess = $activeIds->slice($max);
+
         if ($excess->isNotEmpty()) {
-            Artwork::whereIn('id', $excess)->update(['status' => 'archived']);
+            Artwork::whereIn('id', $excess->toArray())->update(['status' => 'archived']);
         }
     }
 
