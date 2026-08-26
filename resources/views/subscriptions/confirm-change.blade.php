@@ -43,6 +43,33 @@
 
                 {{-- Prorrateo --}}
                 <div class="mt-6 border-t border-gray-100 pt-6">
+                    {{-- Método de pago --}}
+                    <div class="rounded-lg border border-gray-200 p-4">
+                        <p class="text-xs text-gray-500 uppercase tracking-wide font-medium">{{ __('Método de pago') }}</p>
+                        <div class="mt-1 flex items-center gap-2">
+                            @if ($paymentMethod)
+                                <svg class="w-8 h-6" viewBox="0 0 32 20" fill="none"><rect width="32" height="20" rx="3" fill="#e5e7eb"/><rect x="4" y="7" width="24" height="3" rx="1" fill="#9ca3af"/></svg>
+                                <span class="text-sm font-medium text-gray-900">
+                                    {{ ucfirst($paymentMethod['brand']) }} **** {{ $paymentMethod['last4'] }}
+                                </span>
+                                @if ($paymentMethod['expiry_year'])
+                                    <span class="text-xs text-gray-500">
+                                        {{ str_pad((string) $paymentMethod['expiry_month'] ?? '', 2, '0', STR_PAD_LEFT) }}/{{ $paymentMethod['expiry_year'] }}
+                                    </span>
+                                @endif
+                            @else
+                                <span class="text-sm text-gray-600">{{ __('Método de pago guardado en tu suscripción.') }}</span>
+                            @endif
+                        </div>
+                        <p class="mt-2 text-xs text-gray-500">
+                            @if ($amounts['action'] === 'charge' && ! $amounts['deferred'])
+                                {{ __('El cargo se hará automáticamente a este método de pago al confirmar.') }}
+                            @elseif ($amounts['action'] === 'charge' && $amounts['deferred'])
+                                {{ __('El cargo se hará a este método de pago en tu próxima factura.') }}
+                            @endif
+                        </p>
+                    </div>
+
                     {{-- Rango del periodo --}}
                     <div class="rounded-lg bg-gray-50 p-4 text-sm">
                         <p class="font-medium text-gray-900">{{ __('Período actual') }}</p>

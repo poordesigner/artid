@@ -102,6 +102,16 @@ class SubscriptionController extends Controller
         $currentPlan = $subscription->plan;
         $targetPlan = $newPeriod->plan;
 
+        // Método de pago guardado para dar claridad sobre dónde se cobra.
+        $paymentMethod = null;
+        if ($subscription->paddle_customer_id) {
+            try {
+                $paymentMethod = $paddle->getPaymentMethod($subscription->paddle_customer_id);
+            } catch (\Throwable $e) {
+                $paymentMethod = null;
+            }
+        }
+
         return view('subscriptions.confirm-change', compact(
             'subscription',
             'currentPlan',
@@ -109,6 +119,7 @@ class SubscriptionController extends Controller
             'targetPlan',
             'amounts',
             'proration',
+            'paymentMethod',
         ));
     }
 
@@ -131,7 +142,13 @@ class SubscriptionController extends Controller
         // Degregar el modo de prorrateo según el monto de la diferencia.
         $mode = $this->resolveProrationMode($subscription, $period, $paddle);
 
-        $data = $paddle->changeSubscriptionPlan($subscription->paddle_subscription_id, $period, $mode);
+        try {
+            $data = $paddle->changeSubscriptionPlan($subscription->paddle_subscription_id, $period, $mode);
+        } catch (\Illuminate\Http\Client\RequestException $e) {
+            // Si el cobro falló, el plan no cambió. Avisar y sugerir actualizar método de pago.
+            return redirect()->route('configuracion', ['tab' => 'mi-plan'])
+                ->with('error', __('No pudimos cobrar la diferencia a tu método de pago y el plan no cambió. Actualizá tu método de pago desde "Gestionar suscripción" e intentá de nuevo.'));
+        }
 
         $subscription->update([
             'plan_id' => $period->plan_id,

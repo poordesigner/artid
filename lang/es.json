@@ -301,5 +301,10 @@
     "Tu upgrade se aplica de inmediato, pero la diferencia de $:amount se sumará a tu próxima factura del nuevo plan. No se te cobra nada hoy.": "Tu upgrade se aplica de inmediato, pero la diferencia de $:amount se sumará a tu próxima factura del nuevo plan. No se te cobra nada hoy.",
     "Al confirmar, tu plan cambia ya. El monto prorrateado se cobrará en la próxima fecha de facturación.": "Al confirmar, tu plan cambia ya. El monto prorrateado se cobrará en la próxima fecha de facturación.",
     "Confirmar (se cobrará en la próxima factura)": "Confirmar (se cobrará en la próxima factura)",
-    "Confirmar (sin cargo hoy)": "Confirmar (sin cargo hoy)"
+    "Confirmar (sin cargo hoy)": "Confirmar (sin cargo hoy)",
+    "Método de pago": "Método de pago",
+    "Método de pago guardado en tu suscripción.": "Método de pago guardado en tu suscripción.",
+    "El cargo se hará automáticamente a este método de pago al confirmar.": "El cargo se hará automáticamente a este método de pago al confirmar.",
+    "El cargo se hará a este método de pago en tu próxima factura.": "El cargo se hará a este método de pago en tu próxima factura.",
+    "No pudimos cobrar la diferencia a tu método de pago y el plan no cambió. Actualizá tu método de pago desde \"Gestionar suscripción\" e intentá de nuevo.": "No pudimos cobrar la diferencia a tu método de pago y el plan no cambió. Actualizá tu método de pago desde \"Gestionar suscripción\" e intentá de nuevo."
 }

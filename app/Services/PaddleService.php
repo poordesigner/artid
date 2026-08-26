@@ -213,6 +213,32 @@ class PaddleService
     }
 
     /**
+     * Obtiene el método de pago guardado del customer (para mostrar los últimos 4 dígitos).
+     *
+     * @return array<string, mixed>|null
+     */
+    public function getPaymentMethod(string $customerId): ?array
+    {
+        $response = $this->client()->get("/customers/{$customerId}/payment-methods");
+        $response->throw();
+
+        $list = $response->json('data');
+
+        foreach ($list as $method) {
+            if ($method['type'] === 'card' && ! empty($method['card']['last4'])) {
+                return [
+                    'last4' => $method['card']['last4'],
+                    'brand' => $method['card']['brand'] ?? $method['card']['type'] ?? 'tarjeta',
+                    'expiry_month' => $method['card']['expiry_month'] ?? null,
+                    'expiry_year' => $method['card']['expiry_year'] ?? null,
+                ];
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Verifica la firma de un webhook de Paddle.
      *
      * El header viene como: Paddle-Signature: ts=...;h1=...

@@ -238,5 +238,10 @@
     "Tu upgrade se aplica de inmediato, pero la diferencia de $:amount se sumará a tu próxima factura del nuevo plan. No se te cobra nada hoy.": "Your upgrade applies immediately, but the $:amount difference will be added to your next invoice on the new plan. You won't be charged anything today.",
     "Al confirmar, tu plan cambia ya. El monto prorrateado se cobrará en la próxima fecha de facturación.": "By confirming, your plan changes now. The prorated amount will be charged on your next billing date.",
     "Confirmar (se cobrará en la próxima factura)": "Confirm (will be charged on the next invoice)",
-    "Confirmar (sin cargo hoy)": "Confirm (no charge today)"
+    "Confirmar (sin cargo hoy)": "Confirm (no charge today)",
+    "Método de pago": "Payment method",
+    "Método de pago guardado en tu suscripción.": "Payment method saved on your subscription.",
+    "El cargo se hará automáticamente a este método de pago al confirmar.": "The charge will be made automatically to this payment method on confirm.",
+    "El cargo se hará a este método de pago en tu próxima factura.": "The charge will be made to this payment method on your next invoice.",
+    "No pudimos cobrar la diferencia a tu método de pago y el plan no cambió. Actualizá tu método de pago desde \"Gestionar suscripción\" e intentá de nuevo.": "We couldn't charge the difference to your payment method and the plan didn't change. Update your payment method from \"Manage subscription\" and try again."
 }
