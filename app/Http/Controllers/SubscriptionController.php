@@ -92,6 +92,7 @@ class SubscriptionController extends Controller
                 'action' => 'charge',
                 'deferred' => $deferred,
                 'min_immediate' => number_format($minImmediate, 2),
+                'balance_applied' => $this->toDollars($immediateTotals['credit'] ?? 0),
             ];
         } elseif ($action === 'credit') {
             $amounts = [
@@ -101,6 +102,7 @@ class SubscriptionController extends Controller
                 'action' => 'credit',
                 'deferred' => false,
                 'min_immediate' => number_format($minImmediate, 2),
+                'balance_applied' => '0.00',
             ];
         } else {
             $amounts = [
@@ -110,6 +112,7 @@ class SubscriptionController extends Controller
                 'action' => 'none',
                 'deferred' => false,
                 'min_immediate' => number_format($minImmediate, 2),
+                'balance_applied' => '0.00',
             ];
         }
 

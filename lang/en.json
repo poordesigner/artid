@@ -250,5 +250,6 @@
     "Tu plan no tiene una cancelación programada.": "Your plan doesn't have a scheduled cancellation.",
     "Reactivate tu plan correctamente. Seguís vigente sin cambios.": "Your plan was reactivated. It remains active without changes.",
     "Saldo a favor": "Credit balance",
-    "Se usará automáticamente en tu próxima factura o cargo de suscripción.": "It will be used automatically on your next invoice or subscription charge."
+    "Se usará automáticamente en tu próxima factura o cargo de suscripción.": "It will be used automatically on your next invoice or subscription charge.",
+    "Saldo a favor aplicado": "Credit balance applied"
 }

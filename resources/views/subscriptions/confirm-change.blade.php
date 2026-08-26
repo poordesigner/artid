@@ -103,6 +103,12 @@
                             <dt class="text-gray-600">{{ __('Cargo por el nuevo plan') }}</dt>
                             <dd class="font-medium text-gray-900">${{ $amounts['charge'] }}</dd>
                         </div>
+                        @if ($amounts['action'] === 'charge' && (float) $amounts['balance_applied'] > 0)
+                            <div class="flex items-center justify-between text-emerald-600">
+                                <dt>{{ __('Saldo a favor aplicado') }}</dt>
+                                <dd class="font-medium">-${{ $amounts['balance_applied'] }}</dd>
+                            </div>
+                        @endif
                         <div class="flex items-center justify-between border-t border-gray-100 pt-3">
                             <dt class="font-semibold text-gray-900">
                                 @if ($amounts['action'] === 'charge' && ! $amounts['deferred'])
