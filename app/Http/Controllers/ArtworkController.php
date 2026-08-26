@@ -20,8 +20,9 @@ class ArtworkController extends Controller
     public function index(): View
     {
         $artworks = Auth::user()->artworks()->latest()->paginate(20);
+        $artist = Auth::user();
 
-        return view('artworks.index', compact('artworks'));
+        return view('artworks.index', compact('artworks', 'artist'));
     }
 
     /**
@@ -31,8 +32,10 @@ class ArtworkController extends Controller
     {
         $techniques = Technique::orderBy('name')->get();
         $seriesList = Auth::user()->series()->orderBy('name')->get();
+        $artist = Auth::user();
+        $atLimit = $artist->currentMaxArtworks() !== null && $artist->activeArtworksCount() >= $artist->currentMaxArtworks();
 
-        return view('artworks.create', compact('techniques', 'seriesList'));
+        return view('artworks.create', compact('techniques', 'seriesList', 'atLimit'));
     }
 
     /**
@@ -181,7 +184,7 @@ class ArtworkController extends Controller
             'series_id' => ['nullable', 'integer'],
             'techniques' => ['nullable', 'array'],
             'techniques.*' => ['string', 'max:255'],
-            'image' => ['nullable', 'image', 'max:20480'],
+            'image' => ['nullable', 'image', 'max:2048'],
         ];
     }
 
@@ -195,7 +198,7 @@ class ArtworkController extends Controller
             'series_id' => ['nullable', 'integer'],
             'techniques' => ['nullable', 'array'],
             'techniques.*' => ['string', 'max:255'],
-            'image' => ['nullable', 'image', 'max:20480'],
+            'image' => ['nullable', 'image', 'max:2048'],
         ];
     }
 
@@ -206,10 +209,10 @@ class ArtworkController extends Controller
     {
         return [
             'title' => ['required', 'string', 'max:255'],
-            'year' => ['nullable', 'string', 'max:50'],
-            'edition' => ['nullable', 'string', 'max:255'],
+            'year' => ['nullable', 'string', 'digits:4', 'regex:/^[12][0-9]{3}$/'],
+            'edition' => ['nullable', 'string', 'max:50'],
             'dimensions' => ['nullable', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
+            'description' => ['nullable', 'string', 'max:500'],
         ];
     }
 

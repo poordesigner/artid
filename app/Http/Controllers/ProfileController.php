@@ -68,11 +68,18 @@ class ProfileController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        $request->validateWithBag('userDeletion', [
-            'password' => ['required', 'current_password'],
-        ]);
-
         $user = $request->user();
+
+        // Las cuentas iniciadas con Google no tienen contraseña definida.
+        if ($user->password) {
+            $request->validateWithBag('userDeletion', [
+                'password' => ['required', 'current_password'],
+            ]);
+        } else {
+            $request->validateWithBag('userDeletion', [
+                'confirm_delete' => ['required', 'in:confirmar'],
+            ]);
+        }
 
         Auth::logout();
 

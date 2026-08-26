@@ -1,10 +1,8 @@
-
-
 import Alpine from 'alpinejs';
 
 window.Alpine = Alpine;
 
-/* Buscar el artistaas */
+/* Selector de técnicas (multi-selección). */
 Alpine.data('techniquePicker', (selectedInit, options) => ({
     selected: (selectedInit || []),
     options: (options || []),
@@ -19,12 +17,18 @@ Alpine.data('techniquePicker', (selectedInit, options) => ({
         const i = this.selected.indexOf(option.value);
         if (i > -1) { this.selected.splice(i, 1); } else { this.selected.push(option.value); }
         this.search = '';
-        this.open = false;
+        this.open = true;
+        // Mantener el foco en el input para poder seguir buscando.
+        this.$nextTick(() => {
+            const input = this.$el && this.$el.querySelector('input[type="text"]');
+            if (input) input.focus();
+        });
     },
     remove(v) { this.selected = this.selected.filter(x => x !== v); },
     onKeydown(e) {
         if (e.key === 'Backspace' && this.search === '' && this.selected.length) {
             this.selected.pop();
+            this.open = true;
         }
         if (e.key === 'ArrowDown' && this.filtered.length) {
             this.open = true;

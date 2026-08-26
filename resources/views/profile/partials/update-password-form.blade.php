@@ -5,7 +5,11 @@
         </h2>
 
         <p class="mt-1 text-sm text-gray-600">
-            {{ __('Ensure your account is using a long, random password to stay secure.') }}
+            @if (Auth::user()->password)
+                {{ __('Ensure your account is using a long, random password to stay secure.') }}
+            @else
+                {{ __('Tu cuenta no tiene contraseña definida. Podés crear una para entrar manualmente (sin Google).') }}
+            @endif
         </p>
     </header>
 
@@ -13,11 +17,13 @@
         @csrf
         @method('put')
 
+        @if (Auth::user()->password)
         <div>
             <x-input-label for="update_password_current_password" :value="__('Current Password')" />
             <x-text-input id="update_password_current_password" name="current_password" type="password" class="mt-1 block w-full" autocomplete="current-password" />
             <x-input-error :messages="$errors->updatePassword->get('current_password')" class="mt-2" />
         </div>
+        @endif
 
         <div>
             <x-input-label for="update_password_password" :value="__('New Password')" />

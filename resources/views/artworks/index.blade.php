@@ -6,6 +6,11 @@
                     {{ session('status') }}
                 </div>
             @endif
+            @if (session('error'))
+                <div class="mb-4 p-4 bg-red-50 text-red-700 rounded-md">
+                    {{ session('error') }}
+                </div>
+            @endif
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6">
@@ -13,10 +18,24 @@
                         <a href="{{ route('series.index') }}" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
                             {{ __('Series') }}
                         </a>
-                        <a href="{{ route('artworks.create') }}" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                            {{ __('New Artwork') }}
-                        </a>
+                        @if ($artist->currentMaxArtworks() !== null && $artist->activeArtworksCount() >= $artist->currentMaxArtworks())
+                            <span class="inline-flex items-center px-4 py-2 bg-gray-100 text-gray-500 rounded-md text-xs uppercase tracking-widest cursor-not-allowed">{{ __('Límite alcanzado') }}</span>
+                        @else
+                            <a href="{{ route('artworks.create') }}" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                {{ __('New Artwork') }}
+                            </a>
+                        @endif
                     </div>
+
+                    @php
+                        $max = $artist->currentMaxArtworks();
+                        $count = $artist->activeArtworksCount();
+                    @endphp
+                    @if ($max !== null)
+                        <p class="mb-4 text-sm text-gray-600">
+                            {{ __('Obras registradas') }}: <strong>{{ $count }} / {{ $max }}</strong>
+                        </p>
+                    @endif
 
                     @if ($artworks->isEmpty())
                         <p class="text-gray-500 text-center py-8">{{ __('No artworks yet.') }}</p>

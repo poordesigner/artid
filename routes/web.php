@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ArtworkController;
 use App\Http\Controllers\CheckoutPageController;
 use App\Http\Controllers\ConfigController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExhibitionController;
 use App\Http\Controllers\OwnershipController;
 use App\Http\Controllers\PlanController;
@@ -46,8 +47,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
         return auth()->user()->isAdmin()
             ? redirect()->route('admin.dashboard')
-            : redirect()->route('artworks.index');
+            : redirect()->route('dashboard.artist');
     })->name('dashboard');
+
+    Route::get('/panel', [DashboardController::class, 'artist'])->name('dashboard.artist');
 
     Route::get('/admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 

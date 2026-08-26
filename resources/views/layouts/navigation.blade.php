@@ -5,7 +5,7 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ Auth::user()?->isAdmin() ? route('admin.dashboard') : route('artworks.index') }}">
+                    <a href="{{ Auth::user()?->isAdmin() ? route('admin.dashboard') : route('dashboard.artist') }}">
                         <img src="{{ asset('img/logo_simple.png') }}" alt="artid" class="block h-9 w-auto">
                     </a>
                 </div>
@@ -19,8 +19,11 @@
                         {{ __('Panel') }}
                     </x-nav-link>
                 @else
+                    <x-nav-link :href="route('dashboard.artist')" :active="request()->routeIs('dashboard.*')">
+                        {{ __('Panel') }}
+                    </x-nav-link>
                     <x-nav-link :href="route('artworks.index')" :active="request()->routeIs('artworks.*')">
-                        {{ __('Artworks') }}
+                        {{ __('Obras') }}
                     </x-nav-link>
                 @endif
                 <x-nav-link :href="route('configuracion')" :active="request()->routeIs('configuracion')">
@@ -89,8 +92,11 @@
                     {{ __('Panel') }}
                 </x-responsive-nav-link>
             @else
+                <x-responsive-nav-link :href="route('dashboard.artist')" :active="request()->routeIs('dashboard.*')">
+                    {{ __('Panel') }}
+                </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('artworks.index')" :active="request()->routeIs('artworks.*')">
-                    {{ __('Artworks') }}
+                    {{ __('Obras') }}
                 </x-responsive-nav-link>
             @endif
             <x-responsive-nav-link :href="route('configuracion')" :active="request()->routeIs('configuracion')">

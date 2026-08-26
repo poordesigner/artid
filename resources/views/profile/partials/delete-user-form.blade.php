@@ -24,22 +24,36 @@
             </h2>
 
             <p class="mt-1 text-sm text-gray-600">
-                {{ __('Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.') }}
+                {{ __('Once your account is deleted, all of its resources and data will be permanently deleted.') }}
             </p>
 
-            <div class="mt-6">
-                <x-input-label for="password" value="{{ __('Password') }}" class="sr-only" />
-
-                <x-text-input
-                    id="password"
-                    name="password"
-                    type="password"
-                    class="mt-1 block w-3/4"
-                    placeholder="{{ __('Password') }}"
-                />
-
-                <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-2" />
-            </div>
+            @if (Auth::user()->password)
+                <p class="mt-1 text-sm text-gray-600">{{ __('Please enter your password to confirm.') }}</p>
+                <div class="mt-6">
+                    <x-input-label for="password" value="{{ __('Password') }}" class="sr-only" />
+                    <x-text-input
+                        id="password"
+                        name="password"
+                        type="password"
+                        class="mt-1 block w-3/4"
+                        placeholder="{{ __('Password') }}"
+                    />
+                    <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-2" />
+                </div>
+            @else
+                <p class="mt-1 text-sm text-gray-600">{{ __('Confirma que querés eliminar tu cuenta escribiendo la palabra:') }}</p>
+                <div class="mt-6">
+                    <x-input-label for="confirm_delete" :value="__('Escribí la palabra')" class="sr-only" />
+                    <x-text-input
+                        id="confirm_delete"
+                        name="confirm_delete"
+                        type="text"
+                        class="mt-1 block w-3/4"
+                        placeholder="confirmar"
+                    />
+                    <x-input-error :messages="$errors->userDeletion->get('confirm_delete')" class="mt-2" />
+                </div>
+            @endif
 
             <div class="mt-6 flex justify-end">
                 <x-secondary-button x-on:click="$dispatch('close')">

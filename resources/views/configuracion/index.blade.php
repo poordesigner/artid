@@ -177,6 +177,13 @@
                                             </span>
                                             <span class="text-sm text-gray-600">{{ __('Estás en el plan gratuito.') }}</span>
                                         </div>
+                                        @if ($user->activeArtworksCount() === 0)
+                                            <div class="mt-4">
+                                                <a href="{{ route('artworks.create') }}" class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-md font-semibold text-sm hover:bg-indigo-700 transition">
+                                                    {{ __('Crear mi primera obra') }}
+                                                </a>
+                                            </div>
+                                        @endif
                                     @endif
                                 </div>
                             </section>

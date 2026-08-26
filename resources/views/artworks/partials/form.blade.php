@@ -9,9 +9,9 @@
 <!-- Artwork ID (create only, permanent) -->
 <div class="mt-4">
     <x-input-label for="artwork_id" :value="__('Artwork ID (optional)')" />
-    <x-text-input id="artwork_id" class="block mt-1 w-full" type="text" name="artwork_id" :value="old('artwork_id')" placeholder="Ej: NATURAI-3.0" />
+    <x-text-input id="artwork_id" class="block mt-1 w-full" type="text" name="artwork_id" :value="old('artwork_id')" placeholder="Ej: MI-OBRA-01" />
     <x-input-error :messages="$errors->get('artwork_id')" class="mt-2" />
-    <p class="mt-1 text-xs text-gray-500">{{ __('Uppercase, dashes or dots. If empty, it is generated from the title.') }}</p>
+    <p class="mt-1 text-xs text-gray-500">{{ __('Solo mayúsculas, guiones o puntos (ej. MI-OBRA-01, NATURAI-3.0). Es permanente y único. Si lo dejas vacío, se genera del título.') }}</p>
 </div>
 @endif
 
@@ -19,6 +19,7 @@
 <div class="mt-4">
     <x-input-label for="image" :value="__('Image')" />
     <input id="image" name="image" type="file" accept="image/*" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full text-sm text-gray-700" />
+    <p class="mt-1 text-xs text-gray-500">{{ __('Imagen JPG o PNG, máximo 2 MB.') }}</p>
     <x-input-error :messages="$errors->get('image')" class="mt-2" />
     @if (isset($artwork) && $artwork && $artwork->image)
         <img src="{{ $artwork->imageUrl() }}" alt="{{ $artwork->title }}" class="mt-2 h-40 object-contain rounded border border-gray-200" />
@@ -29,16 +30,51 @@
 <!-- Year -->
 <div class="mt-4">
     <x-input-label for="year" :value="__('Year')" />
-    <x-text-input id="year" class="block mt-1 w-full" type="text" name="year" :value="old('year', $artwork->year ?? '')" />
+    <x-text-input id="year" class="block mt-1 w-full" type="number" name="year" min="1000" :max="date('Y') + 1" :value="old('year', $artwork->year ?? '')" placeholder="Ej: 2025" />
     <x-input-error :messages="$errors->get('year')" class="mt-2" />
 </div>
 
 <!-- Edition -->
-<div class="mt-4">
-    <x-input-label for="edition" :value="__('Edition')" />
-    <x-text-input id="edition" class="block mt-1 w-full" type="text" name="edition" :value="old('edition', $artwork->edition ?? '')" />
+<div class="mt-4" x-data="editionPicker()">
+    <x-input-label for="edition_type" :value="__('Edición')" />
+    <select id="edition_type" name="edition_type" x-model="type" @change="updateEdition()" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full">
+        <option value="single">{{ __('Pieza única') }}</option>
+        <option value="edition">{{ __('Tiraje') }}</option>
+        <option value="pa">{{ __('P/A (Prueba de artista)') }}</option>
+    </select>
+
+    <div x-show="type === 'edition'" x-transition class="mt-3">
+        <x-input-label for="edition_copies" :value="__('Nº de copias')" />
+        <x-text-input id="edition_copies" class="block mt-1 w-full" type="number" x-model="copies" min="1" @input="updateEdition()" :value="old('edition_copies')" />
+    </div>
+
+    <input type="hidden" name="edition" :value="editionValue">
+    <input type="hidden" name="edition_type_value" :value="type">
     <x-input-error :messages="$errors->get('edition')" class="mt-2" />
 </div>
+<script>
+    function editionPicker() {
+        const existing = '{{ old('edition', $artwork->edition ?? '') }}';
+        let type = 'single';
+        let copies = 1;
+
+        if (existing.startsWith('P/A')) { type = 'pa'; }
+        else if (existing.includes('/')) { type = 'edition'; copies = existing.split('/')[1] || 1; }
+
+        function build() {
+            if (type === 'pa') return 'P/A';
+            if (type === 'edition') return '1/' + copies;
+            return '';
+        }
+
+        return {
+            type,
+            copies,
+            editionValue: build(),
+            updateEdition() { this.editionValue = build(); },
+        };
+    }
+</script>
 
 <!-- Status -->
 <!-- (oculto por ahora: se deriva del historial) -->
@@ -124,15 +160,64 @@
 </div>
 
 <!-- Dimensions -->
-<div class="mt-4">
-    <x-input-label for="dimensions" :value="__('Dimensions')" />
-    <x-text-input id="dimensions" class="block mt-1 w-full" type="text" name="dimensions" :value="old('dimensions', $artwork->dimensions ?? '')" />
+<div class="mt-4" x-data="dimensionsPicker()">
+    <x-input-label :value="__('Dimensiones (alto x ancho x profundidad)')" />
+    <div class="mt-1 grid grid-cols-3 gap-3">
+        <div>
+            <x-input-label for="dim_height" :value="__('Alto')" />
+            <x-text-input id="dim_height" class="block mt-1 w-full" type="number" step="0.1" x-model="height" @input="updateDimensions()" placeholder="0" />
+        </div>
+        <div>
+            <x-input-label for="dim_width" :value="__('Ancho')" />
+            <x-text-input id="dim_width" class="block mt-1 w-full" type="number" step="0.1" x-model="width" @input="updateDimensions()" placeholder="0" />
+        </div>
+        <div>
+            <x-input-label for="dim_depth" :value="__('Profundidad')" />
+            <x-text-input id="dim_depth" class="block mt-1 w-full" type="number" step="0.1" x-model="depth" @input="updateDimensions()" placeholder="0" />
+        </div>
+    </div>
+    <div class="mt-3">
+        <x-input-label for="dim_unit" :value="__('Unidad')" />
+        <select id="dim_unit" name="dim_unit" x-model="unit" @change="updateDimensions()" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full">
+            <option value="cm" selected>cm</option>
+            <option value="m">m</option>
+            <option value="in">in</option>
+        </select>
+    </div>
+    <input type="hidden" name="dimensions" :value="dimensionsValue">
     <x-input-error :messages="$errors->get('dimensions')" class="mt-2" />
+    <p class="mt-1 text-xs text-gray-500" x-text="dimensionsValue || '{{ __('Sin dimensiones') }}'"></p>
 </div>
+<script>
+    function dimensionsPicker() {
+        const existing = '{{ old('dimensions', $artwork->dimensions ?? '') }}';
+        const parts = existing ? existing.split(' x ') : [];
+        const height = parseFloat(parts[0]) || '';
+        const width = parseFloat(parts[1]) || '';
+        const depth = parseFloat(parts[2]) || '';
+        let unit = parts[3] || 'cm';
+
+        return {
+            height, width, depth, unit,
+            dimensionsValue: existing,
+            updateDimensions() {
+                if (this.height === '' && this.width === '' && this.depth === '') {
+                    this.dimensionsValue = '';
+                    return;
+                }
+                this.dimensionsValue = `${this.height || 0} x ${this.width || 0} x ${this.depth || 0} ${this.unit}`.trim();
+            },
+        };
+    }
+</script>
 
 <!-- Description -->
 <div class="mt-4">
     <x-input-label for="description" :value="__('Description')" />
-    <textarea id="description" name="description" rows="4" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full">{{ old('description', $artwork->description ?? '') }}</textarea>
+    <textarea id="description" name="description" rows="4" maxlength="500" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full" x-data x-init="let $t = $el; $el.addEventListener('input', () => { document.getElementById('desc-count').textContent = $t.value.length + ' / 500'; });">{{ old('description', $artwork->description ?? '') }}</textarea>
+    <div class="mt-1 flex justify-between">
+        <span class="text-xs text-gray-500">{{ __('Máximo 500 caracteres.') }}</span>
+        <span id="desc-count" class="text-xs text-gray-400">0 / 500</span>
+    </div>
     <x-input-error :messages="$errors->get('description')" class="mt-2" />
 </div>
