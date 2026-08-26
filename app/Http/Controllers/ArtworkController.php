@@ -40,9 +40,16 @@ class ArtworkController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        $artist = $request->user();
+
+        $max = $artist->currentMaxArtworks();
+        if ($max !== null && $artist->activeArtworksCount() >= $max) {
+            return redirect()->route('artworks.index')
+                ->with('error', __('Límite de :max obras alcanzado en tu plan actual. Mejora tu plan para registrar más obras.', ['max' => $max]));
+        }
+
         $validated = $request->validate($this->storeRules());
 
-        $artist = $request->user();
         $artworkId = $this->resolveArtworkId($validated['title'], $validated['artwork_id'] ?? null);
 
         $series = $validated['series_id'] ? $artist->series()->findOrFail($validated['series_id']) : null;

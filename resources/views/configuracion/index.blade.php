@@ -360,13 +360,24 @@
                                     <textarea id="description" name="description" rows="2" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full" x-model="form.description"></textarea>
                                 </div>
 
-                                {{-- Activo + Orden --}}
+                                {{-- Activo + Orden + Límites --}}
                                 <div class="grid grid-cols-2 gap-4 mt-4">
                                     <div>
                                         <label class="inline-flex items-center">
                                             <input type="checkbox" name="is_active" value="1" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" :checked="form.is_active" @change="form.is_active = $event.target.checked">
                                             <span class="ms-2 text-sm text-gray-600">{{ __('Activo') }}</span>
                                         </label>
+                                    </div>
+                                    <div>
+                                        <label class="inline-flex items-center">
+                                            <input type="checkbox" name="is_free" value="1" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" :checked="form.is_free" @change="form.is_free = $event.target.checked">
+                                            <span class="ms-2 text-sm text-gray-600">{{ __('Plan gratuito') }}</span>
+                                        </label>
+                                    </div>
+                                    <div>
+                                        <x-input-label for="max_artworks" :value="__('Máximo de obras')" />
+                                        <x-text-input id="max_artworks" class="block mt-1 w-full" type="number" min="0" name="max_artworks" x-model="form.max_artworks" />
+                                        <p class="mt-1 text-xs text-gray-400">{{ __('Dejalo vacío para obras ilimitadas.') }}</p>
                                     </div>
                                     <div>
                                         <x-input-label for="sort_order" :value="__('Orden')" />
@@ -466,6 +477,8 @@
                     name: '',
                     description: '',
                     is_active: true,
+                    is_free: false,
+                    max_artworks: '',
                     sort_order: 0,
                     periods: [],
                     features: [],
@@ -476,6 +489,8 @@
                         name: '',
                         description: '',
                         is_active: true,
+                        is_free: false,
+                        max_artworks: '',
                         sort_order: 0,
                         periods: [],
                         features: [],
@@ -488,6 +503,8 @@
                         name: plan.name,
                         description: plan.description || '',
                         is_active: plan.is_active,
+                        is_free: plan.is_free,
+                        max_artworks: plan.max_artworks ?? '',
                         sort_order: plan.sort_order,
                         periods: plan.periods.map(p => ({...p})),
                         features: plan.features.map(f => ({...f})),

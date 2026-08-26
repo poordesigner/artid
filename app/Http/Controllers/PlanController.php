@@ -22,6 +22,8 @@ class PlanController extends Controller
             'description' => 'nullable|string',
             'is_active' => 'boolean',
             'sort_order' => 'integer|min:0',
+            'max_artworks' => 'nullable|integer|min:0',
+            'is_free' => 'boolean',
             'periods' => 'array',
             'periods.*.number' => 'required_with:periods.*|integer|min:1',
             'periods.*.period' => 'required_with:periods.*|in:monthly,quarterly,semiannual,annual',
@@ -38,6 +40,8 @@ class PlanController extends Controller
             'description' => $validated['description'] ?? null,
             'is_active' => $validated['is_active'] ?? true,
             'sort_order' => $validated['sort_order'] ?? 0,
+            'max_artworks' => $validated['max_artworks'] ?? null,
+            'is_free' => $validated['is_free'] ?? false,
         ]);
 
         $this->syncRelations($plan, $validated);
@@ -53,6 +57,8 @@ class PlanController extends Controller
             'description' => 'nullable|string',
             'is_active' => 'boolean',
             'sort_order' => 'integer|min:0',
+            'max_artworks' => 'nullable|integer|min:0',
+            'is_free' => 'boolean',
             'periods' => 'array',
             'periods.*.number' => 'required_with:periods.*|integer|min:1',
             'periods.*.period' => 'required_with:periods.*|in:monthly,quarterly,semiannual,annual',
@@ -69,6 +75,8 @@ class PlanController extends Controller
             'description' => $validated['description'] ?? null,
             'is_active' => $validated['is_active'] ?? true,
             'sort_order' => $validated['sort_order'] ?? 0,
+            'max_artworks' => $validated['max_artworks'] ?? null,
+            'is_free' => $validated['is_free'] ?? false,
         ]);
 
         $this->syncRelations($plan, $validated);

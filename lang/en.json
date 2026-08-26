@@ -124,5 +124,9 @@
     "Failed": "Failed",
     "Past due": "Past due",
     "Completed": "Completed",
-    "Paid": "Paid"
+    "Paid": "Paid",
+    "Plan gratuito": "Free plan",
+    "Máximo de obras": "Max artworks",
+    "Dejalo vacío para obras ilimitadas.": "Leave empty for unlimited artworks.",
+    "Límite de :max obras alcanzado en tu plan actual. Mejora tu plan para registrar más obras.": "You reached the :max artworks limit on your current plan. Upgrade your plan to register more artworks."
 }

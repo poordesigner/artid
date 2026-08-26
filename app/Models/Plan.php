@@ -13,10 +13,14 @@ class Plan extends Model
         'is_active',
         'sort_order',
         'paddle_product_id',
+        'max_artworks',
+        'is_free',
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
+        'is_free' => 'boolean',
+        'max_artworks' => 'integer',
     ];
 
     public function periods(): HasMany

@@ -222,6 +222,9 @@ class WebhookController extends Controller
                 ->whereIn('status', ['active', 'trialing', 'past_due'])
                 ->update(['status' => 'canceled']);
         }
+
+        // Aplicar límites del plan (archivar obras sobrantes si bajó de plan).
+        $artist->enforcePlanLimits();
     }
 
     private function handleSubscriptionStatus(array $data, string $status): void
@@ -231,11 +234,17 @@ class WebhookController extends Controller
             return;
         }
 
-        Subscription::where('paddle_subscription_id', $subscriptionId)
-            ->update([
-                'status' => $status,
-                'next_billed_at' => $data['next_billed_at'] ?? null,
-            ]);
+        $subscription = Subscription::where('paddle_subscription_id', $subscriptionId)->update([
+            'status' => $status,
+            'next_billed_at' => $data['next_billed_at'] ?? null,
+            'canceled_at' => $status === 'canceled' ? ($data['canceled_at'] ?? now()) : null,
+        ]);
+
+        // Si la suscripción se canceló (vuelve a Free) o quedó pausada, aplicar límites.
+        if (in_array($status, ['canceled', 'paused'])) {
+            $sub = Subscription::where('paddle_subscription_id', $subscriptionId)->first();
+            $sub?->artist?->enforcePlanLimits();
+        }
     }
 
     /**

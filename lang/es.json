@@ -187,5 +187,9 @@
     "Failed": "Fallido",
     "Past due": "Vencido",
     "Completed": "Completado",
-    "Paid": "Pagado"
+    "Paid": "Pagado",
+    "Plan gratuito": "Plan gratuito",
+    "Máximo de obras": "Máximo de obras",
+    "Dejalo vacío para obras ilimitadas.": "Dejalo vacío para obras ilimitadas.",
+    "Límite de :max obras alcanzado en tu plan actual. Mejora tu plan para registrar más obras.": "Límite de :max obras alcanzado en tu plan actual. Mejora tu plan para registrar más obras."
 }

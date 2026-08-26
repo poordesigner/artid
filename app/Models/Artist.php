@@ -53,6 +53,52 @@ class Artist extends Authenticatable
         return $this->activeSubscription() === null;
     }
 
+    /**
+     * Límite de obras del plan actual del artista.
+     * Si está en un plan pago, usa su max_artworks; si es Free, usa el plan free.
+     */
+    public function currentMaxArtworks(): ?int
+    {
+        $subscription = $this->activeSubscription();
+
+        if ($subscription && $subscription->plan) {
+            return $subscription->plan->max_artworks;
+        }
+
+        return Plan::where('is_free', true)->value('max_artworks');
+    }
+
+    /**
+     * Cantidad de obras activas (no archivadas).
+     */
+    public function activeArtworksCount(): int
+    {
+        return $this->artworks()->where('status', '!=', 'archived')->count();
+    }
+
+    /**
+     * Aplica los límites del plan: si hay más obras activas que el máximo,
+     * archiva las más antiguas (conservando las últimas registradas).
+     */
+    public function enforcePlanLimits(): void
+    {
+        $max = $this->currentMaxArtworks();
+
+        if ($max === null) {
+            return;
+        }
+
+        $excess = $this->artworks()
+            ->where('status', '!=', 'archived')
+            ->latest('id')
+            ->skip($max)
+            ->pluck('id');
+
+        if ($excess->isNotEmpty()) {
+            Artwork::whereIn('id', $excess)->update(['status' => 'archived']);
+        }
+    }
+
     public function avatarUrl(): ?string
     {
         if (! $this->avatar) {
