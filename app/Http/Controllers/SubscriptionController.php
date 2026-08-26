@@ -53,11 +53,32 @@ class SubscriptionController extends Controller
         $summary = $preview['update_summary'] ?? [];
         $immediate = $preview['immediate_transaction'] ?? null;
 
+        // Monto real a cobrar: el grand_total de la transacción inmediata (incluye impuestos).
+        $immediateTotals = $immediate['details']['totals'] ?? [];
+        $charge = $this->toDollars($immediateTotals['grand_total'] ?? $summary['charge']['amount'] ?? 0);
+
         $amounts = [
             'credit' => $this->toDollars($summary['credit']['amount'] ?? 0),
-            'charge' => $this->toDollars($summary['charge']['amount'] ?? 0),
-            'to_action' => $this->toDollars($summary['result']['amount'] ?? 0),
+            'charge' => $charge,
+            'to_action' => $this->toDollars($immediateTotals['grand_total'] ?? $summary['result']['amount'] ?? 0),
             'action' => $summary['result']['action'] ?? 'none', // charge | credit | none
+        ];
+
+        // Rango del período actual y días restantes para explicar el prorrateo.
+        $periodStart = $subscription->current_period_start ?? $subscription->startedAt();
+        $periodEnd = $subscription->current_period_end ?? $subscription->next_billed_at;
+        $now = now();
+
+        $totalDays = $periodStart && $periodEnd ? max(1, $periodStart->diffInDays($periodEnd)) : 0;
+        $restDays = $periodEnd ? max(0, $now->diffInDays($periodEnd)) : 0;
+
+        $proration = [
+            'period_start' => $periodStart?->format('d/m/Y'),
+            'period_end' => $periodEnd?->format('d/m/Y'),
+            'today' => $now->format('d/m/Y'),
+            'total_days' => $totalDays,
+            'rest_days' => $restDays,
+            'used_days' => $periodStart ? max(0, $periodStart->diffInDays($now)) : 0,
         ];
 
         $currentPlan = $subscription->plan;
@@ -69,6 +90,7 @@ class SubscriptionController extends Controller
             'newPeriod',
             'targetPlan',
             'amounts',
+            'proration',
         ));
     }
 

@@ -226,5 +226,11 @@
     "Total": "Total",
     "El prorrateo se calcula al minuto. Si hay un monto a cobrar, se cargará automáticamente a tu método de pago guardado en Paddle.": "Proration is calculated by the minute. If there's an amount to charge, it will be automatically charged to your saved payment method in Paddle.",
     "Confirmar y cobrar $:amount": "Confirm and charge $:amount",
-    "Confirmar (sin cargo)": "Confirm (no charge)"
+    "Confirmar (sin cargo)": "Confirm (no charge)",
+    "Período actual": "Current period",
+    "Inicio": "Start",
+    "Fin": "End",
+    "Hoy": "Today",
+    "Usado": "Used",
+    "Restante": "Remaining"
 }

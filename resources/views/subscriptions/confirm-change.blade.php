@@ -43,7 +43,31 @@
 
                 {{-- Prorrateo --}}
                 <div class="mt-6 border-t border-gray-100 pt-6">
-                    <dl class="space-y-3 text-sm">
+                    {{-- Rango del periodo --}}
+                    <div class="rounded-lg bg-gray-50 p-4 text-sm">
+                        <p class="font-medium text-gray-900">{{ __('Período actual') }}</p>
+                        <p class="mt-1 text-gray-600">
+                            {{ __('Inicio') }}: <strong>{{ $proration['period_start'] }}</strong> ·
+                            {{ __('Fin') }}: <strong>{{ $proration['period_end'] }}</strong> ·
+                            {{ __('Hoy') }}: <strong>{{ $proration['today'] }}</strong>
+                        </p>
+                        <div class="mt-2 flex items-center gap-3 text-xs text-gray-600">
+                            <span class="inline-flex items-center gap-1">
+                                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                                {{ __('Usado') }}: {{ $proration['used_days'] }} días
+                            </span>
+                            <span class="inline-flex items-center gap-1">
+                                <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
+                                {{ __('Restante') }}: {{ $proration['rest_days'] }} días
+                            </span>
+                            <span class="text-gray-400">({{ $proration['total_days'] }} total)</span>
+                        </div>
+                        <div class="mt-2 h-2 w-full rounded-full bg-gray-200 overflow-hidden">
+                            <div class="h-full bg-emerald-500" style="width: {{ $proration['total_days'] > 0 ? round($proration['used_days'] / $proration['total_days'] * 100) : 0 }}%"></div>
+                        </div>
+                    </div>
+
+                    <dl class="mt-4 space-y-3 text-sm">
                         <div class="flex items-center justify-between">
                             <dt class="text-gray-600">{{ __('Crédito por el tiempo no usado') }}</dt>
                             <dd class="font-medium text-gray-900">${{ $amounts['credit'] }}</dd>
