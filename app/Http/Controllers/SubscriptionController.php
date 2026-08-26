@@ -53,12 +53,18 @@ class SubscriptionController extends Controller
 
         $summary = $preview['update_summary'] ?? [];
         $immediate = $preview['immediate_transaction'] ?? null;
-
         $immediateTotals = $immediate['details']['totals'] ?? [];
-        $chargeCents = $immediateTotals['grand_total'] ?? $summary['charge']['amount'] ?? 0;
-        $action = $summary['result']['action'] ?? 'none'; // charge | credit | none
 
-        // Decidir si el cobro se difiere a la próxima factura (monto < mínimo).
+        $creditCents = $summary['credit']['amount'] ?? 0;    // lo que credita el plan viejo
+        $chargeCents = $summary['charge']['amount'] ?? 0;    // lo que cobra el plan nuevo
+        $action = $summary['result']['action'] ?? 'none';    // charge | credit | none
+        $netAmount = $summary['result']['amount'] ?? 0;      // neto
+
+        // Si el cobro real difiere del summary (impuestos), usar grand_total de la inmediata
+        // solo cuando es un cargo.
+        $immediateGrandTotal = $immediateTotals['grand_total'] ?? 0;
+
+        // Decidir si el cobro se difiere a la próxima factura (cargo < mínimo).
         $minImmediate = (float) config('paddle.min_immediate_charge', 10);
         $deferred = $action === 'charge' && ((float) $chargeCents / 100) < $minImmediate;
         $mode = $deferred ? 'prorated_next_billing_period' : 'prorated_immediately';
@@ -69,17 +75,43 @@ class SubscriptionController extends Controller
             $summary = $preview['update_summary'] ?? [];
             $immediate = $preview['immediate_transaction'] ?? null;
             $immediateTotals = $immediate['details']['totals'] ?? [];
-            $chargeCents = $immediateTotals['grand_total'] ?? $summary['charge']['amount'] ?? 0;
+            $creditCents = $summary['credit']['amount'] ?? 0;
+            $chargeCents = $summary['charge']['amount'] ?? 0;
+            $action = $summary['result']['action'] ?? 'none';
+            $netAmount = $summary['result']['amount'] ?? 0;
         }
 
-        $amounts = [
-            'credit' => $this->toDollars($summary['credit']['amount'] ?? 0),
-            'charge' => $this->toDollars($chargeCents),
-            'to_action' => $this->toDollars($chargeCents),
-            'action' => $action,
-            'deferred' => $deferred,
-            'min_immediate' => number_format($minImmediate, 2),
-        ];
+        // Para cargos, el monto final a cobrar = grand_total de la transacción inmediata (con impuestos).
+        // Para créditos, el neto = result.amount (lo que queda a favor).
+        if ($action === 'charge') {
+            $finalAmount = $immediateGrandTotal != 0 ? $immediateGrandTotal : $chargeCents;
+            $amounts = [
+                'credit' => $this->toDollars($creditCents),
+                'charge' => $this->toDollars($chargeCents),
+                'to_action' => $this->toDollars($finalAmount),
+                'action' => 'charge',
+                'deferred' => $deferred,
+                'min_immediate' => number_format($minImmediate, 2),
+            ];
+        } elseif ($action === 'credit') {
+            $amounts = [
+                'credit' => $this->toDollars($creditCents),
+                'charge' => $this->toDollars($chargeCents),
+                'to_action' => $this->toDollars(abs($netAmount)),
+                'action' => 'credit',
+                'deferred' => false,
+                'min_immediate' => number_format($minImmediate, 2),
+            ];
+        } else {
+            $amounts = [
+                'credit' => $this->toDollars($creditCents),
+                'charge' => $this->toDollars($chargeCents),
+                'to_action' => $this->toDollars($netAmount),
+                'action' => 'none',
+                'deferred' => false,
+                'min_immediate' => number_format($minImmediate, 2),
+            ];
+        }
 
         // Rango del período actual y días restantes para explicar el prorrateo.
         $periodStart = $subscription->current_period_start ?? $subscription->startedAt();
@@ -174,8 +206,15 @@ class SubscriptionController extends Controller
         $summary = $preview['update_summary'] ?? [];
         $immediate = $preview['immediate_transaction'] ?? null;
         $immediateTotals = $immediate['details']['totals'] ?? [];
-        $chargeCents = $immediateTotals['grand_total'] ?? $summary['charge']['amount'] ?? 0;
         $action = $summary['result']['action'] ?? 'none';
+
+        // Base del cargo: update_summary.charge (lo que cobra Paddle por el plan nuevo).
+        $chargeCents = $summary['charge']['amount'] ?? 0;
+
+        // Para cargos, si hay un grand_total real mayor (impuestos incluidos), usarlo.
+        if ($action === 'charge' && ($immediateTotals['grand_total'] ?? 0) > 0) {
+            $chargeCents = $immediateTotals['grand_total'];
+        }
 
         $minImmediate = (float) config('paddle.min_immediate_charge', 10);
         $deferred = $action === 'charge' && ((float) $chargeCents / 100) < $minImmediate;
