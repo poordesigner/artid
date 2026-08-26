@@ -207,6 +207,31 @@ class SubscriptionController extends Controller
         return back()->with('status', __('Tu plan quedará cancelado al final del período contratado.'));
     }
 
+    public function reactivate(PaddleService $paddle): RedirectResponse
+    {
+        $user = Auth::user();
+        $subscription = $user->activeSubscription();
+
+        if (! $subscription || ! $subscription->paddle_subscription_id) {
+            return back()->with('error', __('No tienes una suscripción activa para reactivar.'));
+        }
+
+        // Solo se puede reactivar si hay una cancelación programada (dentro del período).
+        if (! $subscription->hasScheduledCancellation()) {
+            return back()->with('error', __('Tu plan no tiene una cancelación programada.'));
+        }
+
+        $data = $paddle->removeScheduledCancellation($subscription->paddle_subscription_id);
+
+        $subscription->update([
+            'canceled_at' => null,
+            'status' => $data['status'] ?? $subscription->status,
+            'next_billed_at' => $data['next_billed_at'] ?? $subscription->next_billed_at,
+        ]);
+
+        return back()->with('status', __('Reactivate tu plan correctamente. Seguís vigente sin cambios.'));
+    }
+
     public function portal(PaddleService $paddle): \Illuminate\Http\JsonResponse
     {
         $user = Auth::user();

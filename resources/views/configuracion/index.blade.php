@@ -154,9 +154,17 @@
                                         </div>
 
                                         @if ($activeSubscription->hasScheduledCancellation())
-                                            <p class="mt-3 text-sm text-amber-600">
-                                                {{ __('Cancelación programada: el plan vence el :date.', ['date' => $activeSubscription->endsAt()?->format('d/m/Y')]) }}
-                                            </p>
+                                            <div class="mt-3 rounded-lg bg-amber-50 border border-amber-200 p-4">
+                                                <p class="text-sm text-amber-700">
+                                                    {{ __('Cancelación programada: el plan vence el :date.', ['date' => $activeSubscription->endsAt()?->format('d/m/Y')]) }}
+                                                </p>
+                                                <form method="POST" action="{{ route('subscribe.reactivate') }}" class="mt-3">
+                                                    @csrf
+                                                    <button type="submit" class="inline-flex items-center px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-md text-xs font-semibold uppercase tracking-widest transition">
+                                                        {{ __('Reactivar plan') }}
+                                                    </button>
+                                                </form>
+                                            </div>
                                         @endif
 
                                         <dl class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">

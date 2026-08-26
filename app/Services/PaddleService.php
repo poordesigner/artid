@@ -147,6 +147,22 @@ class PaddleService
     }
 
     /**
+     * Remueve una cancelación programada (reactiva el plan).
+     *
+     * @return array<string, mixed>
+     */
+    public function removeScheduledCancellation(string $subscriptionId): array
+    {
+        $response = $this->client()->patch("/subscriptions/{$subscriptionId}", [
+            'scheduled_change' => null,
+        ]);
+
+        $response->throw();
+
+        return $response->json('data');
+    }
+
+    /**
      * Crea una sesión del customer portal para un abonado.
      *
      * @param string      $customerId     ID del customer en Paddle

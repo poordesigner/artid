@@ -244,5 +244,9 @@
     "El cargo se hará automáticamente a este método de pago al confirmar.": "The charge will be made automatically to this payment method on confirm.",
     "El cargo se hará a este método de pago en tu próxima factura.": "The charge will be made to this payment method on your next invoice.",
     "No pudimos cobrar la diferencia a tu método de pago y el plan no cambió. Actualizá tu método de pago desde \"Gestionar suscripción\" e intentá de nuevo.": "We couldn't charge the difference to your payment method and the plan didn't change. Update your payment method from \"Manage subscription\" and try again.",
-    "Abriendo portal...": "Opening portal..."
+    "Abriendo portal...": "Opening portal...",
+    "Reactivar plan": "Reactivate plan",
+    "No tienes una suscripción activa para reactivar.": "You don't have an active subscription to reactivate.",
+    "Tu plan no tiene una cancelación programada.": "Your plan doesn't have a scheduled cancellation.",
+    "Reactivate tu plan correctamente. Seguís vigente sin cambios.": "Your plan was reactivated. It remains active without changes."
 }

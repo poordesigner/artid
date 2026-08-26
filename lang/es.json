@@ -307,5 +307,9 @@
     "El cargo se hará automáticamente a este método de pago al confirmar.": "El cargo se hará automáticamente a este método de pago al confirmar.",
     "El cargo se hará a este método de pago en tu próxima factura.": "El cargo se hará a este método de pago en tu próxima factura.",
     "No pudimos cobrar la diferencia a tu método de pago y el plan no cambió. Actualizá tu método de pago desde \"Gestionar suscripción\" e intentá de nuevo.": "No pudimos cobrar la diferencia a tu método de pago y el plan no cambió. Actualizá tu método de pago desde \"Gestionar suscripción\" e intentá de nuevo.",
-    "Abriendo portal...": "Abriendo portal..."
+    "Abriendo portal...": "Abriendo portal...",
+    "Reactivar plan": "Reactivar plan",
+    "No tienes una suscripción activa para reactivar.": "No tienes una suscripción activa para reactivar.",
+    "Tu plan no tiene una cancelación programada.": "Tu plan no tiene una cancelación programada.",
+    "Reactivate tu plan correctamente. Seguís vigente sin cambios.": "Reactivaste tu plan correctamente. Seguís vigente sin cambios."
 }
