@@ -7,9 +7,11 @@ use App\Models\Payment;
 use App\Models\Plan;
 use App\Models\PlanPeriod;
 use App\Models\Subscription;
+use App\Models\WebhookEvent;
 use App\Services\PaddleService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class WebhookController extends Controller
@@ -24,15 +26,58 @@ class WebhookController extends Controller
         }
 
         $payload = json_decode($body, true);
+        $eventId = $payload['event_id'] ?? null;
         $eventType = $payload['event_type'] ?? null;
         $data = $payload['data'] ?? [];
 
-        Log::info('Paddle webhook recibido', ['event_type' => $eventType, 'id' => $data['id'] ?? null]);
+        Log::info('Paddle webhook recibido', [
+            'event_id' => $eventId,
+            'event_type' => $eventType,
+            'id' => $data['id'] ?? null,
+        ]);
+
+        if (! $eventId) {
+            return response()->json(['error' => 'Missing event_id'], 400);
+        }
+
+        // Idempotencia: si el evento ya se procesó, respondemos 200 sin reprocesar.
+        try {
+            $claimed = DB::transaction(function () use ($eventId, $eventType, $payload, $data) {
+                $event = WebhookEvent::where('event_id', $eventId)->first();
+
+                if ($event) {
+                    return false;
+                }
+
+                WebhookEvent::create([
+                    'event_id' => $eventId,
+                    'event_type' => $eventType,
+                    'occurred_at' => $payload['occurred_at'] ?? null,
+                    'processed_at' => now(),
+                ]);
+
+                return true;
+            });
+        } catch (\Throwable $e) {
+            Log::error('Error registrando evento de Paddle', [
+                'event_id' => $eventId,
+                'error' => $e->getMessage(),
+            ]);
+
+            return response()->json(['error' => 'Internal error'], 500);
+        }
+
+        if (! $claimed) {
+            Log::info('Webhook de Paddle duplicado (omitido)', ['event_id' => $eventId]);
+
+            return response()->json(['success' => true, 'duplicate' => true]);
+        }
 
         try {
             $this->dispatch($eventType, $data);
         } catch (\Throwable $e) {
             Log::error('Error procesando webhook de Paddle', [
+                'event_id' => $eventId,
                 'event_type' => $eventType,
                 'error' => $e->getMessage(),
             ]);
