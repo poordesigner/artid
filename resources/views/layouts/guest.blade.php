@@ -18,7 +18,7 @@
         <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
             <div>
                 <a href="/">
-                    <img src="{{ asset('img/logo_600x300.png') }}" alt="ARTid" class="h-36 w-auto">
+                    <img src="{{ config('artid.logos.main') }}" alt="ARTid" class="h-36 w-auto">
                 </a>
                 <div class="mt-3 text-center">
                     <a href="{{ route('ayuda') }}" class="text-sm text-gray-500 hover:text-gray-700 underline">{{ __('Ayuda') }}</a>
