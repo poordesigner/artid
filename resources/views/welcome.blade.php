@@ -3,8 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" href="{{ config('artid.logos.favicon') }}" type="image/png">
-    <link rel="apple-touch-icon" href="{{ config('artid.logos.apple_touch') }}">
+    <link rel="icon" href="{{ asset('img/favicon_192x192.png') }}" type="image/png">
+    <link rel="apple-touch-icon" href="{{ asset('img/favicon_192x192.png') }}">
     <title>{{ __('Identidad Digital para Obras de Arte') }} — ARTid</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
@@ -17,7 +17,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="flex items-center gap-8">
                 <a href="{{ url('/') }}">
-                    <img src="{{ config('artid.logos.navbar') }}" alt="ARTid" class="h-10 w-auto">
+                    <img src="{{ asset('img/navbar_240x120.png') }}" alt="ARTid" class="h-10 w-auto">
                 </a>
                 <nav class="hidden md:flex items-center gap-8">
                     <a href="#planes" class="text-sm text-gray-500 hover:text-gray-700 transition">{{ __('Planes') }}</a>
@@ -259,7 +259,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col md:flex-row items-center justify-between gap-8">
                 <div class="flex items-center gap-3">
-                    <img src="{{ config('artid.logos.navbar') }}" alt="ARTid" class="h-9 w-auto">
+                    <img src="{{ asset('img/navbar_240x120.png') }}" alt="ARTid" class="h-9 w-auto">
                     <span class="text-sm text-gray-400">by <a href="https://poordesigner.com" class="text-gray-300 hover:text-white" target="_blank" rel="noopener">POORdesigner.com</a></span>
                 </div>
                 <div class="flex items-center gap-8 text-sm text-gray-400">

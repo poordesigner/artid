@@ -5,8 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <link rel="icon" href="{{ config('artid.logos.favicon') }}" type="image/png">
-        <link rel="apple-touch-icon" href="{{ config('artid.logos.apple_touch') }}">
+        <link rel="icon" href="{{ asset('img/favicon_192x192.png') }}" type="image/png">
+        <link rel="apple-touch-icon" href="{{ asset('img/favicon_192x192.png') }}">
 
         <title>artid</title>
 
@@ -21,7 +21,7 @@
         <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
             <div>
                 <a href="/">
-                    <img src="{{ config('artid.logos.main') }}" alt="ARTid" class="h-36 w-auto">
+                    <img src="{{ asset('img/logo_600x300.png') }}" alt="ARTid" class="h-36 w-auto">
                 </a>
                 <div class="mt-3 text-center">
                     <a href="{{ route('ayuda') }}" class="text-sm text-gray-500 hover:text-gray-700 underline">{{ __('Ayuda') }}</a>
