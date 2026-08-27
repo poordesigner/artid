@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="{{ asset('img/favicon_192x192.png') }}" type="image/png">
     <link rel="apple-touch-icon" href="{{ asset('img/favicon_192x192.png') }}">
-    <title>{{ $attributes->get('title', 'ARTid') }}</title>
+    <title>@yield('title', 'ARTid')</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -40,7 +40,7 @@
 
     {{-- Contenido --}}
     <main>
-        {{ $slot }}
+        @yield('content')
     </main>
 
     {{-- Footer --}}
