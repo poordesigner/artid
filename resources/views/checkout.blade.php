@@ -56,7 +56,7 @@
 </head>
 <body>
     <div class="container">
-        <img src="{{ asset('img/logo_simple.png') }}" alt="ARTid" class="logo">
+        <img src="{{ asset('img/logo_600x300.png') }}" alt="ARTid" class="logo">
         <div id="start">
             <h1>{{ __('Procesando tu pago...') }}</h1>
             <p>{{ __('Te estamos redirigiendo a un pago seguro.') }}</p>

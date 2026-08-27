@@ -15,7 +15,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="flex items-center gap-8">
                 <a href="{{ url('/') }}">
-                    <img src="{{ asset('img/logo_simple.png') }}" alt="ARTid" class="h-9 w-auto">
+                    <img src="{{ asset('img/navar_240x110.png') }}" alt="ARTid" class="h-10 w-auto">
                 </a>
                 <nav class="hidden md:flex items-center gap-8">
                     <a href="#planes" class="text-sm text-gray-500 hover:text-gray-700 transition">{{ __('Planes') }}</a>
@@ -257,7 +257,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col md:flex-row items-center justify-between gap-8">
                 <div class="flex items-center gap-3">
-                    <img src="{{ asset('img/logo_simple.png') }}" alt="ARTid" class="h-8 w-auto">
+                    <img src="{{ asset('img/navar_240x110.png') }}" alt="ARTid" class="h-9 w-auto">
                     <span class="text-sm text-gray-400">by <a href="https://poordesigner.com" class="text-gray-300 hover:text-white" target="_blank" rel="noopener">POORdesigner.com</a></span>
                 </div>
                 <div class="flex items-center gap-8 text-sm text-gray-400">
