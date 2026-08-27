@@ -41,13 +41,10 @@
     {{-- Hero --}}
     <section class="py-20 sm:py-28">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
                 {{-- Izquierda: imagen --}}
-                <div>
-                    <div class="relative">
-                        <div class="absolute -inset-4 bg-gradient-to-r from-indigo-100 to-purple-100 rounded-3xl blur-2xl opacity-60"></div>
-                        <img src="{{ asset('img/img_home_1.png') }}" alt="ARTid" class="relative rounded-2xl shadow-xl border border-gray-100 w-full h-auto">
-                    </div>
+                <div class="pt-6">
+                    <img src="{{ asset('img/img_home_1.png') }}" alt="ARTid" class="w-full h-auto">
                 </div>
 
                 {{-- Derecha: texto arriba + ficha abajo --}}
