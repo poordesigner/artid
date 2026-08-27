@@ -48,6 +48,8 @@ return [
         'navbar' => 'https://pub-10efd14d011c4a98a3d5281d393c13d1.r2.dev/logos/navbar_240x120.png',
         'main' => 'https://pub-10efd14d011c4a98a3d5281d393c13d1.r2.dev/logos/logo_600x300.png',
         'box' => 'https://pub-10efd14d011c4a98a3d5281d393c13d1.r2.dev/logos/logo_box_1024x1024.png',
+        'favicon' => 'https://pub-10efd14d011c4a98a3d5281d393c13d1.r2.dev/logos/favicon.png',
+        'apple_touch' => 'https://pub-10efd14d011c4a98a3d5281d393c13d1.r2.dev/logos/apple-touch-icon.png',
     ],
 
 ];
