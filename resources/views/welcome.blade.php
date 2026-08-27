@@ -20,7 +20,7 @@
                     <img src="{{ asset('img/navbar_240x120.png') }}" alt="ARTid" class="h-10 w-auto">
                 </a>
                 <nav class="hidden md:flex items-center gap-8">
-                    <a href="#planes" class="text-sm text-gray-500 hover:text-gray-700 transition">{{ __('Planes') }}</a>
+                    <a href="{{ route('planes') }}" class="text-sm text-gray-500 hover:text-gray-700 transition">{{ __('Planes') }}</a>
                     <a href="#caracteristicas" class="text-sm text-gray-500 hover:text-gray-700 transition">{{ __('Características') }}</a>
                     <a href="{{ route('ayuda') }}" class="text-sm text-gray-500 hover:text-gray-700 transition">{{ __('Ayuda') }}</a>
                 </nav>
@@ -42,31 +42,45 @@
     <section class="py-20 sm:py-28">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                {{-- Izquierda: imagen --}}
                 <div>
-                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-[1.1] tracking-tight">
-                        {{ __('Identidad digital para tus obras de arte.') }}
-                    </h1>
-                    <p class="mt-6 text-lg text-gray-600 leading-relaxed">
-                        {{ __('Genera una ficha técnica permanente para cada obra. Código QR único, metadata verificada y control de propiedad cifrado.') }}
-                    </p>
-                    <div class="mt-8 flex flex-wrap items-center gap-4">
-                        <a href="{{ route('register') }}" class="inline-flex items-center px-6 py-3 bg-gray-900 hover:bg-gray-800 text-white text-sm font-semibold rounded-lg transition">
-                            {{ __('Empezar ahora') }}
-                            <svg class="w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                            </svg>
-                        </a>
-                        <a href="{{ route('ayuda') }}" class="inline-flex items-center px-6 py-3 bg-white border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg hover:bg-gray-50 transition">
-                            {{ __('Ver guía') }}
-                        </a>
-                    </div>
-                    <p class="mt-6 text-xs text-gray-400 max-w-md">
-                        {{ __('QR permanente y firmado criptográficamente. Solo la obra auténtica accede a su ficha pública.') }}
-                    </p>
-                </div>
-                <div class="hidden lg:block">
                     <div class="relative">
                         <div class="absolute -inset-4 bg-gradient-to-r from-indigo-100 to-purple-100 rounded-3xl blur-2xl opacity-60"></div>
+                        <img src="{{ asset('img/img_home_1.png') }}" alt="ARTid" class="relative rounded-2xl shadow-xl border border-gray-100 w-full h-auto">
+                    </div>
+                </div>
+
+                {{-- Derecha: texto arriba + ficha abajo --}}
+                <div class="space-y-10">
+                    {{-- Texto --}}
+                    <div>
+                        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-[1.1] tracking-tight">
+                            {{ __('Identidad digital para tus obras de arte.') }}
+                        </h1>
+                        <p class="mt-6 text-lg text-gray-600 leading-relaxed">
+                            {{ __('Genera una ficha técnica permanente para cada obra. Código QR único, metadata verificada y control de propiedad cifrado.') }}
+                        </p>
+                        <div class="mt-8 flex flex-wrap items-center gap-4">
+                            <a href="{{ route('register') }}" class="inline-flex items-center px-6 py-3 bg-gray-900 hover:bg-gray-800 text-white text-sm font-semibold rounded-lg transition">
+                                {{ __('Empezar ahora') }}
+                                <svg class="w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                </svg>
+                            </a>
+                            <a href="{{ route('planes') }}" class="inline-flex items-center px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-lg transition">
+                                {{ __('Ver Planes') }}
+                            </a>
+                            <a href="{{ route('ayuda') }}" class="inline-flex items-center px-6 py-3 bg-white border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg hover:bg-gray-50 transition">
+                                {{ __('Ver guía') }}
+                            </a>
+                        </div>
+                        <p class="mt-6 text-xs text-gray-400 max-w-md">
+                            {{ __('QR permanente y firmado criptográficamente. Solo la obra auténtica accede a su ficha pública.') }}
+                        </p>
+                    </div>
+
+                    {{-- Ficha simulada --}}
+                    <div class="relative">
                         <div class="relative bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
                             <div class="flex items-center justify-between pb-4 border-b border-gray-100">
                                 <span class="text-sm font-semibold text-gray-900">{{ __('Obra autenticada') }}</span>
@@ -106,98 +120,6 @@
             </div>
         </div>
     </section>
-
-    {{-- Plans --}}
-    @if ($plans->count())
-        <section id="planes" class="py-20 bg-gray-50">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center mb-14">
-                    <p class="text-sm font-semibold text-indigo-600 uppercase tracking-wider">{{ __('Planes') }}</p>
-                    <h2 class="mt-3 text-3xl sm:text-4xl font-bold text-gray-900">{{ __('Elige el plan que mejor se adapte a ti.') }}</h2>
-                    <p class="mt-4 text-gray-600 max-w-xl mx-auto">{{ __('Todos los planes incluyen acceso a la plataforma. Selecciona el que se ajuste a tus necesidades.') }}</p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-{{ min($plans->count(), 3) }} gap-8 max-w-5xl mx-auto">
-                    @foreach ($plans as $plan)
-                        @php
-                            $annualPeriod = $plan->periods->firstWhere('period', 'annual');
-                            $annualUnit = $plan->periods->first(fn ($p) => $p->period === 'annual' && $p->number === 1);
-                            $monthlyPeriod = $plan->periods->first(fn ($p) => $p->period === 'monthly' && $p->number === 1);
-
-                            $mainPrice = $annualUnit ? $annualUnit->monthlyEquivalent() : ($monthlyPeriod?->price ?? 0);
-                            $monthlyPerPeriod = $monthlyPeriod ? (float) $monthlyPeriod->price : null;
-                        @endphp
-                        <div class="bg-white rounded-2xl shadow-sm border {{ $loop->first ? 'border-indigo-500 ring-2 ring-indigo-500' : 'border-gray-200' }} flex flex-col overflow-hidden">
-                            @if ($loop->first)
-                                <div class="px-8 pt-6">
-                                    <span class="inline-block px-3 py-1 bg-indigo-50 text-indigo-700 text-xs font-semibold rounded-full uppercase tracking-wider">{{ __('Popular') }}</span>
-                                </div>
-                            @endif
-
-                            <div class="p-8 {{ $loop->first ? 'pt-4' : '' }}">
-                                <h3 class="text-xl font-bold text-gray-900">{{ $plan->name }}</h3>
-
-                                @if ($plan->description)
-                                    <p class="mt-2 text-sm text-gray-600">{{ $plan->description }}</p>
-                                @endif
-
-                                <div class="mt-6">
-                                    @if ($mainPrice)
-                                        <div class="flex items-end gap-1">
-                                            <span class="text-4xl font-bold text-gray-900">${{ number_format($mainPrice, 2) }}</span>
-                                            <span class="text-lg text-gray-500 pb-1.5">/ {{ __('mes') }}</span>
-                                        </div>
-                                        @if ($annualUnit)
-                                            <p class="mt-1 text-sm font-medium text-gray-600">{{ __('pago anual') }}</p>
-                                            @if ($monthlyPerPeriod !== null)
-                                                <p class="mt-1 text-xs text-gray-400">
-                                                    ${{ number_format($monthlyPerPeriod, 2) }}/mes · {{ __('pago mensual') }}
-                                                </p>
-                                            @endif
-                                        @endif
-                                    @endif
-                                </div>
-                            </div>
-
-                            <div class="px-8 pb-8 flex-1">
-                                {{-- Períodos como listado --}}
-                                @if ($plan->periods->count())
-                                    <div class="border-t border-gray-100 pt-6 space-y-4">
-                                        @foreach ($plan->periods as $period)
-                                            <div class="flex items-center justify-between">
-                                                <span class="text-sm text-gray-500">{{ $period->recurrenceLabel() }}</span>
-                                                <span class="text-sm font-semibold text-gray-900">${{ number_format($period->price, 2) }}</span>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                @endif
-
-                                {{-- Características --}}
-                                @if ($plan->features->count())
-                                    <ul class="mt-6 space-y-3">
-                                        @foreach ($plan->features as $feature)
-                                            <li class="flex items-start gap-3 text-sm text-gray-700">
-                                                <svg class="w-5 h-5 text-indigo-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                                </svg>
-                                                {{ $feature->description }}
-                                            </li>
-                                        @endforeach
-                                    </ul>
-                                @endif
-                            </div>
-
-                            <div class="px-8 pb-8">
-                                <a href="{{ route('register') }}" class="block w-full text-center px-6 py-3 {{ $loop->first ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-gray-900 hover:bg-gray-800' }} text-white rounded-lg font-semibold text-sm transition">
-                                    {{ __('Empezar') }}
-                                </a>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-        </section>
-    @endif
 
     {{-- Features --}}
     <section id="caracteristicas" class="py-20">
@@ -264,7 +186,7 @@
                 </div>
                 <div class="flex items-center gap-8 text-sm text-gray-400">
                     <a href="{{ route('ayuda') }}" class="hover:text-white transition">{{ __('Ayuda') }}</a>
-                    <a href="#planes" class="hover:text-white transition">{{ __('Planes') }}</a>
+                    <a href="{{ route('planes') }}" class="hover:text-white transition">{{ __('Planes') }}</a>
                     <a href="#caracteristicas" class="hover:text-white transition">{{ __('Características') }}</a>
                 </div>
             </div>

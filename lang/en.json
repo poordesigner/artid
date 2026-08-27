@@ -269,5 +269,7 @@
     "Año": "Year",
     "Registrada": "Registered",
     "Inactiva": "Inactive",
-    "Activa": "Active"
+    "Activa": "Active",
+    "Ver Planes": "View Plans",
+    "No hay planes disponibles.": "No plans available."
 }

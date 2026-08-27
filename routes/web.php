@@ -37,6 +37,15 @@ Route::get('/', function () {
     return view('welcome', compact('plans'));
 });
 
+Route::get('/planes', function () {
+    $plans = Plan::with(['periods', 'features'])
+        ->where('is_active', true)
+        ->orderBy('sort_order')
+        ->get();
+
+    return view('planes', compact('plans'));
+})->name('planes');
+
 Route::get('/o/{publicId}', [PublicArtworkController::class, 'show'])->name('public.artwork');
 
 Route::get('/artist/{id}', [PublicArtworkController::class, 'artist'])->name('public.artist');
