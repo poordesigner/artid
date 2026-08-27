@@ -1,13 +1,8 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Ayuda') }}
-        </h2>
-    </x-slot>
-
+<x-public-layout :title="__('Ayuda') . ' — ARTid'">
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white shadow-sm sm:rounded-lg p-6 sm:p-8">
+        <h1 class="font-semibold text-xl text-gray-900">{{ __('Ayuda') }}</h1>
         <p class="mt-2 text-gray-600">{{ __('Conoce tu plataforma de identidad digital para obras de arte, paso a paso.') }}</p>
 
         <!-- Introducción -->
@@ -145,6 +140,7 @@
         </section>
 
         <p class="mt-8 text-sm text-gray-500">{{ __('¿Dudas? Sigue estos pasos o contacta con soporte desde el panel.') }}</p>
+            </div>
+        </div>
     </div>
-    </div>
-</x-app-layout>
+</x-public-layout>

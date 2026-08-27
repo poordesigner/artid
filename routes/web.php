@@ -52,6 +52,10 @@ Route::get('/artist/{id}', [PublicArtworkController::class, 'artist'])->name('pu
 
 Route::post('/webhooks/paddle', [WebhookController::class, 'handle'])->name('webhooks.paddle');
 
+Route::get('/ayuda', function () {
+    return view('ayuda');
+})->name('ayuda');
+
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
         return auth()->user()->isAdmin()
@@ -62,10 +66,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/panel', [DashboardController::class, 'artist'])->name('dashboard.artist');
 
     Route::get('/admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-
-    Route::get('/ayuda', function () {
-        return view('ayuda');
-    })->name('ayuda');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
