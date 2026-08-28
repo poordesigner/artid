@@ -7,10 +7,10 @@
     <link rel="apple-touch-icon" href="{{ asset('img/favicon_192x192.png') }}">
     <title>{{ __('Identidad Digital para Obras de Arte') }} — ARTid</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=Muli:300,400,500,600,700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.bunny.net/css?family=Space+Grotesk:300,400,500,600,700&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
-        body { font-family: 'Muli', ui-sans-serif, system-ui, sans-serif; }
+        body { font-family: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif; }
         .tracking-gallery { letter-spacing: 0.25em; }
     </style>
 </head>
