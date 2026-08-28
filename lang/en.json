@@ -347,5 +347,6 @@
     "Función de tokens eliminada.": "Token function deleted.",
     "¿Cómo se usan los tokens?": "How are tokens used?",
     "Cada función de la plataforma consume la cantidad de tokens indicada.": "Each platform function consumes the indicated amount of tokens.",
-    "Crear QR + Ficha Básica": "Create QR + Basic Record"
+    "Crear QR + Ficha Básica": "Create QR + Basic Record",
+    "Hubo un problema al iniciar sesión con Google. Inténtalo de nuevo.": "There was a problem signing in with Google. Please try again."
 }
