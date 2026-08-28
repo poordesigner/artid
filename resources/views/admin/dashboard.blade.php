@@ -14,12 +14,12 @@
                     <p class="mt-1 text-3xl font-bold text-gray-900">{{ $stats['artists'] }}</p>
                 </div>
                 <div class="bg-white shadow-sm sm:rounded-lg p-6">
-                    <p class="text-sm text-gray-500">{{ __('Planes de pago') }}</p>
-                    <p class="mt-1 text-3xl font-bold text-gray-900">{{ $stats['paid_plans'] }}</p>
+                    <p class="text-sm text-gray-500">{{ __('Paquetes activos') }}</p>
+                    <p class="mt-1 text-3xl font-bold text-gray-900">{{ $stats['token_packages'] }}</p>
                 </div>
                 <div class="bg-white shadow-sm sm:rounded-lg p-6">
-                    <p class="text-sm text-gray-500">{{ __('Suscripciones activas') }}</p>
-                    <p class="mt-1 text-3xl font-bold text-gray-900">{{ $stats['active_subscriptions'] }}</p>
+                    <p class="text-sm text-gray-500">{{ __('Tokens entregados') }}</p>
+                    <p class="mt-1 text-3xl font-bold text-gray-900">{{ $stats['tokens_granted'] }}</p>
                 </div>
                 <div class="bg-white shadow-sm sm:rounded-lg p-6">
                     <p class="text-sm text-gray-500">{{ __('Cobrado (USD)') }}</p>
@@ -42,14 +42,14 @@
                         <span class="mt-3 inline-block text-sm font-medium text-indigo-600">{{ __('Abrir panel') }} →</span>
                     </a>
 
-                    <a href="{{ route('plans.index') }}" class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 hover:border-indigo-300 hover:shadow transition">
+                    <a href="{{ route('configuracion', ['tab' => 'packages']) }}" class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 hover:border-indigo-300 hover:shadow transition">
                         <div class="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center">
                             <svg class="w-6 h-6 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                         </div>
-                        <h4 class="mt-4 font-semibold text-gray-900">{{ __('Gestión de planes') }}</h4>
-                        <p class="mt-1 text-sm text-gray-600">{{ __('Crea y edita los planes de suscripción, sus períodos y límites.') }}</p>
+                        <h4 class="mt-4 font-semibold text-gray-900">{{ __('Gestión de paquetes') }}</h4>
+                        <p class="mt-1 text-sm text-gray-600">{{ __('Crea y edita los paquetes de tokens y sus precios.') }}</p>
                         <span class="mt-3 inline-block text-sm font-medium text-indigo-600">{{ __('Abrir panel') }} →</span>
                     </a>
 

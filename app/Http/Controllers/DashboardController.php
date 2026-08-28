@@ -12,18 +12,18 @@ class DashboardController extends Controller
         $user = Auth::user();
 
         $artworkCount = $user->activeArtworksCount();
-        $max = $user->currentMaxArtworks();
         $totalArtworks = $user->artworks()->count();
         $seriesCount = $user->series()->count();
-        $subscription = $user->activeSubscription();
+        $tokenBalance = $user->tokenBalance();
+        $canCreate = $user->canCreateArtwork();
         $recentArtworks = $user->artworks()->latest()->limit(4)->get();
 
         return view('dashboard.artist', compact(
             'artworkCount',
-            'max',
             'totalArtworks',
             'seriesCount',
-            'subscription',
+            'tokenBalance',
+            'canCreate',
             'recentArtworks'
         ));
     }

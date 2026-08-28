@@ -118,6 +118,55 @@
                 </div>
             </div>
 
+            <!-- Links externos -->
+            <div class="mt-6 bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-semibold text-lg text-gray-900">{{ __('Enlaces externos') }}</h3>
+                        <span class="text-xs text-gray-500">{{ $artwork->links->count() }}/10</span>
+                    </div>
+
+                    @if ($artwork->links->isEmpty())
+                        <p class="mt-4 text-sm text-gray-500">{{ __('No hay enlaces todavía.') }}</p>
+                    @else
+                        <ul class="mt-4 divide-y divide-gray-200">
+                            @foreach ($artwork->links as $link)
+                                <li class="py-2 flex items-center justify-between gap-4">
+                                    <div class="min-w-0">
+                                        <span class="text-xs uppercase tracking-wide text-gray-500">{{ __('Enlace') }} {{ $link->type }}</span>
+                                        <a href="{{ $link->url }}" target="_blank" rel="noopener" class="block text-sm text-indigo-600 hover:underline truncate">{{ $link->url }}</a>
+                                    </div>
+                                    <form method="POST" action="{{ route('artwork-links.destroy', $link) }}" onsubmit="return confirm('{{ __('Are you sure?') }}');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-sm text-red-600 hover:text-red-900">{{ __('Delete') }}</button>
+                                    </form>
+                                </li>
+                            @endforeach
+                        </ul>
+                    @endif
+
+                    @if ($artwork->links->count() < 10)
+                        <form method="POST" action="{{ route('artwork-links.store', $artwork) }}" class="mt-4 flex flex-wrap items-end gap-2">
+                            @csrf
+                            <div class="flex flex-col">
+                                <label class="text-xs text-gray-500">{{ __('Tipo') }}</label>
+                                <select name="type" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm mt-1">
+                                    <option value="video">{{ __('Video') }}</option>
+                                    <option value="photo">{{ __('Foto') }}</option>
+                                    <option value="blog">{{ __('Blog') }}</option>
+                                </select>
+                            </div>
+                            <div class="flex-1 min-w-[16rem] flex flex-col">
+                                <label class="text-xs text-gray-500">{{ __('URL') }}</label>
+                                <x-text-input type="url" name="url" placeholder="https://..." class="block mt-1 w-full" required />
+                            </div>
+                            <x-secondary-button>{{ __('Agregar enlace') }}</x-secondary-button>
+                        </form>
+                    @endif
+                </div>
+            </div>
+
             <!-- Ownership -->
             <div class="mt-6 bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6">

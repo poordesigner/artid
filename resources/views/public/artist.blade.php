@@ -75,6 +75,17 @@
             </section>
         @endif
 
+        @if ($artist->links->isNotEmpty())
+            <section class="section">
+                <h2>Portafolio / CV / Exposiciones</h2>
+                <ul class="links">
+                    @foreach ($artist->links as $link)
+                        <li><a href="{{ $link->url }}" target="_blank" rel="noopener">{{ ucfirst($link->type) }}</a></li>
+                    @endforeach
+                </ul>
+            </section>
+        @endif
+
         <div class="footer">
             <a href="{{ config('artid.public_url') }}" target="_blank" rel="noopener">ARTid</a> — by POORdesigner.com
         </div>

@@ -64,7 +64,7 @@
         </div>
         <div id="done" style="display:none;">
             <h1>✓ {{ __('¡Pago completado!') }}</h1>
-            <p>{{ __('Verificando tu suscripción... te redirigimos a tu plan.') }}</p>
+            <p>{{ __('Verificando tu pago... te redirigimos a tus tokens.') }}</p>
             <div class="spinner-lg"></div>
         </div>
         <p class="error" id="error">{{ __('No se pudo iniciar el checkout.') }}</p>
@@ -78,7 +78,7 @@
 
         function redirectAfterSuccess() {
             if (completed) {
-                window.location.href = '/configuracion?tab=mi-plan';
+                window.location.href = '/tokens';
             }
         }
 

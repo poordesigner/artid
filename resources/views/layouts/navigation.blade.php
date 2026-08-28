@@ -25,6 +25,9 @@
                     <x-nav-link :href="route('artworks.index')" :active="request()->routeIs('artworks.*')">
                         {{ __('Obras') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('tokens.index')" :active="request()->routeIs('tokens.*')">
+                        {{ __('Mis tokens') }}
+                    </x-nav-link>
                 @endif
                 <x-nav-link :href="route('configuracion')" :active="request()->routeIs('configuracion')">
                     {{ __('Configuración') }}
@@ -97,6 +100,9 @@
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('artworks.index')" :active="request()->routeIs('artworks.*')">
                     {{ __('Obras') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('tokens.index')" :active="request()->routeIs('tokens.*')">
+                    {{ __('Mis tokens') }}
                 </x-responsive-nav-link>
             @endif
             <x-responsive-nav-link :href="route('configuracion')" :active="request()->routeIs('configuracion')">

@@ -16,14 +16,14 @@
 
             <div class="bg-white shadow-sm sm:rounded-lg p-6">
                 <h3 class="font-semibold text-lg text-gray-900">{{ __('Cuentas de artistas') }}</h3>
-                <p class="mt-1 text-sm text-gray-600">{{ __('Otorga planes, revoca accesos y gestiona administradores.') }}</p>
+                <p class="mt-1 text-sm text-gray-600">{{ __('Otorga tokens gratuitos y gestiona administradores.') }}</p>
 
                 <div class="mt-6 overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
                                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Artista') }}</th>
-                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Plan efectivo') }}</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Tokens') }}</th>
                                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Obras') }}</th>
                                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Admin') }}</th>
                                 <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Acciones') }}</th>
@@ -31,41 +31,16 @@
                         </thead>
                         <tbody class="divide-y divide-gray-200">
                             @foreach ($artists as $artist)
-                                @php
-                                    $effective = $artist->effectivePlan();
-                                    $granted = $artist->activeGrantedPlan();
-                                @endphp
                                 <tr class="align-top">
                                     <td class="px-4 py-3">
                                         <p class="text-sm font-medium text-gray-900">{{ $artist->name }}</p>
                                         <p class="text-xs text-gray-500">{{ $artist->email }}</p>
                                     </td>
                                     <td class="px-4 py-3">
-                                        <p class="text-sm {{ $granted ? 'text-indigo-600 font-medium' : 'text-gray-700' }}">
-                                            {{ $effective?->name ?? '—' }}
-                                            @if ($granted)
-                                                <span class="ml-1 px-1.5 py-0.5 text-[10px] bg-indigo-50 text-indigo-700 rounded-full font-semibold">{{ __('otorgado') }}</span>
-                                            @endif
-                                        </p>
-                                        @if ($granted?->id !== $effective?->id && $artist->subscriptions->isNotEmpty())
-                                            @php
-                                                $activeSub = $artist->subscriptions
-                                                    ->sortByDesc('id')
-                                                    ->first(fn ($s) => in_array($s->status, ['active', 'trialing', 'past_due']));
-                                            @endphp
-                                            @if ($activeSub && $activeSub->plan)
-                                                <p class="text-xs text-gray-500">{{ __('Suscripción: :plan', ['plan' => $activeSub->plan->name]) }}</p>
-                                            @endif
-                                        @endif
-                                        @if ($artist->granted_expires_at)
-                                            <p class="text-xs text-gray-400 mt-0.5">{{ __('Vence el :date', ['date' => $artist->granted_expires_at->format('d/m/Y')]) }}</p>
-                                        @endif
+                                        <p class="text-sm font-semibold text-gray-900">{{ $artist->tokens_balance }}</p>
                                     </td>
                                     <td class="px-4 py-3 text-sm text-gray-700">
                                         {{ $artist->artworks_count }}
-                                        @if ($effective?->max_artworks)
-                                            <span class="text-gray-400">/ {{ $effective->max_artworks }}</span>
-                                        @endif
                                     </td>
                                     <td class="px-4 py-3">
                                         @if ($artist->is_admin)
@@ -76,30 +51,14 @@
                                     </td>
                                     <td class="px-4 py-3 text-right whitespace-nowrap">
                                         <details class="inline">
-                                            <summary class="text-sm text-indigo-600 hover:text-indigo-900 cursor-pointer">{{ __('Otorgar plan') }}</summary>
+                                            <summary class="text-sm text-indigo-600 hover:text-indigo-900 cursor-pointer">{{ __('Otorgar tokens') }}</summary>
                                             <form method="POST" action="{{ route('accounts.grant', $artist) }}" class="mt-2 flex items-center gap-2 justify-end">
                                                 @csrf
-                                                <select name="plan_id" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm">
-                                                    @foreach ($plans as $plan)
-                                                        <option value="{{ $plan->id }}">{{ $plan->name }}</option>
-                                                    @endforeach
-                                                </select>
-                                                <select name="duration" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm">
-                                                    <option value="30">{{ __('30 días') }}</option>
-                                                    <option value="7">{{ __('7 días') }}</option>
-                                                    <option value="90">{{ __('90 días') }}</option>
-                                                    <option value="none">{{ __('Sin expiración') }}</option>
-                                                </select>
+                                                <input type="number" name="token_amount" min="1" required placeholder="{{ __('Cantidad') }}"
+                                                    class="w-24 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm">
                                                 <x-primary-button>{{ __('Otorgar') }}</x-primary-button>
                                             </form>
                                         </details>
-
-                                        @if ($granted)
-                                            <form method="POST" action="{{ route('accounts.revoke', $artist) }}" class="inline mt-1">
-                                                @csrf
-                                                <button type="submit" class="text-sm text-red-600 hover:text-red-900">{{ __('Revocar') }}</button>
-                                            </form>
-                                        @endif
 
                                         <form method="POST" action="{{ route('accounts.toggle-admin', $artist) }}" class="inline">
                                             @csrf

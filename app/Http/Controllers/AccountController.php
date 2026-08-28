@@ -12,7 +12,7 @@ class AccountController extends Controller
 {
     public function index(): View
     {
-        $artists = Artist::with(['subscriptions.plan', 'grantedPlan'])
+        $artists = Artist::with('links')
             ->withCount('artworks')
             ->orderBy('name')
             ->get();
@@ -25,38 +25,22 @@ class AccountController extends Controller
     public function grant(Request $request, Artist $artist): RedirectResponse
     {
         $validated = $request->validate([
-            'plan_id' => ['required', 'exists:plans,id'],
-            'duration' => ['required', 'in:7,30,90,none'],
+            'token_amount' => ['required', 'integer', 'min:1', 'max:100000'],
+            'note' => ['nullable', 'string', 'max:255'],
         ]);
 
-        $expiresAt = match ($validated['duration']) {
-            '7' => now()->addDays(7),
-            '30' => now()->addDays(30),
-            '90' => now()->addDays(90),
-            default => null,
-        };
+        $artist->addTokens($validated['token_amount'], 'grant', null, $validated['note'] ?: 'Tokens otorgados por el administrador');
 
-        $artist->update([
-            'granted_plan_id' => $validated['plan_id'],
-            'granted_expires_at' => $expiresAt,
-        ]);
-
-        // Aplicar/archivar obras según el nuevo límite.
-        $artist->enforcePlanLimits();
-
-        return back()->with('status', __('Plan otorgado a :name.', ['name' => $artist->name]));
+        return back()->with('status', __(':count tokens otorgados a :name.', [
+            'count' => $validated['token_amount'],
+            'name' => $artist->name,
+        ]));
     }
 
     public function revoke(Artist $artist): RedirectResponse
     {
-        $artist->update([
-            'granted_plan_id' => null,
-            'granted_expires_at' => null,
-        ]);
-
-        $artist->enforcePlanLimits();
-
-        return back()->with('status', __('Grant revocado a :name.', ['name' => $artist->name]));
+        // Marcador: en el modelo de tokens no hay plan que revocar.
+        return back()->with('error', __('El acceso por plan ya no se usa. Usa el otorgamiento de tokens.'));
     }
 
     public function toggleAdmin(Artist $artist): RedirectResponse

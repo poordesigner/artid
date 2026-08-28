@@ -41,24 +41,17 @@
     {{-- Hero --}}
     <section class="py-16 sm:py-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 class="text-4xl sm:text-5xl font-bold text-gray-900">{{ __('Planes de Suscripción') }}</h1>
+            <h1 class="text-4xl sm:text-5xl font-bold text-gray-900">{{ __('Paquetes de tokens') }}</h1>
             <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">{{ __('Elige el plan que mejor se adapte a tus necesidades.') }}</p>
         </div>
     </section>
 
-    {{-- Plans --}}
+    {{-- Packages --}}
     <section class="pb-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            @if ($plans->count())
-                <div class="grid grid-cols-1 md:grid-cols-{{ min($plans->count(), 3) }} gap-8 max-w-5xl mx-auto">
-                    @foreach ($plans as $plan)
-                        @php
-                            $annualUnit = $plan->periods->first(fn ($p) => $p->period === 'annual' && $p->number === 1);
-                            $monthlyPeriod = $plan->periods->first(fn ($p) => $p->period === 'monthly' && $p->number === 1);
-
-                            $mainPrice = $annualUnit ? $annualUnit->monthlyEquivalent() : ($monthlyPeriod?->price ?? 0);
-                            $monthlyPerPeriod = $monthlyPeriod ? (float) $monthlyPeriod->price : null;
-                        @endphp
+            @if ($packages->count())
+                <div class="grid grid-cols-1 md:grid-cols-{{ min($packages->count(), 3) }} gap-8 max-w-5xl mx-auto">
+                    @foreach ($packages as $package)
                         <div class="bg-white rounded-2xl shadow-sm border {{ $loop->first ? 'border-indigo-500 ring-2 ring-indigo-500' : 'border-gray-200' }} flex flex-col overflow-hidden">
                             @if ($loop->first)
                                 <div class="px-8 pt-6">
@@ -67,54 +60,42 @@
                             @endif
 
                             <div class="p-8 {{ $loop->first ? 'pt-4' : '' }}">
-                                <h3 class="text-xl font-bold text-gray-900">{{ $plan->name }}</h3>
+                                <h3 class="text-xl font-bold text-gray-900">{{ $package->name }}</h3>
 
-                                @if ($plan->description)
-                                    <p class="mt-2 text-sm text-gray-600">{{ $plan->description }}</p>
+                                @if ($package->description)
+                                    <p class="mt-2 text-sm text-gray-600">{{ $package->description }}</p>
                                 @endif
 
                                 <div class="mt-6">
-                                    @if ($mainPrice)
-                                        <div class="flex items-end gap-1">
-                                            <span class="text-4xl font-bold text-gray-900">${{ number_format($mainPrice, 2) }}</span>
-                                            <span class="text-lg text-gray-500 pb-1.5">/ {{ __('mes') }}</span>
-                                        </div>
-                                        @if ($annualUnit)
-                                            <p class="mt-1 text-sm font-medium text-gray-600">{{ __('pago anual') }}</p>
-                                            @if ($monthlyPerPeriod !== null)
-                                                <p class="mt-1 text-xs text-gray-400">
-                                                    ${{ number_format($monthlyPerPeriod, 2) }}/mes · {{ __('pago mensual') }}
-                                                </p>
-                                            @endif
-                                        @endif
-                                    @endif
+                                    <div class="flex items-end gap-1">
+                                        <span class="text-4xl font-bold text-gray-900">{{ $package->tokens }}</span>
+                                        <span class="text-lg text-gray-500 pb-1.5">{{ __('tokens') }}</span>
+                                    </div>
+                                    <p class="mt-1 text-2xl font-semibold text-gray-700">${{ number_format($package->price_usd, 2) }} USD</p>
                                 </div>
                             </div>
 
                             <div class="px-8 pb-8 flex-1">
-                                @if ($plan->periods->count())
-                                    <div class="border-t border-gray-100 pt-6 space-y-4">
-                                        @foreach ($plan->periods as $period)
-                                            <div class="flex items-center justify-between">
-                                                <span class="text-sm text-gray-500">{{ $period->recurrenceLabel() }}</span>
-                                                <span class="text-sm font-semibold text-gray-900">${{ number_format($period->price, 2) }}</span>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                @endif
-
-                                @if ($plan->features->count())
-                                    <ul class="mt-6 space-y-3">
-                                        @foreach ($plan->features as $feature)
-                                            <li class="flex items-start gap-3 text-sm text-gray-700">
-                                                <svg class="w-5 h-5 text-indigo-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                                </svg>
-                                                {{ $feature->description }}
-                                            </li>
-                                        @endforeach
-                                    </ul>
-                                @endif
+                                <ul class="mt-2 space-y-3">
+                                    <li class="flex items-start gap-3 text-sm text-gray-700">
+                                        <svg class="w-5 h-5 text-indigo-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                        {{ __('QR + ficha básica por cada obra') }}
+                                    </li>
+                                    <li class="flex items-start gap-3 text-sm text-gray-700">
+                                        <svg class="w-5 h-5 text-indigo-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                        {{ __('Pago único, sin suscripción') }}
+                                    </li>
+                                    <li class="flex items-start gap-3 text-sm text-gray-700">
+                                        <svg class="w-5 h-5 text-indigo-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                        {{ __('La ficha pública es permanente') }}
+                                    </li>
+                                </ul>
                             </div>
 
                             <div class="px-8 pb-8">

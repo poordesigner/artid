@@ -7,6 +7,7 @@ use App\Models\Payment;
 use App\Models\Plan;
 use App\Models\PlanPeriod;
 use App\Models\Subscription;
+use App\Models\TokenPackage;
 use App\Models\WebhookEvent;
 use App\Services\PaddleService;
 use Illuminate\Http\JsonResponse;
@@ -110,6 +111,7 @@ class WebhookController extends Controller
         $transactionId = $data['id'] ?? null;
         $subscriptionId = $data['subscription_id'] ?? null;
         $customerId = $data['customer_id'] ?? null;
+        $customData = $data['custom_data'] ?? [];
 
         if (! $transactionId) {
             return;
@@ -118,14 +120,21 @@ class WebhookController extends Controller
         $artist = null;
         $subscription = null;
 
-        if ($subscriptionId) {
+        // Compra one-time de tokens: el custom_data lleva artist_id.
+        $customArtistId = $customData['artist_id'] ?? null;
+        if ($customArtistId) {
+            $artist = Artist::find($customArtistId);
+        }
+
+        if (! $artist && $subscriptionId) {
             $subscription = Subscription::where('paddle_subscription_id', $subscriptionId)->first();
             $artist = $subscription?->artist;
         }
 
         if (! $artist && $customerId) {
-            $subscription = Subscription::where('paddle_customer_id', $customerId)->latest('id')->first();
-            $artist = $subscription?->artist;
+            $artist = Artist::whereHas('subscriptions', fn ($q) => $q->where('paddle_customer_id', $customerId))
+                ->orWhereHas('payments', fn ($q) => $q->where('paddle_transaction_id', $transactionId))
+                ->first();
         }
 
         if (! $artist) {
@@ -137,6 +146,28 @@ class WebhookController extends Controller
         $totals = $data['totals'] ?? $data['details']['totals'] ?? [];
         $grandTotal = $totals['grand_total'] ?? $totals['total'] ?? 0;
         $currency = $data['currency_code'] ?? 'USD';
+
+        // Acreditar tokens si es una compra one-time completada.
+        if ($status === 'completed' && ! empty($customData['token_package_id'])) {
+            $packageId = (int) $customData['token_package_id'];
+            $tokens = (int) ($customData['tokens'] ?? 0);
+
+            $package = TokenPackage::find($packageId);
+            if ($package) {
+                $tokens = $package->tokens;
+            }
+
+            if ($tokens > 0) {
+                $alreadyCredited = $artist->tokenTransactions()
+                    ->where('type', 'purchase')
+                    ->where('ref', $transactionId)
+                    ->exists();
+
+                if (! $alreadyCredited) {
+                    $artist->addTokens($tokens, 'purchase', $transactionId, 'Compra de paquete');
+                }
+            }
+        }
 
         Payment::updateOrCreate(
             ['paddle_transaction_id' => $transactionId],

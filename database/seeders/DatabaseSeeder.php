@@ -17,6 +17,8 @@ class DatabaseSeeder extends Seeder
     {
         // Artist::factory(10)->create();
 
+        $this->call(TokenPackageSeeder::class);
+
         Artist::factory()->create([
             'name' => 'Test Artist',
             'email' => 'test@example.com',

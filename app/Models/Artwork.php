@@ -67,6 +67,11 @@ class Artwork extends Model
         return $this->hasMany(Ownership::class);
     }
 
+    public function links(): HasMany
+    {
+        return $this->hasMany(ArtworkLink::class)->orderBy('sort_order');
+    }
+
     /**
      * Firma HMAC versionada que vincula el QR con la ficha.
      */

@@ -274,6 +274,90 @@ class PaddleService
     }
 
     /**
+     * Crea un producto de paquete de tokens en el catálogo (one-time).
+     *
+     * @return array<string, mixed>
+     */
+    public function createTokenProduct(TokenPackage $package): array
+    {
+        $response = $this->client()->post('/products', [
+            'name' => $package->name,
+            'description' => $package->description ?? $package->name,
+            'tax_category' => 'saas',
+            'type' => 'standard',
+            'custom_data' => [
+                'token_package_id' => $package->id,
+                'tokens' => $package->tokens,
+            ],
+        ]);
+
+        $response->throw();
+
+        return $response->json('data');
+    }
+
+    /**
+     * Crea un precio one-time (billing_cycle null) para un paquete de tokens.
+     *
+     * @return array<string, mixed>
+     */
+    public function createTokenPrice(TokenPackage $package): array
+    {
+        $response = $this->client()->post('/prices', [
+            'description' => $package->name.' — '.$package->tokens.' tokens',
+            'name' => $package->name,
+            'product_id' => $package->paddle_product_id,
+            'billing_cycle' => null,
+            'unit_price' => [
+                'amount' => (string) $package->priceInCents(),
+                'currency_code' => 'USD',
+            ],
+            'quantity' => [
+                'minimum' => 1,
+                'maximum' => 1,
+            ],
+            'tax_mode' => 'account_setting',
+            'custom_data' => [
+                'token_package_id' => $package->id,
+            ],
+        ]);
+
+        $response->throw();
+
+        return $response->json('data');
+    }
+
+    /**
+     * Crea una transacción de checkout one-time para un paquete de tokens.
+     *
+     * @return array<string, mixed>
+     */
+    public function createTokenCheckout(Artist $artist, TokenPackage $package): array
+    {
+        $customer = $this->findOrCreateCustomer($artist);
+
+        $transaction = $this->client()->post('/transactions', [
+            'customer_id' => $customer['id'],
+            'items' => [
+                [
+                    'price_id' => $package->paddle_price_id,
+                    'quantity' => 1,
+                ],
+            ],
+            'collection_mode' => 'automatic',
+            'custom_data' => [
+                'artist_id' => $artist->id,
+                'token_package_id' => $package->id,
+                'tokens' => $package->tokens,
+            ],
+        ]);
+
+        $transaction->throw();
+
+        return $transaction->json('data');
+    }
+
+    /**
      * Verifica la firma de un webhook de Paddle.
      *
      * El header viene como: Paddle-Signature: ts=...;h1=...

@@ -29,6 +29,10 @@
         .event-date { font-size: 0.8rem; color: #666; margin-top: 2px; }
         .event-desc { margin-top: 6px; color: #bbb; font-size: 0.9rem; white-space: pre-line; }
         .event-link { display: inline-block; margin-top: 6px; color: #ff0066; font-size: 0.85rem; text-decoration: none; }
+        .links { list-style: none; margin-top: 12px; display: flex; flex-wrap: wrap; gap: 8px; }
+        .link-tag { display: inline-block; font-size: 0.8rem; color: #eee; border: 1px solid #2a2a2a; border-radius: 9999px; padding: 5px 14px; text-decoration: none; }
+        .link-tag:hover { border-color: #ff0066; color: #ff0066; }
+        .link-tag small { display: inline-block; margin-left: 8px; color: #888; text-transform: uppercase; font-size: 0.62rem; letter-spacing: 0.08em; }
         .footer { margin-top: 40px; text-align: center; font-size: 0.75rem; color: #555; }
         .footer a { color: #888; text-decoration: none; }
         @media (max-width: 480px) { .meta { grid-template-columns: 1fr; } }
@@ -55,6 +59,17 @@
 
         @if ($artwork->description)
             <p class="description">{{ $artwork->description }}</p>
+        @endif
+
+        @if ($artwork->links->isNotEmpty())
+            <section class="section">
+                <h2>Enlaces</h2>
+                <ul class="links">
+                    @foreach ($artwork->links as $link)
+                        <li><a class="link-tag" href="{{ $link->url }}" target="_blank" rel="noopener">{{ ucfirst($link->type) }}<small>&#8599;</small></a></li>
+                    @endforeach
+                </ul>
+            </section>
         @endif
 
         @if ($artwork->exhibitions->isNotEmpty())

@@ -3,6 +3,8 @@
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ArtworkController;
+use App\Http\Controllers\ArtworkLinkController;
+use App\Http\Controllers\ArtistLinkController;
 use App\Http\Controllers\CheckoutPageController;
 use App\Http\Controllers\ConfigController;
 use App\Http\Controllers\DashboardController;
@@ -13,8 +15,11 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicArtworkController;
 use App\Http\Controllers\SeriesController;
 use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\TokenController;
+use App\Http\Controllers\TokenPackageController;
 use App\Http\Controllers\WebhookController;
 use App\Models\Plan;
+use App\Models\TokenPackage;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Route;
 
@@ -38,12 +43,9 @@ Route::get('/', function () {
 });
 
 Route::get('/planes', function () {
-    $plans = Plan::with(['periods', 'features'])
-        ->where('is_active', true)
-        ->orderBy('sort_order')
-        ->get();
+    $packages = TokenPackage::active()->get();
 
-    return view('planes', compact('plans'));
+    return view('planes', compact('packages'));
 })->name('planes');
 
 Route::get('/o/{publicId}', [PublicArtworkController::class, 'show'])->name('public.artwork');
@@ -73,6 +75,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/configuracion', [ConfigController::class, 'index'])->name('configuracion');
 
+    Route::get('/tokens', [TokenController::class, 'index'])->name('tokens.index');
+    Route::post('/tokens/checkout/{package}', [TokenController::class, 'checkout'])->name('tokens.checkout');
+
     Route::post('/subscribe/cancel', [SubscriptionController::class, 'cancel'])->name('subscribe.cancel');
     Route::post('/subscribe/reactivate', [SubscriptionController::class, 'reactivate'])->name('subscribe.reactivate');
     Route::get('/subscribe/portal', [SubscriptionController::class, 'portal'])->name('subscribe.portal');
@@ -89,6 +94,10 @@ Route::middleware('auth')->group(function () {
         Route::post('/configuracion/plans', [PlanController::class, 'store'])->name('plans.store');
         Route::patch('/configuracion/plans/{plan}', [PlanController::class, 'update'])->name('plans.update');
         Route::delete('/configuracion/plans/{plan}', [PlanController::class, 'destroy'])->name('plans.destroy');
+
+        Route::post('/configuracion/packages', [TokenPackageController::class, 'store'])->name('packages.store');
+        Route::patch('/configuracion/packages/{package}', [TokenPackageController::class, 'update'])->name('packages.update');
+        Route::delete('/configuracion/packages/{package}', [TokenPackageController::class, 'destroy'])->name('packages.destroy');
     });
 
     Route::get('/artworks', [ArtworkController::class, 'index'])->name('artworks.index');
@@ -108,6 +117,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/artworks/{artwork}/ownerships', [OwnershipController::class, 'store'])->name('ownerships.store');
     Route::post('/ownerships/{ownership}/reveal', [OwnershipController::class, 'reveal'])->name('ownerships.reveal');
     Route::delete('/ownerships/{ownership}', [OwnershipController::class, 'destroy'])->name('ownerships.destroy');
+
+    Route::post('/artworks/{artwork}/links', [ArtworkLinkController::class, 'store'])->name('artwork-links.store');
+    Route::delete('/artwork-links/{link}', [ArtworkLinkController::class, 'destroy'])->name('artwork-links.destroy');
+
+    Route::post('/profile/links', [ArtistLinkController::class, 'store'])->name('artist-links.store');
+    Route::delete('/profile/links/{link}', [ArtistLinkController::class, 'destroy'])->name('artist-links.destroy');
 
     Route::get('/series', [SeriesController::class, 'index'])->name('series.index');
     Route::post('/series', [SeriesController::class, 'store'])->name('series.store');

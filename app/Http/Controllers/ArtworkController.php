@@ -54,9 +54,9 @@ class ArtworkController extends Controller
         $techniques = Technique::orderBy('name')->get();
         $seriesList = Auth::user()->series()->orderBy('name')->get();
         $artist = Auth::user();
-        $atLimit = $artist->currentMaxArtworks() !== null && $artist->activeArtworksCount() >= $artist->currentMaxArtworks();
+        $canCreate = $artist->canCreateArtwork();
 
-        return view('artworks.create', compact('techniques', 'seriesList', 'atLimit'));
+        return view('artworks.create', compact('techniques', 'seriesList', 'canCreate'));
     }
 
     /**
@@ -66,10 +66,9 @@ class ArtworkController extends Controller
     {
         $artist = $request->user();
 
-        $max = $artist->currentMaxArtworks();
-        if ($max !== null && $artist->activeArtworksCount() >= $max) {
+        if (! $artist->canCreateArtwork()) {
             return redirect()->route('artworks.index')
-                ->with('error', __('Límite de :max obras alcanzado en tu plan actual. Mejora tu plan para registrar más obras.', ['max' => $max]));
+                ->with('error', __('No tienes tokens disponibles. Compra un paquete de tokens para registrar más obras.'));
         }
 
         $validated = $request->validate($this->storeRules());
@@ -94,14 +93,25 @@ class ArtworkController extends Controller
             'image' => null,
         ];
 
-        $file = $request->file('image');
-        if ($file) {
-            $filename = $artworkId.'.'.$file->extension();
-            Storage::disk('r2')->put("artworks/$artworkId/$filename", $file->get());
-            $data['image'] = $filename;
+        $artwork = Artwork::create($data);
+
+        // Consume 1 token por la obra (QR + ficha básica).
+        if (! $artist->consumeToken('Obra: '.$artwork->title)) {
+            $artwork->delete();
+
+            return redirect()->route('artworks.index')
+                ->with('error', __('No tienes tokens disponibles. Compra un paquete de tokens para registrar más obras.'));
         }
 
-        Artwork::create($data);
+        $file = $request->file('image');
+        if ($file) {
+            $filename = $artworkId.'.webp';
+            $optimized = $this->optimizeImage($file->getContent());
+            if ($optimized !== null) {
+                Storage::disk('r2')->put("artworks/$artworkId/$filename", $optimized);
+                $artwork->update(['image' => $filename]);
+            }
+        }
 
         return redirect()->route('artworks.index')->with('status', 'Artwork created.');
     }
@@ -124,7 +134,11 @@ class ArtworkController extends Controller
     public function show(string $artwork): View
     {
         $artwork = Auth::user()->artworks()
-            ->with(['exhibitions' => fn ($q) => $q->latest(), 'ownerships' => fn ($q) => $q->latest()])
+            ->with([
+                'exhibitions' => fn ($q) => $q->latest(),
+                'ownerships' => fn ($q) => $q->latest(),
+                'links',
+            ])
             ->findOrFail($artwork);
 
         return view('artworks.show', compact('artwork'));
@@ -163,14 +177,19 @@ class ArtworkController extends Controller
 
         $file = $request->file('image');
         if ($file) {
-            $filename = $artwork->artwork_id.'.'.$file->extension();
-            Storage::disk('r2')->put("artworks/{$artwork->artwork_id}/$filename", $file->get());
+            $filename = $artwork->artwork_id.'.webp';
+            $optimized = $this->optimizeImage($file->getContent());
+            if ($optimized !== null) {
+                Storage::disk('r2')->put("artworks/{$artwork->artwork_id}/$filename", $optimized);
 
-            if ($artwork->image && $artwork->image !== $filename) {
-                Storage::disk('r2')->delete("artworks/{$artwork->artwork_id}/{$artwork->image}");
+                if ($artwork->image && $artwork->image !== $filename) {
+                    Storage::disk('r2')->delete("artworks/{$artwork->artwork_id}/{$artwork->image}");
+                }
+
+                $data['image'] = $filename;
+            } else {
+                $data['image'] = $artwork->image;
             }
-
-            $data['image'] = $filename;
         }
 
         $artwork->update($data);
@@ -247,6 +266,63 @@ class ArtworkController extends Controller
         $techniques = array_values(array_filter($techniques, fn ($t) => is_string($t) && $t !== ''));
 
         return $techniques ? implode(', ', $techniques) : null;
+    }
+
+    /**
+     * Optimiza la imagen del archivo subido: redimensiona manteniendo
+     * proporciones (máx 2000px), la convierte a WEBP y re-comprime hasta
+     * dejarla en 300 KB o menos. Devuelve el contenido binario o null si
+     * no se pudo procesar.
+     */
+    private function optimizeImage(string $contents): ?string
+    {
+        $image = @imagecreatefromstring($contents);
+        if ($image === false) {
+            return null;
+        }
+
+        $width = imagesx($image);
+        $height = imagesy($image);
+        $maxSide = 2000;
+
+        if ($width > $maxSide || $height > $maxSide) {
+            $scale = $maxSide / max($width, $height);
+            $newWidth = (int) round($width * $scale);
+            $newHeight = (int) round($height * $scale);
+
+            $resized = imagecreatetruecolor($newWidth, $newHeight);
+            if ($resized === false) {
+                imagedestroy($image);
+                return null;
+            }
+
+            imagecopyresampled($resized, $image, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+            imagedestroy($image);
+            $image = $resized;
+        }
+
+        imagealphablending($image, true);
+        imagesavealpha($image, true);
+
+        $quality = 80;
+        $output = null;
+
+        // Bajamos la calidad progresivamente hasta que pese <= 300 KB.
+        while ($quality >= 40) {
+            ob_start();
+            imagewebp($image, null, $quality);
+            $output = ob_get_clean();
+
+            if (strlen($output) <= 300 * 1024) {
+                break;
+            }
+
+            $quality -= 10;
+        }
+
+        imagedestroy($image);
+
+        return $output !== null ? $output : null;
     }
 
     /**

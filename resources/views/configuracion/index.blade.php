@@ -12,6 +12,7 @@
         $allowedTabs[] = 'mi-plan';
     } else {
         $allowedTabs[] = 'planes';
+        $allowedTabs[] = 'packages';
     }
     if (! in_array($initialTab, $allowedTabs)) {
         $initialTab = 'seguridad';
@@ -40,11 +41,14 @@
                     </button>
                     @if (! $user->isAdmin())
                         <button @click="tab = 'mi-plan'" :class="tab === 'mi-plan' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition">
-                            {{ __('Mi Plan') }}
+                            {{ __('Mis tokens') }}
                         </button>
                     @else
                         <button @click="tab = 'planes'" :class="tab === 'planes' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition">
                             {{ __('Planes') }}
+                        </button>
+                        <button @click="tab = 'packages'" :class="tab === 'packages' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition">
+                            {{ __('Paquetes de tokens') }}
                         </button>
                     @endif
                 </nav>
@@ -128,234 +132,32 @@
             {{-- Tab: Mi Plan --}}
             <div x-show="tab === 'mi-plan'" x-transition>
                 <div class="space-y-6">
-                    {{-- Plan actual --}}
+                    {{-- Saldo de tokens --}}
                     <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
                         <div class="max-w-xl">
                             <section>
                                 <header>
                                     <h2 class="text-lg font-medium text-gray-900">
-                                        {{ __('Tu plan actual') }}
+                                        {{ __('Mis tokens') }}
                                     </h2>
+                                    <p class="mt-1 text-sm text-gray-600">
+                                        {{ __('1 token = QR + ficha básica de una obra, para siempre.') }}
+                                    </p>
                                 </header>
                                 <div class="mt-4">
-                                    @php
-                                        $effective = $user->effectivePlan();
-                                        $granted = $user->activeGrantedPlan();
-                                        $sub = $activeSubscription;
-                                    @endphp
-                                    @if ($effective)
-                                        <div class="flex flex-wrap items-center gap-3">
-                                            <span class="px-3 py-1 bg-indigo-50 text-indigo-700 text-sm font-semibold rounded-full">
-                                                {{ $effective->name }}
-                                            </span>
-                                            @if ($granted)
-                                                <span class="px-3 py-1 text-sm font-semibold rounded-full bg-purple-50 text-purple-700">
-                                                    {{ __('Plan otorgado') }}
-                                                </span>
-                                            @elseif ($sub)
-                                                <span class="px-3 py-1 text-sm font-semibold rounded-full {{ $sub->statusBadgeClass() }}">
-                                                    {{ $sub->statusLabel() }}
-                                                </span>
-                                            @endif
-                                            @if ($sub && $sub->period)
-                                                <span class="text-sm text-gray-600">
-                                                    {{ $sub->period->recurrenceLabel() }} · ${{ number_format($sub->period->price, 2) }} {{ __('USD') }}
-                                                </span>
-                                            @elseif ($granted && ! $sub)
-                                                <span class="text-sm text-gray-600">{{ __('Acceso especial sin costo.') }}</span>
-                                            @endif
-                                            @if ($granted && $granted->id !== $effective->id)
-                                                <span class="text-sm text-gray-600">{{ __('Mejora sobre :plan', ['plan' => $effective->name]) }}</span>
-                                            @endif
-                                        </div>
-
-                                        @if ($user->granted_plan_id && ! $granted && $user->granted_expires_at)
-                                            <div class="mt-3 rounded-lg bg-gray-100 border border-gray-200 p-3">
-                                                <p class="text-sm text-gray-600">
-                                                    {{ __('Tu plan otorgado venció el :date.', ['date' => $user->granted_expires_at->format('d/m/Y')]) }}
-                                                </p>
-                                            </div>
-                                        @endif
-
-                                        @if ($user->granted_expires_at && $granted)
-                                            <p class="mt-2 text-xs text-purple-500">
-                                                {{ __('Plan otorgado vigente hasta el :date.', ['date' => $user->granted_expires_at->format('d/m/Y')]) }}
-                                            </p>
-                                        @endif
-
-                                        @if ($sub && $sub->hasScheduledCancellation())
-                                            <div class="mt-3 rounded-lg bg-amber-50 border border-amber-200 p-4">
-                                                <p class="text-sm text-amber-700">
-                                                    {{ __('Cancelación programada: el plan vence el :date.', ['date' => $sub->endsAt()?->format('d/m/Y')]) }}
-                                                </p>
-                                                <form method="POST" action="{{ route('subscribe.reactivate') }}" class="mt-3">
-                                                    @csrf
-                                                    <button type="submit" class="inline-flex items-center px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-md text-xs font-semibold uppercase tracking-widest transition">
-                                                        {{ __('Reactivar plan') }}
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        @endif
-
-                                        <dl class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
-                                            <div>
-                                                <dt class="text-gray-500">{{ __('Fecha de inicio') }}</dt>
-                                                <dd class="font-medium text-gray-900">{{ $sub?->startedAt()?->format('d/m/Y') ?? $user->created_at->format('d/m/Y') }}</dd>
-                                            </div>
-                                            <div>
-                                                <dt class="text-gray-500">{{ __('Fecha de terminación') }}</dt>
-                                                <dd class="font-medium text-gray-900">{{ $sub?->endsAt()?->format('d/m/Y') ?? '—' }}</dd>
-                                            </div>
-                                        </dl>
-
-                                        @if ($creditBalance > 0)
-                                            <div class="mt-4 p-3 bg-emerald-50 border border-emerald-200 rounded-lg">
-                                                <div class="flex items-center justify-between">
-                                                    <div>
-                                                        <p class="text-sm font-medium text-emerald-800">{{ __('Saldo a favor') }}</p>
-                                                        <p class="text-xs text-emerald-600">{{ __('Se usará automáticamente en tu próxima factura o cargo de suscripción.') }}</p>
-                                                    </div>
-                                                    <span class="text-xl font-bold text-emerald-700">${{ number_format($creditBalance, 2) }}</span>
-                                                </div>
-                                            </div>
-                                        @endif
-
-                                        @if ($sub && ! $sub->hasScheduledCancellation() && $sub->isActive())
-                                            <div class="mt-6 flex flex-wrap items-center gap-3">
-                                                <button type="button"
-                                                        x-on:click="openPortal()"
-                                                        class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent text-white rounded-md font-semibold text-xs uppercase tracking-widest hover:bg-gray-700 transition">
-                                                    {{ __('Gestionar suscripción') }}
-                                                </button>
-                                                <span x-show="portalLoading" class="text-sm text-gray-500">{{ __('Abriendo portal...') }}</span>
-                                                <form method="POST" action="{{ route('subscribe.cancel') }}" onsubmit="return confirm('{{ __('¿Estás seguro de cancelar tu plan? Quedará vigente hasta la fecha de terminación contratada.') }}');">
-                                                    @csrf
-                                                    <button type="submit" class="inline-flex items-center px-4 py-2 bg-white border border-red-300 text-red-600 rounded-md font-semibold text-xs uppercase tracking-widest hover:bg-red-50 transition">
-                                                        {{ __('Cancelar plan') }}
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        @endif
-                                    @else
-                                        <div class="flex items-center gap-3">
-                                            <span class="px-3 py-1 bg-gray-100 text-gray-600 text-sm font-semibold rounded-full">
-                                                {{ __('Free') }}
-                                            </span>
-                                            <span class="text-sm text-gray-600">{{ __('Estás en el plan gratuito.') }}</span>
-                                        </div>
-                                        @if ($user->activeArtworksCount() === 0)
-                                            <div class="mt-4">
-                                                <a href="{{ route('artworks.create') }}" class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-md font-semibold text-sm hover:bg-indigo-700 transition">
-                                                    {{ __('Crear mi primera obra') }}
-                                                </a>
-                                            </div>
-                                        @endif
-                                    @endif
+                                    <p class="text-5xl font-bold text-gray-900">{{ $user->tokens_balance }}</p>
+                                    <div class="mt-4 flex flex-wrap gap-3">
+                                        <a href="{{ route('tokens.index') }}" class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-md font-semibold text-sm hover:bg-indigo-700 transition">
+                                            {{ __('Comprar tokens') }}
+                                        </a>
+                                        <a href="{{ route('tokens.index') }}" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-md font-semibold text-sm hover:bg-gray-50 transition">
+                                            {{ __('Ver historial') }}
+                                        </a>
+                                    </div>
                                 </div>
                             </section>
                         </div>
                     </div>
-
-                    {{-- Planes disponibles --}}
-                    @if ($plans->count())
-                        <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                            <div class="max-w-3xl">
-                                <section>
-                                    <header>
-                                        <h2 class="text-lg font-medium text-gray-900">
-                                            {{ __('Planes disponibles') }}
-                                        </h2>
-                                        <p class="mt-1 text-sm text-gray-600">
-                                            {{ __('Elige un plan y un período para suscribirte.') }}
-                                        </p>
-                                    </header>
-
-                                    <div class="mt-6 space-y-6">
-                                        @foreach ($plans as $plan)
-                                            <div class="border border-gray-200 rounded-lg p-5">
-                                                <div class="flex items-center justify-between">
-                                                    <h3 class="font-semibold text-gray-900">{{ $plan->name }}</h3>
-                                                    @if ($activeSubscription && $activeSubscription->plan_id === $plan->id)
-                                                        <span class="px-2 py-1 text-xs bg-emerald-50 text-emerald-700 rounded-full">{{ __('Actual') }}</span>
-                                                    @endif
-                                                </div>
-                                                @if ($plan->description)
-                                                    <p class="mt-1 text-sm text-gray-600">{{ $plan->description }}</p>
-                                                @endif
-
-                                                @if ($plan->periods->count())
-                                                    <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                                        @foreach ($plan->periods as $period)
-                                                            @php
-                                                                $isCurrent = $activeSubscription && $activeSubscription->plan_period_id === $period->id;
-                                                            @endphp
-                                                            <div class="flex items-center justify-between border border-gray-100 rounded-lg px-4 py-3">
-                                                                <div>
-                                                                    <p class="text-sm font-medium text-gray-900">{{ $period->recurrenceLabel() }}</p>
-                                                                    <p class="text-xs text-gray-500">${{ number_format($period->price, 2) }} USD</p>
-                                                                </div>
-                                                                @if ($isCurrent)
-                                                                    <span class="px-3 py-1 text-xs bg-emerald-50 text-emerald-700 rounded-full font-medium">{{ __('Plan actual') }}</span>
-                                                                @else
-                                                                    <form method="POST" action="{{ route('subscribe.checkout', $period) }}">
-                                                                        @csrf
-                                                                        <x-primary-button>
-                                                                            {{ $activeSubscription ? __('Cambiar a este plan') : __('Suscribirse') }}
-                                                                        </x-primary-button>
-                                                                    </form>
-                                                                @endif
-                                                            </div>
-                                                        @endforeach
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                </section>
-                            </div>
-                        </div>
-                    @endif
-
-                    {{-- Historial de pagos --}}
-                    @if ($payments->isNotEmpty())
-                        <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                            <div class="max-w-xl">
-                                <section>
-                                    <header>
-                                        <h2 class="text-lg font-medium text-gray-900">
-                                            {{ __('Historial de pagos') }}
-                                        </h2>
-                                        <p class="mt-1 text-sm text-gray-600">
-                                            {{ __('Tus últimos cobros de suscripción.') }}
-                                        </p>
-                                    </header>
-
-                                    <ul class="mt-6 divide-y divide-gray-100">
-                                        @foreach ($payments as $payment)
-                                            <li class="py-3 flex items-center justify-between gap-4">
-                                                <div class="min-w-0">
-                                                    <p class="text-sm font-medium text-gray-900">
-                                                        {{ $payment->status === 'completed' ? __('Pago') : __(ucfirst($payment->status)) }}
-                                                    </p>
-                                                    @if ($payment->billed_at)
-                                                        <p class="text-xs text-gray-500">{{ $payment->billed_at->format('d/m/Y H:i') }}</p>
-                                                    @endif
-                                                </div>
-                                                <div class="text-right shrink-0">
-                                                    <p class="text-sm font-semibold text-gray-900">
-                                                        ${{ number_format($payment->amount, 2) }} {{ $payment->currency_code }}
-                                                    </p>
-                                                    <span class="text-xs {{ $payment->status === 'completed' ? 'text-emerald-600' : 'text-red-600' }}">
-                                                        {{ $payment->status }}
-                                                    </span>
-                                                </div>
-                                            </li>
-                                        @endforeach
-                                    </ul>
-                                </section>
-                            </div>
-                        </div>
-                    @endif
                 </div>
             </div>
 
@@ -555,11 +357,156 @@
                     </div>
                 </div>
             @endif
+
+            {{-- Tab: Paquetes de tokens (admin) --}}
+            @if ($user->isAdmin())
+                <div x-show="tab === 'packages'" x-transition>
+                    <div x-data="packageForm()">
+                        <div class="bg-white shadow-sm sm:rounded-lg p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="font-semibold text-lg text-gray-900">{{ __('Paquetes de tokens') }}</h3>
+                                <div class="flex items-center gap-2">
+                                    <button @click="showForm = true; editingPackage = null; resetForm(); window.scrollTo({ top: 0, behavior: 'smooth' });"
+                                        class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-lg">
+                                        {{ __('Nuevo paquete') }}
+                                    </button>
+                                </div>
+                            </div>
+
+                            @if ($adminPackages->isEmpty())
+                                <p class="text-gray-500 text-center py-4">{{ __('No hay paquetes creados.') }}</p>
+                            @else
+                                <div class="space-y-4">
+                                    @foreach ($adminPackages as $package)
+                                        <div class="border border-gray-200 rounded-lg p-4">
+                                            <div class="flex items-start justify-between gap-4">
+                                                <div class="min-w-0 flex-1">
+                                                    <div class="flex items-center gap-2">
+                                                        <p class="font-medium text-gray-900">{{ $package->name }}</p>
+                                                        @if (!$package->is_active)
+                                                            <span class="px-2 py-0.5 text-xs bg-gray-100 text-gray-500 rounded">{{ __('Inactivo') }}</span>
+                                                        @endif
+                                                    </div>
+                                                    <p class="text-sm text-gray-600 mt-1">
+                                                        {{ $package->tokens }} tokens · ${{ number_format($package->price_usd, 2) }} USD
+                                                    </p>
+                                                    @if ($package->description)
+                                                        <p class="text-sm text-gray-600 mt-0.5">{{ $package->description }}</p>
+                                                    @endif
+                                                    @if (!$package->paddle_price_id)
+                                                        <span class="inline-block mt-1 px-2 py-0.5 text-xs bg-amber-50 text-amber-700 rounded">{{ __('Sin sincronizar con Paddle') }}</span>
+                                                    @endif
+                                                </div>
+                                                <div class="flex items-center gap-2 shrink-0">
+                                                    <button @click="editPackage({{ $package->toJson() }})" class="text-sm text-indigo-600 hover:text-indigo-900">{{ __('Edit') }}</button>
+                                                    <form method="POST" action="{{ route('packages.destroy', $package) }}" onsubmit="return confirm('{{ __('Are you sure?') }}');">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="text-sm text-red-600 hover:text-red-900">{{ __('Delete') }}</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @endif
+                        </div>
+
+                        {{-- Formulario crear/editar --}}
+                        <div x-show="showForm" x-transition class="bg-white shadow-sm sm:rounded-lg p-6 mt-6">
+                            <h3 class="font-semibold text-lg text-gray-900 mb-4" x-text="editingPackage ? '{{ __('Editar paquete') }}' : '{{ __('Nuevo paquete') }}'"></h3>
+
+                            <form :action="editingPackage ? '{{ url('configuracion/packages') }}/' + editingPackage.id : '{{ route('packages.store') }}'" method="POST">
+                                @csrf
+                                <template x-if="editingPackage">
+                                    <input type="hidden" name="_method" value="PATCH">
+                                </template>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <x-input-label for="pkg_name" :value="__('Nombre')" />
+                                        <x-text-input id="pkg_name" class="block mt-1 w-full" type="text" name="name" x-model="form.name" required />
+                                    </div>
+                                    <div>
+                                        <x-input-label for="pkg_tokens" :value="__('Número de tokens')" />
+                                        <x-text-input id="pkg_tokens" class="block mt-1 w-full" type="number" min="1" name="tokens" x-model="form.tokens" required />
+                                    </div>
+                                    <div>
+                                        <x-input-label for="pkg_price" :value="__('Precio (USD)')" />
+                                        <x-text-input id="pkg_price" class="block mt-1 w-full" type="number" step="0.01" min="0.5" name="price_usd" x-model="form.price_usd" required />
+                                    </div>
+                                    <div>
+                                        <x-input-label for="pkg_sort" :value="__('Orden')" />
+                                        <x-text-input id="pkg_sort" class="block mt-1 w-full" type="number" min="0" name="sort_order" x-model="form.sort_order" />
+                                    </div>
+                                    <div class="md:col-span-2">
+                                        <x-input-label for="pkg_desc" :value="__('Descripción')" />
+                                        <x-text-input id="pkg_desc" class="block mt-1 w-full" type="text" name="description" x-model="form.description" />
+                                    </div>
+                                    <div>
+                                        <label class="inline-flex items-center gap-2 text-sm text-gray-700">
+                                            <input type="checkbox" name="is_active" value="1" x-model="form.is_active" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                                            {{ __('Activo') }}
+                                        </label>
+                                        <input type="hidden" name="is_active" value="0" :disabled="true">
+                                    </div>
+                                </div>
+
+                                <div class="mt-6 flex items-center justify-end">
+                                    <button type="button" @click="showForm = false; editingPackage = null; resetForm()" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                        {{ __('Cancelar') }}
+                                    </button>
+                                    <x-primary-button class="ms-4">
+                                        <span x-text="editingPackage ? '{{ __('Guardar') }}' : '{{ __('Crear') }}'"></span>
+                                    </x-primary-button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            @endif
         </div>
     </div>
 
     <script>
-        function planForm() {
+        function packageForm() {
+            return {
+                showForm: false,
+                editingPackage: null,
+                form: {
+                    name: '',
+                    description: '',
+                    tokens: '',
+                    price_usd: '',
+                    sort_order: 0,
+                    is_active: true,
+                },
+                resetForm() {
+                    this.form = {
+                        name: '',
+                        description: '',
+                        tokens: '',
+                        price_usd: '',
+                        sort_order: 0,
+                        is_active: true,
+                    };
+                },
+                editPackage(pkg) {
+                    this.editingPackage = pkg;
+                    this.form = {
+                        name: pkg.name,
+                        description: pkg.description || '',
+                        tokens: pkg.tokens,
+                        price_usd: pkg.price_usd,
+                        sort_order: pkg.sort_order,
+                        is_active: pkg.is_active,
+                    };
+                    this.showForm = true;
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                },
+            };
+        }
+    </script>
             return {
                 showForm: false,
                 editingPlan: null,

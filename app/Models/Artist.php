@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password', 'google_id', 'github_id', 'github_token', 'github_nickname', 'github_repo', 'short_domain', 'avatar', 'statement', 'cv_pdf', 'website_url', 'instagram', 'behance', 'artstation', 'youtube', 'tiktok', 'is_admin', 'granted_plan_id', 'granted_expires_at'])]
+#[Fillable(['name', 'email', 'password', 'google_id', 'github_id', 'github_token', 'github_nickname', 'github_repo', 'short_domain', 'avatar', 'statement', 'cv_pdf', 'website_url', 'instagram', 'behance', 'artstation', 'youtube', 'tiktok', 'is_admin', 'granted_plan_id', 'granted_expires_at', 'tokens_balance'])]
 #[Hidden(['password', 'remember_token'])]
 class Artist extends Authenticatable
 {
@@ -35,6 +35,81 @@ class Artist extends Authenticatable
     public function payments(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Payment::class);
+    }
+
+    public function tokenTransactions(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(TokenTransaction::class);
+    }
+
+    public function links(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(ArtistLink::class)->orderBy('sort_order');
+    }
+
+    /**
+     * Saldo actual de tokens disponible.
+     */
+    public function tokenBalance(): int
+    {
+        return (int) $this->tokens_balance;
+    }
+
+    /**
+     * El artista puede crear una obra si le quedan tokens.
+     */
+    public function canCreateArtwork(): bool
+    {
+        return $this->tokenBalance() > 0;
+    }
+
+    /**
+     * Acredita tokens (compra o grant). Actualiza el saldo atómicamente
+     * y registra la transacción con el balance resultante.
+     */
+    public function addTokens(int $amount, string $type, ?string $ref = null, ?string $note = null): TokenTransaction
+    {
+        if ($amount <= 0) {
+            throw new \InvalidArgumentException('El monto debe ser mayor a cero.');
+        }
+
+        $this->increment('tokens_balance', $amount);
+        $this->refresh();
+
+        return $this->tokenTransactions()->create([
+            'type' => $type,
+            'amount' => $amount,
+            'balance_after' => $this->tokens_balance,
+            'ref' => $ref,
+            'note' => $note,
+        ]);
+    }
+
+    /**
+     * Consume 1 token de forma atómica y segura.
+     *
+     * @return bool true si se pudo debitar (había saldo), false si no.
+     */
+    public function consumeToken(?string $note = null): bool
+    {
+        $updated = self::where('id', $this->id)
+            ->where('tokens_balance', '>', 0)
+            ->decrement('tokens_balance', 1);
+
+        if (! $updated) {
+            return false;
+        }
+
+        $this->refresh();
+
+        $this->tokenTransactions()->create([
+            'type' => 'consume',
+            'amount' => -1,
+            'balance_after' => $this->tokens_balance,
+            'note' => $note,
+        ]);
+
+        return true;
     }
 
     /**
@@ -198,6 +273,7 @@ class Artist extends Authenticatable
             'github_token' => 'encrypted',
             'is_admin' => 'boolean',
             'granted_expires_at' => 'datetime',
+            'tokens_balance' => 'integer',
         ];
     }
 

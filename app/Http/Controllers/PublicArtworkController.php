@@ -16,6 +16,7 @@ class PublicArtworkController extends Controller
         $artwork = Artwork::with([
             'exhibitions' => fn ($q) => $q->oldest(),
             'ownerships' => fn ($q) => $q->oldest(),
+            'links',
         ])->where('public_id', $publicId)->firstOrFail();
 
         if (! $artwork->verifySignature($request->query('s'))) {
@@ -30,7 +31,7 @@ class PublicArtworkController extends Controller
      */
     public function artist(string $id): View
     {
-        $artist = \App\Models\Artist::withCount('artworks')->findOrFail($id);
+        $artist = \App\Models\Artist::with('links')->withCount('artworks')->findOrFail($id);
 
         return view('public.artist', compact('artist'));
     }

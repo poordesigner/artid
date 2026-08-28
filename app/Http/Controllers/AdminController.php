@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Artist;
 use App\Models\Payment;
 use App\Models\Plan;
+use App\Models\TokenPackage;
+use App\Models\TokenTransaction;
 use Illuminate\View\View;
 
 class AdminController extends Controller
@@ -13,8 +15,9 @@ class AdminController extends Controller
     {
         $stats = [
             'artists' => Artist::count(),
-            'paid_plans' => Plan::where('is_free', false)->where('is_active', true)->count(),
-            'active_subscriptions' => \App\Models\Subscription::whereIn('status', ['active', 'trialing', 'past_due'])->count(),
+            'token_packages' => TokenPackage::where('is_active', true)->count(),
+            'tokens_granted' => TokenTransaction::where('type', 'purchase')
+                ->sum('amount') + TokenTransaction::where('type', 'grant')->sum('amount'),
             'total_paid' => Payment::where('status', 'completed')->sum('amount'),
         ];
 

@@ -5,9 +5,9 @@
             <div class="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-8 text-white shadow-lg">
                 <h2 class="text-2xl font-bold">{{ __('Hola, :name!', ['name' => Auth::user()->name]) }}</h2>
                 <p class="mt-2 text-indigo-100">{{ __('Bienvenido a tu panel de ARTid. Registra tus obras y genera su identidad digital.') }}</p>
-                @if ($max !== null && $artworkCount >= $max)
+                @if (! $canCreate)
                     <p class="mt-4 inline-flex items-center px-3 py-1 bg-white/20 rounded-full text-sm font-medium">
-                        {{ __('Límite de obras alcanzado en tu plan actual.') }}
+                        {{ __('No tienes tokens disponibles. Compra un paquete de tokens para registrar obras.') }}
                     </p>
                 @endif
             </div>
@@ -16,27 +16,16 @@
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
                 <div class="bg-white shadow-sm sm:rounded-lg p-6">
                     <p class="text-sm text-gray-500">{{ __('Obras registradas') }}</p>
-                    <p class="mt-1 text-3xl font-bold text-gray-900">
-                        {{ $artworkCount }}
-                        @if ($max !== null)
-                            <span class="text-lg text-gray-400">/ {{ $max }}</span>
-                        @endif
-                    </p>
+                    <p class="mt-1 text-3xl font-bold text-gray-900">{{ $artworkCount }}</p>
+                </div>
+                <div class="bg-white shadow-sm sm:rounded-lg p-6">
+                    <p class="text-sm text-gray-500">{{ __('Tokens') }}</p>
+                    <p class="mt-1 text-3xl font-bold text-gray-900">{{ $tokenBalance }}</p>
+                    <a href="{{ route('tokens.index') }}" class="mt-1 inline-block text-sm text-indigo-600 hover:text-indigo-900">{{ __('Ver mis tokens') }} →</a>
                 </div>
                 <div class="bg-white shadow-sm sm:rounded-lg p-6">
                     <p class="text-sm text-gray-500">{{ __('Series') }}</p>
                     <p class="mt-1 text-3xl font-bold text-gray-900">{{ $seriesCount }}</p>
-                </div>
-                <div class="bg-white shadow-sm sm:rounded-lg p-6">
-                    <p class="text-sm text-gray-500">{{ __('Plan actual') }}</p>
-                    <p class="mt-1 text-2xl font-bold text-gray-900">
-                        @if ($subscription?->plan)
-                            {{ $subscription->plan->name }}
-                        @else
-                            {{ __('Free') }}
-                        @endif
-                    </p>
-                    <a href="{{ route('configuracion', ['tab' => 'mi-plan']) }}" class="mt-1 inline-block text-sm text-indigo-600 hover:text-indigo-900">{{ __('Ver mi plan') }} →</a>
                 </div>
             </div>
 
@@ -52,7 +41,7 @@
                     <p class="mt-1 text-sm text-gray-600">{{ __('Administra tus obras, QRs y su historial.') }}</p>
                 </a>
 
-                @if ($max === null || $artworkCount < $max)
+                @if ($canCreate)
                     <a href="{{ route('artworks.create') }}" class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 hover:border-indigo-300 hover:shadow transition">
                         <div class="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center">
                             <svg class="w-6 h-6 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -61,6 +50,16 @@
                         </div>
                         <h3 class="mt-4 font-semibold text-gray-900">{{ __('Nueva obra') }}</h3>
                         <p class="mt-1 text-sm text-gray-600">{{ __('Registra una obra y genera su identidad digital.') }}</p>
+                    </a>
+                @else
+                    <a href="{{ route('tokens.index') }}" class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 hover:border-indigo-300 hover:shadow transition">
+                        <div class="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-6 h-6 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <h3 class="mt-4 font-semibold text-gray-900">{{ __('Comprar tokens') }}</h3>
+                        <p class="mt-1 text-sm text-gray-600">{{ __('Consigue tokens para registrar nuevas obras.') }}</p>
                     </a>
                 @endif
 
