@@ -40,67 +40,73 @@
     </header>
 
     {{-- Hero --}}
-    <section class="py-24 sm:py-32">
-        <div class="max-w-4xl mx-auto px-6 lg:px-8 text-center">
-            <h1 class="font-medium text-5xl sm:text-6xl lg:text-7xl leading-[1.1] tracking-tight text-gray-900">
+    <section class="py-28 sm:py-36">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 text-center">
+            <h1 class="font-medium text-6xl sm:text-7xl lg:text-8xl leading-[1.05] tracking-tight text-gray-900 max-w-6xl mx-auto">
                 {{ __('Identidad digital para tus obras de arte.') }}
             </h1>
-            <div class="mx-auto mt-10 h-px w-24 bg-gray-300"></div>
-            <p class="mt-10 text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+            <div class="mx-auto mt-12 h-px w-32 bg-gray-300"></div>
+            <p class="mt-12 text-xl sm:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed font-light">
                 {{ __('Genera una ficha técnica permanente para cada obra. Código QR único, metadata verificada y control de propiedad cifrado.') }}
             </p>
-            <div class="mt-12 flex flex-wrap items-center justify-center gap-4">
-                <a href="{{ route('register') }}" class="px-8 py-3 border border-gray-900 bg-gray-900 text-white text-sm tracking-gallery uppercase hover:bg-white hover:text-gray-900 transition">
+            <div class="mt-14 flex flex-wrap items-center justify-center gap-5 sm:gap-6">
+                <a href="{{ route('register') }}" class="px-10 py-4 border border-gray-900 bg-gray-900 text-white text-base tracking-gallery uppercase hover:bg-white hover:text-gray-900 transition">
                     {{ __('Empezar ahora') }}
                 </a>
-                <a href="{{ route('planes') }}" class="px-8 py-3 border border-gray-900 text-gray-900 text-sm tracking-gallery uppercase hover:bg-gray-900 hover:text-white transition">
+                <a href="{{ route('planes') }}" class="px-10 py-4 border border-gray-900 text-gray-900 text-base tracking-gallery uppercase hover:bg-gray-900 hover:text-white transition">
                     {{ __('Ver Planes') }}
                 </a>
-                <a href="{{ route('ayuda') }}" class="px-8 py-3 text-gray-500 text-sm tracking-gallery uppercase hover:text-gray-900 transition">
+                <a href="{{ route('ayuda') }}" class="px-10 py-4 text-gray-500 text-base tracking-gallery uppercase hover:text-gray-900 transition">
                     {{ __('Ver guía') }}
                 </a>
             </div>
-            <p class="mt-10 text-xs text-gray-400 max-w-md mx-auto">
+            <p class="mt-12 text-sm text-gray-400 max-w-lg mx-auto">
                 {{ __('QR permanente y firmado criptográficamente. Solo la obra auténtica accede a su ficha pública.') }}
             </p>
         </div>
     </section>
 
     {{-- Ficha simulada --}}
-    <section id="galeria" class="pb-24">
-        <div class="max-w-3xl mx-auto px-6 lg:px-8">
-            <div class="border border-gray-200 p-10 sm:p-14">
-                <div class="flex items-start justify-between pb-6 border-b border-gray-200">
-                    <span class="text-sm font-semibold uppercase tracking-gallery text-gray-900">{{ __('Obra autenticada') }}</span>
-                    <span class="px-2.5 py-1 text-xs uppercase tracking-wider text-gray-500 border border-gray-200">✓ {{ __('Verificado') }}</span>
+    <section id="galeria" class="pb-28">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="border border-gray-200 p-10 sm:p-16">
+                <div class="flex items-start justify-between pb-8 border-b border-gray-200">
+                    <span class="text-base font-semibold uppercase tracking-gallery text-gray-900">{{ __('Obra autenticada') }}</span>
+                    <span class="px-3 py-1.5 text-sm uppercase tracking-wider text-gray-500 border border-gray-200">✓ {{ __('Verificado') }}</span>
                 </div>
-                <div class="mt-8 space-y-6">
-                    <div class="flex items-center justify-between border-b border-gray-100 pb-3">
-                        <span class="text-sm text-gray-500">{{ __('Serie') }}</span>
-                        <span class="text-sm font-medium text-gray-900">Paisajes Urbanos</span>
-                    </div>
-                    <div class="flex items-center justify-between border-b border-gray-100 pb-3">
-                        <span class="text-sm text-gray-500">{{ __('Editorial') }}</span>
-                        <span class="text-sm font-medium text-gray-900">2 / 5</span>
-                    </div>
-                    <div class="flex items-center justify-between border-b border-gray-100 pb-3">
-                        <span class="text-sm text-gray-500">{{ __('Técnica') }}</span>
-                        <span class="text-sm font-medium text-gray-900">Óleo sobre lienzo</span>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <span class="text-sm text-gray-500">{{ __('Dimensiones') }}</span>
-                        <span class="text-sm font-medium text-gray-900">50 x 70 cm</span>
-                    </div>
-                </div>
-                <div class="mt-10 flex items-center justify-center gap-6 p-6 bg-gray-50">
-                    <div class="w-16 h-16 bg-white flex items-center justify-center border border-gray-200">
-                        <div class="grid grid-cols-5 gap-0.5">
-                            @for ($i = 0; $i < 25; $i++)
-                                <div class="{{ in_array($i % 7, [0, 1, 3, 5]) ? 'bg-gray-900' : 'bg-white' }} w-1.5 h-1.5"></div>
-                            @endfor
+                <div class="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20">
+                    {{-- Metadata en dos columnas --}}
+                    <div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-8">
+                            <div>
+                                <p class="text-sm text-gray-500">{{ __('Serie') }}</p>
+                                <p class="mt-2 text-lg font-medium text-gray-900">Paisajes Urbanos</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">{{ __('Editorial') }}</p>
+                                <p class="mt-2 text-lg font-medium text-gray-900">2 / 5</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">{{ __('Técnica') }}</p>
+                                <p class="mt-2 text-lg font-medium text-gray-900">Óleo sobre lienzo</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">{{ __('Dimensiones') }}</p>
+                                <p class="mt-2 text-lg font-medium text-gray-900">50 x 70 cm</p>
+                            </div>
                         </div>
                     </div>
-                    <p class="text-xs uppercase tracking-gallery text-gray-500">{{ __('Ficha pública verificada') }}</p>
+                    {{-- QR --}}
+                    <div class="flex items-center justify-center gap-8 p-8 bg-gray-50 lg:justify-end lg:pr-0">
+                        <div class="w-24 h-24 bg-white flex items-center justify-center border border-gray-200">
+                            <div class="grid grid-cols-5 gap-0.5">
+                                @for ($i = 0; $i < 25; $i++)
+                                    <div class="{{ in_array($i % 7, [0, 1, 3, 5]) ? 'bg-gray-900' : 'bg-white' }} w-2 h-2"></div>
+                                @endfor
+                            </div>
+                        </div>
+                        <p class="text-sm uppercase tracking-gallery text-gray-500 max-w-[8rem]">{{ __('Ficha pública verificada') }}</p>
+                    </div>
                 </div>
             </div>
         </div>
