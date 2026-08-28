@@ -12,7 +12,7 @@
         <div class="max-w-2xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white shadow-sm sm:rounded-lg p-8">
                 <h3 class="text-lg font-semibold text-gray-900">{{ __('Resumen del cambio') }}</h3>
-                <p class="mt-1 text-sm text-gray-600">{{ __('Revisá los montos antes de confirmar tu cambio de plan.') }}</p>
+                <p class="mt-1 text-sm text-gray-600">{{ __('Revisa los montos antes de confirmar tu cambio de plan.') }}</p>
 
                 <div class="mt-6 space-y-4">
                     {{-- De --}}

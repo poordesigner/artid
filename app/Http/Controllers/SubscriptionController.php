@@ -182,7 +182,7 @@ class SubscriptionController extends Controller
         } catch (\Illuminate\Http\Client\RequestException $e) {
             // Si el cobro falló, el plan no cambió. Avisar y sugerir actualizar método de pago.
             return redirect()->route('configuracion', ['tab' => 'mi-plan'])
-                ->with('error', __('No pudimos cobrar la diferencia a tu método de pago y el plan no cambió. Actualizá tu método de pago desde "Gestionar suscripción" e intentá de nuevo.'));
+                ->with('error', __('No pudimos cobrar la diferencia a tu método de pago y el plan no cambió. Actualiza tu método de pago desde "Gestionar suscripción" e intenta de nuevo.'));
         }
 
         $subscription->update([
@@ -271,7 +271,7 @@ class SubscriptionController extends Controller
             'next_billed_at' => $data['next_billed_at'] ?? $subscription->next_billed_at,
         ]);
 
-        return back()->with('status', __('Reactivate tu plan correctamente. Seguís vigente sin cambios.'));
+        return back()->with('status', __('Reactivaste tu plan correctamente. Sigues vigente sin cambios.'));
     }
 
     public function portal(PaddleService $paddle): \Illuminate\Http\JsonResponse

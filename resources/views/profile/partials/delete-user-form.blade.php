@@ -41,9 +41,9 @@
                     <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-2" />
                 </div>
             @else
-                <p class="mt-1 text-sm text-gray-600">{{ __('Confirma que querés eliminar tu cuenta escribiendo la palabra:') }}</p>
+                <p class="mt-1 text-sm text-gray-600">{{ __('Confirma que quieres eliminar tu cuenta escribiendo la palabra:') }}</p>
                 <div class="mt-6">
-                    <x-input-label for="confirm_delete" :value="__('Escribí la palabra')" class="sr-only" />
+                    <x-input-label for="confirm_delete" :value="__('Escribe la palabra')" class="sr-only" />
                     <x-text-input
                         id="confirm_delete"
                         name="confirm_delete"

@@ -8,7 +8,7 @@
             @if (Auth::user()->password)
                 {{ __('Ensure your account is using a long, random password to stay secure.') }}
             @else
-                {{ __('Tu cuenta no tiene contraseña definida. Podés crear una para entrar manualmente (sin Google).') }}
+                {{ __('Tu cuenta no tiene contraseña definida. Puedes crear una para entrar manualmente (sin Google).') }}
             @endif
         </p>
     </header>

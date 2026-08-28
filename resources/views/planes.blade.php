@@ -42,7 +42,7 @@
     <section class="py-16 sm:py-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h1 class="text-4xl sm:text-5xl font-bold text-gray-900">{{ __('Planes de Suscripción') }}</h1>
-            <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">{{ __('Elegí el plan que mejor se adapte a tus necesidades.') }}</p>
+            <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">{{ __('Elige el plan que mejor se adapte a tus necesidades.') }}</p>
         </div>
     </section>
 

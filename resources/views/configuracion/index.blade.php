@@ -467,7 +467,7 @@
                                     <div>
                                         <x-input-label for="max_artworks" :value="__('Máximo de obras')" />
                                         <x-text-input id="max_artworks" class="block mt-1 w-full" type="number" min="0" name="max_artworks" x-model="form.max_artworks" />
-                                        <p class="mt-1 text-xs text-gray-400">{{ __('Dejalo vacío para obras ilimitadas.') }}</p>
+                                        <p class="mt-1 text-xs text-gray-400">{{ __('Déjalo vacío para obras ilimitadas.') }}</p>
                                     </div>
                                     <div>
                                         <x-input-label for="sort_order" :value="__('Orden')" />
