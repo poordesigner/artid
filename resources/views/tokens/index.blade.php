@@ -20,7 +20,6 @@
                     <div>
                         <p class="text-sm text-gray-500">{{ __('Tokens disponibles') }}</p>
                         <p class="mt-1 text-6xl font-bold text-gray-900">{{ $balance }}</p>
-                        <p class="mt-2 text-sm text-gray-500">{{ __('1 token = QR + ficha básica de una obra, para siempre.') }}</p>
                     </div>
                     <a href="#paquetes" class="shrink-0 px-6 py-3 bg-gray-900 text-white text-sm uppercase tracking-wider hover:bg-gray-700 transition">
                         {{ __('Comprar tokens') }}

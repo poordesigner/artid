@@ -36,8 +36,6 @@ Alpine.data('techniquePicker', (selectedInit, options) => ({
     },
 }));
 
-Alpine.start();
-
 /* Selector de paquetes de tokens (lista + detalle interactivo). */
 Alpine.data('packageSelector', (packages) => ({
     packages,
@@ -46,3 +44,5 @@ Alpine.data('packageSelector', (packages) => ({
         return Number(value).toFixed(2);
     },
 }));
+
+Alpine.start();
