@@ -397,5 +397,18 @@
     "Pago único, sin suscripción": "Pago único, sin suscripción",
     "La ficha pública es permanente": "La ficha pública es permanente",
     "Verificando tu pago... te redirigimos a tus tokens.": "Verificando tu pago... te redirigimos a tus tokens.",
-    "Ver historial": "Ver historial"
+    "Ver historial": "Ver historial",
+    "Usos de tokens": "Usos de tokens",
+    "Nueva función": "Nueva función",
+    "Editar función": "Editar función",
+    "No hay funciones creadas.": "No hay funciones creadas.",
+    "No hay funciones definidas.": "No hay funciones definidas.",
+    "Valor en tokens": "Valor en tokens",
+    "Función": "Función",
+    "Función de tokens creada.": "Función de tokens creada.",
+    "Función de tokens actualizada.": "Función de tokens actualizada.",
+    "Función de tokens eliminada.": "Función de tokens eliminada.",
+    "¿Cómo se usan los tokens?": "¿Cómo se usan los tokens?",
+    "Cada función de la plataforma consume la cantidad de tokens indicada.": "Cada función de la plataforma consume la cantidad de tokens indicada.",
+    "Crear QR + Ficha Básica": "Crear QR + Ficha Básica"
 }

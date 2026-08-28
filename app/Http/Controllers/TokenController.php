@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\TokenFunction;
 use App\Models\TokenPackage;
 use App\Models\TokenTransaction;
 use App\Services\PaddleService;
@@ -24,8 +25,9 @@ class TokenController extends Controller
             ->limit(30)
             ->get();
         $packages = TokenPackage::active()->get();
+        $tokenFunctions = TokenFunction::active()->get();
 
-        return view('tokens.index', compact('balance', 'transactions', 'packages'));
+        return view('tokens.index', compact('balance', 'transactions', 'packages', 'tokenFunctions'));
     }
 
     /**

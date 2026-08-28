@@ -13,6 +13,7 @@
     } else {
         $allowedTabs[] = 'planes';
         $allowedTabs[] = 'packages';
+        $allowedTabs[] = 'token-functions';
     }
     if (! in_array($initialTab, $allowedTabs)) {
         $initialTab = 'seguridad';
@@ -49,6 +50,9 @@
                         </button>
                         <button @click="tab = 'packages'" :class="tab === 'packages' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition">
                             {{ __('Paquetes de tokens') }}
+                        </button>
+                        <button @click="tab = 'token-functions'" :class="tab === 'token-functions' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition">
+                            {{ __('Usos de tokens') }}
                         </button>
                     @endif
                 </nav>
@@ -465,10 +469,143 @@
                     </div>
                 </div>
             @endif
+
+            {{-- Tab: Usos de tokens (admin) --}}
+            @if ($user->isAdmin())
+                <div x-show="tab === 'token-functions'" x-transition>
+                    <div x-data="tokenFunctionForm()">
+                        <div class="bg-white shadow-sm sm:rounded-lg p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="font-semibold text-lg text-gray-900">{{ __('Usos de tokens') }}</h3>
+                                <div class="flex items-center gap-2">
+                                    <button @click="showForm = true; editingFunction = null; resetForm(); window.scrollTo({ top: 0, behavior: 'smooth' });"
+                                        class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-lg">
+                                        {{ __('Nueva función') }}
+                                    </button>
+                                </div>
+                            </div>
+
+                            @if ($adminTokenFunctions->isEmpty())
+                                <p class="text-gray-500 text-center py-4">{{ __('No hay funciones creadas.') }}</p>
+                            @else
+                                <div class="space-y-4">
+                                    @foreach ($adminTokenFunctions as $tf)
+                                        <div class="border border-gray-200 rounded-lg p-4">
+                                            <div class="flex items-start justify-between gap-4">
+                                                <div class="min-w-0 flex-1">
+                                                    <div class="flex items-center gap-2">
+                                                        <p class="font-medium text-gray-900">{{ $tf->name }}</p>
+                                                        @if (!$tf->is_active)
+                                                            <span class="px-2 py-0.5 text-xs bg-gray-100 text-gray-500 rounded">{{ __('Inactivo') }}</span>
+                                                        @endif
+                                                    </div>
+                                                    <p class="text-sm text-gray-600 mt-1">{{ $tf->tokens }} token(s)</p>
+                                                    @if ($tf->description)
+                                                        <p class="text-sm text-gray-600 mt-0.5">{{ $tf->description }}</p>
+                                                    @endif
+                                                </div>
+                                                <div class="flex items-center gap-2 shrink-0">
+                                                    <button @click="editFunction({{ $tf->toJson() }})" class="text-sm text-indigo-600 hover:text-indigo-900">{{ __('Edit') }}</button>
+                                                    <form method="POST" action="{{ route('token-functions.destroy', $tf) }}" onsubmit="return confirm('{{ __('Are you sure?') }}');">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="text-sm text-red-600 hover:text-red-900">{{ __('Delete') }}</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @endif
+                        </div>
+
+                        {{-- Formulario crear/editar --}}
+                        <div x-show="showForm" x-transition class="bg-white shadow-sm sm:rounded-lg p-6 mt-6">
+                            <h3 class="font-semibold text-lg text-gray-900 mb-4" x-text="editingFunction ? '{{ __('Editar función') }}' : '{{ __('Nueva función') }}'"></h3>
+
+                            <form :action="editingFunction ? '{{ url('configuracion/token-functions') }}/' + editingFunction.id : '{{ route('token-functions.store') }}'" method="POST">
+                                @csrf
+                                <template x-if="editingFunction">
+                                    <input type="hidden" name="_method" value="PATCH">
+                                </template>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <x-input-label for="tf_name" :value="__('Nombre')" />
+                                        <x-text-input id="tf_name" class="block mt-1 w-full" type="text" name="name" x-model="form.name" required />
+                                    </div>
+                                    <div>
+                                        <x-input-label for="tf_tokens" :value="__('Valor en tokens')" />
+                                        <x-text-input id="tf_tokens" class="block mt-1 w-full" type="number" min="1" name="tokens" x-model="form.tokens" required />
+                                    </div>
+                                    <div>
+                                        <x-input-label for="tf_sort" :value="__('Orden')" />
+                                        <x-text-input id="tf_sort" class="block mt-1 w-full" type="number" min="0" name="sort_order" x-model="form.sort_order" />
+                                    </div>
+                                    <div>
+                                        <label class="inline-flex items-center gap-2 text-sm text-gray-700 mt-6">
+                                            <input type="checkbox" name="is_active" value="1" x-model="form.is_active" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                                            {{ __('Activo') }}
+                                        </label>
+                                        <input type="hidden" name="is_active" value="0" :disabled="true">
+                                    </div>
+                                    <div class="md:col-span-2">
+                                        <x-input-label for="tf_desc" :value="__('Descripción')" />
+                                        <x-text-input id="tf_desc" class="block mt-1 w-full" type="text" name="description" x-model="form.description" />
+                                    </div>
+                                </div>
+
+                                <div class="mt-6 flex items-center justify-end">
+                                    <button type="button" @click="showForm = false; editingFunction = null; resetForm()" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                        {{ __('Cancelar') }}
+                                    </button>
+                                    <x-primary-button class="ms-4">
+                                        <span x-text="editingFunction ? '{{ __('Guardar') }}' : '{{ __('Crear') }}'"></span>
+                                    </x-primary-button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            @endif
         </div>
     </div>
 
     <script>
+        function tokenFunctionForm() {
+            return {
+                showForm: false,
+                editingFunction: null,
+                form: {
+                    name: '',
+                    description: '',
+                    tokens: 1,
+                    sort_order: 0,
+                    is_active: true,
+                },
+                resetForm() {
+                    this.form = {
+                        name: '',
+                        description: '',
+                        tokens: 1,
+                        sort_order: 0,
+                        is_active: true,
+                    };
+                },
+                editFunction(tf) {
+                    this.editingFunction = tf;
+                    this.form = {
+                        name: tf.name,
+                        description: tf.description || '',
+                        tokens: tf.tokens,
+                        sort_order: tf.sort_order,
+                        is_active: tf.is_active,
+                    };
+                    this.showForm = true;
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                },
+            };
+        }
         function packageForm() {
             return {
                 showForm: false,
@@ -506,7 +643,7 @@
                 },
             };
         }
-    </script>
+        function planForm() {
             return {
                 showForm: false,
                 editingPlan: null,
@@ -562,4 +699,5 @@
             };
         }
     </script>
+</x-app-layout>
 </x-app-layout>

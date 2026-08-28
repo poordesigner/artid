@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Payment;
 use App\Models\Plan;
+use App\Models\TokenFunction;
 use App\Models\TokenPackage;
 use App\Services\PaddleService;
 use Illuminate\Http\Request;
@@ -22,6 +23,12 @@ class ConfigController extends Controller
         $adminPackages = $user?->isAdmin()
             ? TokenPackage::orderBy('sort_order')->get()
             : [];
+
+        $adminTokenFunctions = $user?->isAdmin()
+            ? TokenFunction::orderBy('sort_order')->get()
+            : [];
+
+        $tokenFunctions = TokenFunction::active()->get();
 
         // Planes activos visibles para cualquier usuario logueado (comprar plan).
         $plans = Plan::with(['periods'])
@@ -44,6 +51,8 @@ class ConfigController extends Controller
             'user' => $user,
             'adminPlans' => $adminPlans,
             'adminPackages' => $adminPackages,
+            'adminTokenFunctions' => $adminTokenFunctions,
+            'tokenFunctions' => $tokenFunctions,
             'plans' => $plans,
             'activeSubscription' => $activeSubscription,
             'creditBalance' => $creditBalance,

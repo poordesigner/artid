@@ -53,6 +53,41 @@
                 </div>
             </div>
 
+            {{-- Usos de tokens --}}
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-8">
+                    <h3 class="font-semibold text-lg text-gray-900">{{ __('Usos de tokens') }}</h3>
+                    <p class="mt-1 text-sm text-gray-500">{{ __('Cada función de la plataforma consume la cantidad de tokens indicada.') }}</p>
+                    @if ($tokenFunctions->isEmpty())
+                        <p class="mt-4 text-sm text-gray-500">{{ __('No hay funciones definidas.') }}</p>
+                    @else
+                        <div class="mt-6 overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead>
+                                    <tr class="text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <th class="px-4 py-3">{{ __('Función') }}</th>
+                                        <th class="px-4 py-3 text-right">{{ __('Tokens') }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-100 text-sm">
+                                    @foreach ($tokenFunctions as $tf)
+                                        <tr>
+                                            <td class="px-4 py-3">
+                                                <p class="font-medium text-gray-900">{{ $tf->name }}</p>
+                                                @if ($tf->description)
+                                                    <p class="text-xs text-gray-500 mt-0.5">{{ $tf->description }}</p>
+                                                @endif
+                                            </td>
+                                            <td class="px-4 py-3 text-right font-semibold text-gray-900">{{ $tf->tokens }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    @endif
+                </div>
+            </div>
+
             {{-- Historial --}}
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-8">

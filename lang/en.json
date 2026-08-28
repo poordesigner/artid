@@ -334,5 +334,18 @@
     "Pago único, sin suscripción": "One-time payment, no subscription",
     "La ficha pública es permanente": "The public record is permanent",
     "Verificando tu pago... te redirigimos a tus tokens.": "Verifying your payment... redirecting you to your tokens.",
-    "Ver historial": "View history"
+    "Ver historial": "View history",
+    "Usos de tokens": "Token uses",
+    "Nueva función": "New function",
+    "Editar función": "Edit function",
+    "No hay funciones creadas.": "No functions created yet.",
+    "No hay funciones definidas.": "No functions defined.",
+    "Valor en tokens": "Tokens value",
+    "Función": "Function",
+    "Función de tokens creada.": "Token function created.",
+    "Función de tokens actualizada.": "Token function updated.",
+    "Función de tokens eliminada.": "Token function deleted.",
+    "¿Cómo se usan los tokens?": "How are tokens used?",
+    "Cada función de la plataforma consume la cantidad de tokens indicada.": "Each platform function consumes the indicated amount of tokens.",
+    "Crear QR + Ficha Básica": "Create QR + Basic Record"
 }

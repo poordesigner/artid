@@ -16,6 +16,7 @@ use App\Http\Controllers\PublicArtworkController;
 use App\Http\Controllers\SeriesController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\TokenController;
+use App\Http\Controllers\TokenFunctionController;
 use App\Http\Controllers\TokenPackageController;
 use App\Http\Controllers\WebhookController;
 use App\Models\Plan;
@@ -44,8 +45,9 @@ Route::get('/', function () {
 
 Route::get('/planes', function () {
     $packages = TokenPackage::active()->get();
+    $tokenFunctions = \App\Models\TokenFunction::active()->get();
 
-    return view('planes', compact('packages'));
+    return view('planes', compact('packages', 'tokenFunctions'));
 })->name('planes');
 
 Route::get('/o/{publicId}', [PublicArtworkController::class, 'show'])->name('public.artwork');
@@ -98,6 +100,10 @@ Route::middleware('auth')->group(function () {
         Route::post('/configuracion/packages', [TokenPackageController::class, 'store'])->name('packages.store');
         Route::patch('/configuracion/packages/{package}', [TokenPackageController::class, 'update'])->name('packages.update');
         Route::delete('/configuracion/packages/{package}', [TokenPackageController::class, 'destroy'])->name('packages.destroy');
+
+        Route::post('/configuracion/token-functions', [TokenFunctionController::class, 'store'])->name('token-functions.store');
+        Route::patch('/configuracion/token-functions/{function}', [TokenFunctionController::class, 'update'])->name('token-functions.update');
+        Route::delete('/configuracion/token-functions/{function}', [TokenFunctionController::class, 'destroy'])->name('token-functions.destroy');
     });
 
     Route::get('/artworks', [ArtworkController::class, 'index'])->name('artworks.index');

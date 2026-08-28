@@ -87,12 +87,6 @@
                                         <svg class="w-5 h-5 text-indigo-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                         </svg>
-                                        {{ __('Pago único, sin suscripción') }}
-                                    </li>
-                                    <li class="flex items-start gap-3 text-sm text-gray-700">
-                                        <svg class="w-5 h-5 text-indigo-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                        </svg>
                                         {{ __('La ficha pública es permanente') }}
                                     </li>
                                 </ul>
@@ -109,6 +103,43 @@
             @else
                 <p class="text-gray-500 text-center py-8">{{ __('No hay planes disponibles.') }}</p>
             @endif
+        </div>
+    </section>
+
+    {{-- Usos de tokens --}}
+    <section class="pb-20">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">{{ __('¿Cómo se usan los tokens?') }}</h2>
+                <p class="mt-2 text-gray-600">{{ __('Cada función de la plataforma consume la cantidad de tokens indicada.') }}</p>
+            </div>
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Función') }}</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Tokens') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        @forelse ($tokenFunctions as $tf)
+                            <tr>
+                                <td class="px-6 py-4">
+                                    <p class="text-sm font-medium text-gray-900">{{ $tf->name }}</p>
+                                    @if ($tf->description)
+                                        <p class="text-xs text-gray-500 mt-0.5">{{ $tf->description }}</p>
+                                    @endif
+                                </td>
+                                <td class="px-6 py-4 text-right text-sm font-semibold text-gray-900">{{ $tf->tokens }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td class="px-6 py-4 text-sm text-gray-500 text-center" colspan="2">{{ __('No hay funciones definidas.') }}</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
     </section>
 

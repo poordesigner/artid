@@ -11,6 +11,14 @@ class TokenPackageSeeder extends Seeder
     {
         $packages = [
             [
+                'name' => 'Paquete 10',
+                'description' => '10 tokens para registrar hasta 10 obras.',
+                'tokens' => 10,
+                'price_usd' => 10,
+                'is_active' => true,
+                'sort_order' => 0,
+            ],
+            [
                 'name' => 'Paquete 20',
                 'description' => '20 tokens para registrar hasta 20 obras.',
                 'tokens' => 20,
