@@ -17,10 +17,10 @@
 
     {{-- Navbar --}}
     <header class="bg-white border-b border-gray-100 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
             <div class="flex items-center gap-8">
                 <a href="{{ url('/') }}" class="shrink-0">
-                    <img src="{{ asset('img/navbar_240x120.png') }}" alt="ARTid" class="h-11 w-auto max-w-[45vw] sm:max-w-none">
+                    <img src="{{ asset('img/navbar_240x120.png') }}" alt="ARTid" class="h-14 w-auto max-w-[55vw] sm:max-w-none">
                 </a>
                 @isset($navLinks)
                     <nav class="hidden md:flex items-center gap-8 text-[19px] uppercase">

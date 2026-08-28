@@ -21,7 +21,7 @@
         <div class="max-w-6xl mx-auto px-6 lg:px-8">
             <div class="flex items-center justify-between h-20 gap-4">
                 <a href="{{ url('/') }}" class="shrink-0">
-                    <img src="{{ asset('img/navbar_240x120.png') }}" alt="ARTid" class="h-11 w-auto max-w-[50vw] sm:max-w-none">
+                    <img src="{{ asset('img/navbar_240x120.png') }}" alt="ARTid" class="h-14 w-auto max-w-[55vw] sm:max-w-none">
                 </a>
                 <nav class="hidden md:flex items-center gap-10 text-[19px] uppercase text-gray-500">
                     <a href="{{ route('planes') }}" class="hover:text-gray-900 transition">{{ __('Planes') }}</a>
