@@ -23,15 +23,15 @@
                     <img src="{{ asset('img/navbar_240x120.png') }}" alt="ARTid" class="h-11 w-auto max-w-[45vw] sm:max-w-none">
                 </a>
                 @isset($navLinks)
-                    <nav class="hidden md:flex items-center gap-8 text-base">
+                    <nav class="hidden md:flex items-center gap-8 text-[19px] uppercase">
                         {{ $navLinks }}
                     </nav>
                 @endisset
             </div>
             <div class="flex items-center gap-3 sm:gap-4">
                 <x-language-switcher />
-                <a href="{{ route('login') }}" class="text-base font-medium text-gray-700 hover:text-gray-900 transition">{{ __('Login') }}</a>
-                <a href="{{ route('register') }}" class="inline-flex items-center px-5 py-2.5 bg-gray-900 hover:bg-gray-800 text-white text-base font-semibold rounded-lg transition">
+                <a href="{{ route('login') }}" class="text-lg font-medium uppercase text-gray-700 hover:text-gray-900 transition">{{ __('Login') }}</a>
+                <a href="{{ route('register') }}" class="inline-flex items-center px-5 py-2.5 bg-gray-900 hover:bg-gray-800 text-white text-lg font-semibold uppercase rounded-lg transition">
                     {{ __('Empezar') }}
                     <svg class="w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />

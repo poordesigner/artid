@@ -23,15 +23,15 @@
                 <a href="{{ url('/') }}" class="shrink-0">
                     <img src="{{ asset('img/navbar_240x120.png') }}" alt="ARTid" class="h-11 w-auto max-w-[50vw] sm:max-w-none">
                 </a>
-                <nav class="hidden md:flex items-center gap-10 text-base text-gray-500">
+                <nav class="hidden md:flex items-center gap-10 text-[19px] uppercase text-gray-500">
                     <a href="{{ route('planes') }}" class="hover:text-gray-900 transition">{{ __('Planes') }}</a>
                     <a href="#caracteristicas" class="hover:text-gray-900 transition">{{ __('Características') }}</a>
                     <a href="{{ route('ayuda') }}" class="hover:text-gray-900 transition">{{ __('Ayuda') }}</a>
                 </nav>
                 <div class="flex items-center gap-4 sm:gap-5">
                     <x-language-switcher />
-                    <a href="{{ route('login') }}" class="hidden sm:inline text-base text-gray-700 hover:text-gray-900 transition">{{ __('Login') }}</a>
-                    <a href="{{ route('register') }}" class="text-base px-5 py-2.5 border border-gray-900 hover:bg-gray-900 hover:text-white transition">
+                    <a href="{{ route('login') }}" class="hidden sm:inline text-lg uppercase text-gray-700 hover:text-gray-900 transition">{{ __('Login') }}</a>
+                    <a href="{{ route('register') }}" class="text-lg uppercase px-5 py-2.5 border border-gray-900 hover:bg-gray-900 hover:text-white transition">
                         {{ __('Empezar') }}
                     </a>
                 </div>
