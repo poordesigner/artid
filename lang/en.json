@@ -271,5 +271,19 @@
     "Inactiva": "Inactive",
     "Activa": "Active",
     "Ver Planes": "View Plans",
-    "No hay planes disponibles.": "No plans available."
+    "No hay planes disponibles.": "No plans available.",
+    "Identidad digital para obras de arte": "Digital identity for artworks",
+    "El patrimonio de la obra, verificado.": "The artwork's heritage, verified.",
+    "Cada obra recibe una ficha técnica permanente, un código QR firmado y un historial cifrado de propiedad. La autenticidad, a la vista de todos.": "Each artwork receives a permanent technical record, a signed QR code, and an encrypted ownership history. Authenticity, in plain sight.",
+    "Ver planes": "View plans",
+    "La ficha": "The record",
+    "La obra completa, en una sola ficha.": "The complete artwork, in a single record.",
+    "Genera una ficha técnica permanente con la metadata, el historial de exposiciones y la proveniencia. Todo verificado, todo en orden.": "Generate a permanent technical record with metadata, exhibition history, and provenance. Everything verified, everything in order.",
+    "QR permanente y firmado criptográficamente.": "Permanent, cryptographically signed QR code.",
+    "Historial de exposición y proveniencia.": "Exhibition and provenance history.",
+    "Control de propiedad cifrado.": "Encrypted ownership control.",
+    "Serie · Obra 2 / 5": "Series · Work 2 / 5",
+    "Tres pasos para darle identidad digital a cada obra.": "Three steps to give each artwork its digital identity.",
+    "Empezá a proteger tus obras.": "Start protecting your artworks.",
+    "Cómo funciona": "How it works"
 }
