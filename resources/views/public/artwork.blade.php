@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $artwork->title }}</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=inter:400,500,600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.bunny.net/css?family=Space+Grotesk:300,400,500,600,700&display=swap" rel="stylesheet" />
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: #0d0d0d; color: #f5f5f5; font-family: 'Inter', system-ui, sans-serif; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+        body { background: #0d0d0d; color: #f5f5f5; font-family: 'Space Grotesk', system-ui, sans-serif; line-height: 1.6; -webkit-font-smoothing: antialiased; }
         .container { max-width: 720px; margin: 0 auto; padding: 24px 16px 64px; }
         .image { width: 100%; max-height: 60vh; object-fit: contain; border-radius: 8px; background: #111; }
         .title { font-size: 2rem; font-weight: 600; margin-top: 20px; line-height: 1.2; }
