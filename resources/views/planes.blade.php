@@ -9,26 +9,30 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Space+Grotesk:300,400,500,600,700&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <style>
+        body { font-family: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif; }
+        .tracking-gallery { letter-spacing: 0.25em; }
+    </style>
 </head>
-<body class="font-sans text-gray-900 antialiased bg-white">
+<body class="bg-white text-gray-900 antialiased">
 
     {{-- Navbar --}}
     <header class="bg-white border-b border-gray-100 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
             <div class="flex items-center gap-8">
-                <a href="{{ url('/') }}">
-                    <img src="{{ asset('img/navbar_240x120.png') }}" alt="ARTid" class="h-10 w-auto">
+                <a href="{{ url('/') }}" class="shrink-0">
+                    <img src="{{ asset('img/navbar_240x120.png') }}" alt="ARTid" class="h-14 w-auto max-w-[45vw] sm:max-w-none">
                 </a>
-                <nav class="hidden md:flex items-center gap-8">
-                    <a href="{{ url('/') }}" class="text-sm text-gray-500 hover:text-gray-700 transition">{{ __('Inicio') }}</a>
-                    <a href="{{ url('/#caracteristicas') }}" class="text-sm text-gray-500 hover:text-gray-700 transition">{{ __('Características') }}</a>
-                    <a href="{{ route('ayuda') }}" class="text-sm text-gray-500 hover:text-gray-700 transition">{{ __('Ayuda') }}</a>
+                <nav class="hidden md:flex items-center gap-8 text-[19px] uppercase">
+                    <a href="{{ url('/') }}" class="text-gray-500 hover:text-gray-900 transition">{{ __('Inicio') }}</a>
+                    <a href="{{ url('/#caracteristicas') }}" class="text-gray-500 hover:text-gray-900 transition">{{ __('Características') }}</a>
+                    <a href="{{ route('ayuda') }}" class="text-gray-500 hover:text-gray-900 transition">{{ __('Ayuda') }}</a>
                 </nav>
             </div>
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-3 sm:gap-4">
                 <x-language-switcher />
-                <a href="{{ route('login') }}" class="text-sm font-medium text-gray-700 hover:text-gray-900 transition">{{ __('Login') }}</a>
-                <a href="{{ route('register') }}" class="inline-flex items-center px-5 py-2.5 bg-gray-900 hover:bg-gray-800 text-white text-sm font-semibold rounded-lg transition">
+                <a href="{{ route('login') }}" class="text-lg font-medium uppercase text-gray-700 hover:text-gray-900 transition">{{ __('Login') }}</a>
+                <a href="{{ route('register') }}" class="inline-flex items-center px-5 py-2.5 bg-gray-900 hover:bg-gray-800 text-white text-lg font-semibold uppercase rounded-lg transition">
                     {{ __('Empezar') }}
                     <svg class="w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
@@ -46,100 +50,89 @@
         </div>
     </section>
 
-    {{-- Packages --}}
+    {{-- Paquetes + usos --}}
     <section class="pb-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             @if ($packages->count())
-                <div class="grid grid-cols-1 md:grid-cols-{{ min($packages->count(), 3) }} gap-8 max-w-5xl mx-auto">
-                    @foreach ($packages as $package)
-                        <div class="bg-white rounded-2xl shadow-sm border {{ $loop->first ? 'border-indigo-500 ring-2 ring-indigo-500' : 'border-gray-200' }} flex flex-col overflow-hidden">
-                            @if ($loop->first)
-                                <div class="px-8 pt-6">
-                                    <span class="inline-block px-3 py-1 bg-indigo-50 text-indigo-700 text-xs font-semibold rounded-full uppercase tracking-wider">{{ __('Popular') }}</span>
-                                </div>
-                            @endif
+                <div class="grid grid-cols-1 lg:grid-cols-[280px_1fr_320px] gap-10"
+                     x-data="packageSelector(@js($packages->map(fn ($p) => [
+                         'id' => $p->id,
+                         'name' => $p->name,
+                         'tokens' => $p->tokens,
+                         'price' => (float) $p->price_usd,
+                         'perToken' => round((float) $p->price_usd / $p->tokens, 2),
+                     ])->all()))">
 
-                            <div class="p-8 {{ $loop->first ? 'pt-4' : '' }}">
-                                <h3 class="text-xl font-bold text-gray-900">{{ $package->name }}</h3>
-
-                                @if ($package->description)
-                                    <p class="mt-2 text-sm text-gray-600">{{ $package->description }}</p>
+                    {{-- Columna 1: lista de paquetes --}}
+                    <div class="space-y-3">
+                        <p class="text-xs font-semibold uppercase tracking-gallery text-gray-500">{{ __('Paquetes') }}</p>
+                        @foreach ($packages as $package)
+                            <button type="button" @mouseenter="selected = {{ $package->id }}"
+                                @focus="selected = {{ $package->id }}"
+                                :class="selected === {{ $package->id }} ? 'border-gray-900 bg-gray-900 text-white' : 'border-gray-200 bg-white text-gray-900 hover:border-gray-400'"
+                                class="w-full flex items-center justify-between px-5 py-4 border rounded-lg text-left transition">
+                                <span class="font-semibold">{{ $package->name }}</span>
+                                <span class="text-sm">
+                                    ${{ number_format($package->price_usd, 0) }} USD
+                                </span>
+                                @if ($loop->first)
+                                    <span class="ml-2 shrink-0 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider rounded-full {{ $loop->first ? 'bg-indigo-100 text-indigo-700' : '' }}">
+                                        {{ __('Popular') }}
+                                    </span>
                                 @endif
+                            </button>
+                        @endforeach
+                    </div>
 
-                                <div class="mt-6">
-                                    <div class="flex items-end gap-1">
-                                        <span class="text-4xl font-bold text-gray-900">{{ $package->tokens }}</span>
-                                        <span class="text-lg text-gray-500 pb-1.5">{{ __('tokens') }}</span>
-                                    </div>
-                                    <p class="mt-1 text-2xl font-semibold text-gray-700">${{ number_format($package->price_usd, 2) }} USD</p>
+                    {{-- Columna 2: detalle del paquete (se actualiza con hover) --}}
+                    <div class="flex flex-col justify-center">
+                        <div class="border border-gray-200 p-8 sm:p-10" x-cloak>
+                            <template x-for="p in packages" :key="p.id">
+                                <div x-show="selected === p.id">
+                                    <p class="text-xs font-semibold uppercase tracking-gallery text-gray-500" x-text="p.name"></p>
+                                    <p class="mt-4 text-6xl font-bold text-gray-900 leading-none">
+                                        <span x-text="p.tokens"></span>
+                                        <span class="text-2xl font-medium text-gray-500">{{ __('tokens') }}</span>
+                                    </p>
+                                    <p class="mt-4 text-xl text-gray-600">
+                                        <span x-text="'$' + formatUsd(p.perToken)"></span>
+                                        <span class="text-sm">{{ __('USD/token') }}</span>
+                                    </p>
+                                    <p class="mt-2 text-3xl font-semibold text-gray-900">
+                                        <span x-text="'$' + formatUsd(p.price)"></span>
+                                        <span class="text-base text-gray-500">USD</span>
+                                    </p>
+                                    <a :href="'{{ route('register') }}'"
+                                        class="mt-8 inline-flex items-center justify-center w-full px-6 py-4 bg-gray-900 hover:bg-gray-700 text-white text-sm font-semibold uppercase tracking-gallery transition">
+                                        {{ __('Seleccionar') }}
+                                    </a>
                                 </div>
-                            </div>
-
-                            <div class="px-8 pb-8 flex-1">
-                                <ul class="mt-2 space-y-3">
-                                    <li class="flex items-start gap-3 text-sm text-gray-700">
-                                        <svg class="w-5 h-5 text-indigo-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                        </svg>
-                                        {{ __('QR + ficha básica por cada obra') }}
-                                    </li>
-                                    <li class="flex items-start gap-3 text-sm text-gray-700">
-                                        <svg class="w-5 h-5 text-indigo-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                        </svg>
-                                        {{ __('La ficha pública es permanente') }}
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <div class="px-8 pb-8">
-                                <a href="{{ route('register') }}" class="block w-full text-center px-6 py-3 {{ $loop->first ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-gray-900 hover:bg-gray-800' }} text-white rounded-lg font-semibold text-sm transition">
-                                    {{ __('Empezar') }}
-                                </a>
-                            </div>
+                            </template>
                         </div>
-                    @endforeach
+                    </div>
+
+                    {{-- Columna 3: usos de tokens --}}
+                    <div>
+                        <p class="text-xs font-semibold uppercase tracking-gallery text-gray-500">{{ __('Usos de tokens') }}</p>
+                        <p class="mt-2 text-sm text-gray-600">{{ __('Cada función consume la cantidad de tokens indicada.') }}</p>
+                        <div class="mt-4 space-y-3">
+                            @forelse ($tokenFunctions as $tf)
+                                <div class="flex items-center justify-between border border-gray-200 rounded-lg px-5 py-4">
+                                    <span class="text-sm font-medium text-gray-900">{{ $tf->name }}</span>
+                                    <span class="text-sm font-semibold text-gray-700">
+                                        <span class="text-lg font-bold">{{ $tf->tokens }}</span>
+                                        {{ $tf->tokens === 1 ? __('token') : __('tokens') }}
+                                    </span>
+                                </div>
+                            @empty
+                                <p class="text-sm text-gray-500">{{ __('No hay funciones definidas.') }}</p>
+                            @endforelse
+                        </div>
+                    </div>
                 </div>
             @else
                 <p class="text-gray-500 text-center py-8">{{ __('No hay planes disponibles.') }}</p>
             @endif
-        </div>
-    </section>
-
-    {{-- Usos de tokens --}}
-    <section class="pb-20">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-8">
-                <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">{{ __('¿Cómo se usan los tokens?') }}</h2>
-                <p class="mt-2 text-gray-600">{{ __('Cada función de la plataforma consume la cantidad de tokens indicada.') }}</p>
-            </div>
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Función') }}</th>
-                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Tokens') }}</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-100">
-                        @forelse ($tokenFunctions as $tf)
-                            <tr>
-                                <td class="px-6 py-4">
-                                    <p class="text-sm font-medium text-gray-900">{{ $tf->name }}</p>
-                                    @if ($tf->description)
-                                        <p class="text-xs text-gray-500 mt-0.5">{{ $tf->description }}</p>
-                                    @endif
-                                </td>
-                                <td class="px-6 py-4 text-right text-sm font-semibold text-gray-900">{{ $tf->tokens }}</td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td class="px-6 py-4 text-sm text-gray-500 text-center" colspan="2">{{ __('No hay funciones definidas.') }}</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
         </div>
     </section>
 
@@ -164,5 +157,17 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        function packageSelector(packages) {
+            return {
+                packages,
+                selected: packages.length ? packages[0].id : null,
+                formatUsd(value) {
+                    return Number(value).toFixed(2);
+                },
+            };
+        }
+    </script>
 </body>
 </html>
