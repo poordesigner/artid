@@ -157,17 +157,5 @@
             </div>
         </div>
     </footer>
-
-    <script>
-        function packageSelector(packages) {
-            return {
-                packages,
-                selected: packages.length ? packages[0].id : null,
-                formatUsd(value) {
-                    return Number(value).toFixed(2);
-                },
-            };
-        }
-    </script>
 </body>
 </html>
