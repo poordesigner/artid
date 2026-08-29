@@ -85,7 +85,30 @@
         <div class="max-w-[75rem] mx-auto px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-stretch">
 
-                {{-- Izquierda: ficha simulada --}}
+                {{-- Izquierda: Cómo funciona --}}
+                <div class="p-8 sm:p-10 flex flex-col justify-center">
+                    <p class="text-3xl sm:text-4xl font-medium tracking-gallery uppercase text-gray-900">{{ __('Cómo funciona') }}</p>
+                    <hr class="mt-8 border-gray-200">
+                    <div class="mt-10 space-y-10">
+                        <div>
+                            <p class="text-4xl font-light text-gray-200">01</p>
+                            <h3 class="mt-3 text-lg font-semibold tracking-wide text-gray-900">{{ __('Ficha de Datos') }}</h3>
+                            <p class="mt-2 text-sm text-gray-600 leading-relaxed">{{ __('Crea una ficha técnica completa: título, año, edición, serie, técnicas, dimensiones, descripción e imagen.') }}</p>
+                        </div>
+                        <div>
+                            <p class="text-4xl font-light text-gray-200">02</p>
+                            <h3 class="mt-3 text-lg font-semibold tracking-wide text-gray-900">{{ __('QR Permanente') }}</h3>
+                            <p class="mt-2 text-sm text-gray-600 leading-relaxed">{{ __('Cada obra tiene un código QR único que nunca cambia. Se imprime sobre la obra y dirige a la ficha pública.') }}</p>
+                        </div>
+                        <div>
+                            <p class="text-4xl font-light text-gray-200">03</p>
+                            <h3 class="mt-3 text-lg font-semibold tracking-wide text-gray-900">{{ __('Llaves Cifradas') }}</h3>
+                            <p class="mt-2 text-sm text-gray-600 leading-relaxed">{{ __('La relación entre ficha y QR está firmada criptográficamente. Solo la obra auténtica accede a su ficha.') }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Derecha: ficha simulada --}}
                 <div class="border border-gray-200 p-8 sm:p-10">
                     <div class="flex items-start justify-between pb-8 border-b border-gray-200">
                         <span class="text-base font-semibold uppercase tracking-gallery text-gray-900">{{ __('Obra autenticada') }}</span>
@@ -118,29 +141,6 @@
                             </div>
                         </div>
                         <p class="text-sm uppercase tracking-gallery text-gray-500">{{ __('Ficha pública verificada') }}</p>
-                    </div>
-                </div>
-
-                {{-- Derecha: Cómo funciona --}}
-                <div class="p-8 sm:p-10 flex flex-col justify-center">
-                    <p class="text-3xl sm:text-4xl font-medium tracking-gallery uppercase text-gray-900">{{ __('Cómo funciona') }}</p>
-                    <hr class="mt-8 border-gray-200">
-                    <div class="mt-10 space-y-10">
-                        <div>
-                            <p class="text-4xl font-light text-gray-200">01</p>
-                            <h3 class="mt-3 text-lg font-semibold tracking-wide text-gray-900">{{ __('Ficha de Datos') }}</h3>
-                            <p class="mt-2 text-sm text-gray-600 leading-relaxed">{{ __('Crea una ficha técnica completa: título, año, edición, serie, técnicas, dimensiones, descripción e imagen.') }}</p>
-                        </div>
-                        <div>
-                            <p class="text-4xl font-light text-gray-200">02</p>
-                            <h3 class="mt-3 text-lg font-semibold tracking-wide text-gray-900">{{ __('QR Permanente') }}</h3>
-                            <p class="mt-2 text-sm text-gray-600 leading-relaxed">{{ __('Cada obra tiene un código QR único que nunca cambia. Se imprime sobre la obra y dirige a la ficha pública.') }}</p>
-                        </div>
-                        <div>
-                            <p class="text-4xl font-light text-gray-200">03</p>
-                            <h3 class="mt-3 text-lg font-semibold tracking-wide text-gray-900">{{ __('Llaves Cifradas') }}</h3>
-                            <p class="mt-2 text-sm text-gray-600 leading-relaxed">{{ __('La relación entre ficha y QR está firmada criptográficamente. Solo la obra auténtica accede a su ficha.') }}</p>
-                        </div>
                     </div>
                 </div>
             </div>
