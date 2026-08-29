@@ -67,5 +67,7 @@
             </div>
         </div>
     </footer>
+
+    <x-chatwoot-widget />
 </body>
 </html>

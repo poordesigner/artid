@@ -9,16 +9,18 @@
 
         <!-- Introducción -->
         <section id="intro" class="mt-6 bg-white rounded-lg shadow-sm p-6">
-            <h2 class="font-semibold text-xl">¿Qué es ARTid?</h2>
+            <h2 class="font-semibold text-xl">{{ __('¿Qué es ARTid?') }}</h2>
             <p class="mt-2 text-sm text-gray-700">
-                <strong>ARTid</strong> — by <a href="https://poordesigner.com" class="text-indigo-600 hover:underline" target="_blank" rel="noopener">POORdesigner.com</a> — es una herramienta diseñada para que los artistas puedan generar una identidad digital para sus obras físicas.
+                <strong>ARTid</strong> — by <a href="https://poordesigner.com" class="text-indigo-600 hover:underline" target="_blank" rel="noopener">POORdesigner.com</a> — {{ __('es una herramienta diseñada para que los artistas puedan generar una identidad digital para sus obras físicas.') }}
             </p>
 
-            <h3 class="mt-4 font-semibold">¿Cómo está estructurado ARTid?</h3>
+            <h3 class="mt-4 font-semibold">{{ __('¿Cómo está estructurado ARTid?') }}</h3>
             <ul class="mt-2 text-sm space-y-2 list-disc list-inside text-gray-700">
-                <li><strong>Ficha de Datos</strong> — ARTid permite crear una ficha técnica para cada obra: título, año, edición, serie, técnicas, dimensiones, descripción e imagen.</li>
-                <li><strong>QR permanente</strong> — ARTid genera un código QR permanente, que se convierte en un medio digital único de acceso a la ficha de la obra. El QR se imprime sobre la obra y **nunca cambia**.</li>
-                <li><strong>Llaves cifradas</strong> — La generación de llaves cifradas hace que la relación entre la Ficha de Datos y el código QR sea única, evitando suplantaciones. Sólo la obra cuyo QR codifica a la URL firmada puede acceder a su ficha pública.</li>
+                <li><strong>{{ __('Ficha de Datos') }}</strong> — {{ __('Crea una ficha técnica básica de tu obra: título, año, edición, serie, técnicas, dimensiones, descripción, imagen y links externos.') }}</li>
+                <li><strong>{{ __('QR Permanente') }}</strong> — {{ __('Cada obra tiene un código QR único que nunca cambia. Se imprime sobre la obra y dirige a la ficha pública.') }}</li>
+                <li><strong>{{ __('Llaves Cifradas') }}</strong> — {{ __('La relación entre la ficha técnica y la ruta de acceso del código QR está firmada criptográficamente. Solo la obra auténtica accede a su ficha.') }}</li>
+                <li><strong>{{ __('Historial de Exposiciones y Propiedad') }}</strong> — {{ __('Documenta el historial de exposiciones y la proveniencia de cada obra.') }}</li>
+                <li><strong>{{ __('Pago único, sin suscripción') }}</strong> — {{ __('1 token = QR + ficha básica de una obra, para siempre.') }}</li>
             </ul>
         </section>
 
@@ -26,122 +28,170 @@
         <div class="mt-6 bg-white rounded-lg shadow-sm p-5">
             <h2 class="font-semibold text-lg">{{ __('Índice') }}</h2>
             <ol class="mt-2 text-sm text-indigo-600 space-y-1">
-                <li><a href="#registro" class="hover:underline">1. Crear tu cuenta en ARTid</a></li>
-                <li><a href="#panel" class="hover:underline">2. El panel de obras</a></li>
-                <li><a href="#obra" class="hover:underline">3. Crear una obra</a></li>
-                <li><a href="#series" class="hover:underline">4. Organizar obras en series</a></li>
-                <li><a href="#qr" class="hover:underline">5. Generar e imprimir el QR</a></li>
-                <li><a href="#ficha" class="hover:underline">6. La ficha pública</a></li>
-                <li><a href="#exposiciones" class="hover:underline">7. Registrar exposiciones</a></li>
-                <li><a href="#propiedad" class="hover:underline">8. Control de propiedad</a></li>
+                <li><a href="#cuenta" class="hover:underline">{{ __('1. Crear tu cuenta') }}</a></li>
+                <li><a href="#tokens" class="hover:underline">{{ __('2. Tokens: cómo funcionan y cómo comprarlos') }}</a></li>
+                <li><a href="#panel" class="hover:underline">{{ __('3. El panel de obras') }}</a></li>
+                <li><a href="#obra" class="hover:underline">{{ __('4. Crear una obra') }}</a></li>
+                <li><a href="#series" class="hover:underline">{{ __('5. Organizar obras en series') }}</a></li>
+                <li><a href="#qr" class="hover:underline">{{ __('6. Generar e imprimir el QR') }}</a></li>
+                <li><a href="#ficha" class="hover:underline">{{ __('7. La ficha pública y tu perfil público') }}</a></li>
+                <li><a href="#exposiciones" class="hover:underline">{{ __('8. Registrar exposiciones') }}</a></li>
+                <li><a href="#propiedad" class="hover:underline">{{ __('9. Control de propiedad (proveniencia)') }}</a></li>
+                <li><a href="#enlaces" class="hover:underline">{{ __('10. Enlaces externos en tu obra') }}</a></li>
+                <li><a href="#perfil" class="hover:underline">{{ __('11. Tu perfil de artista') }}</a></li>
+                <li><a href="#configuracion" class="hover:underline">{{ __('12. Configuración y seguridad') }}</a></li>
             </ol>
         </div>
 
         <!-- 1 -->
-        <section id="registro" class="mt-6 bg-white rounded-lg shadow-sm p-6">
-            <h2 class="font-semibold text-xl">1. Crear tu cuenta en ARTid</h2>
+        <section id="cuenta" class="mt-6 bg-white rounded-lg shadow-sm p-6">
+            <h2 class="font-semibold text-xl">{{ __('1. Crear tu cuenta') }}</h2>
             <ol class="mt-3 text-sm space-y-2 list-decimal list-inside">
-                <li>Entra a <span class="font-mono">{{ config('app.url') }}</span>.</li>
-                <li>Haz clic en <strong>«Continue with Google»</strong> o regístrate con <strong>email y contraseña</strong> (el enlace «¿No tienes cuenta? Regístrate» está en la página de login).</li>
-                <li>Se crea tu cuenta de artista y entras al <strong>panel de obras</strong>.</li>
+                <li>{{ __('Entra a :app.', ['app' => config('app.url')]) }}</li>
+                <li>{{ __('Haz clic en «Continue with Google» o regístrate con email y contraseña.') }}</li>
+                <li>{{ __('Se crea tu cuenta de artista y recibes :count tokens de bienvenida, gratis y sin tarjeta.', ['count' => config('artid.welcome_tokens', 0)]) }}</li>
             </ol>
         </section>
 
         <!-- 2 -->
-        <section id="panel" class="mt-6 bg-white rounded-lg shadow-sm p-6">
-            <h2 class="font-semibold text-xl">2. El panel de obras</h2>
-            <p class="mt-2 text-sm text-gray-600">La página principal te muestra la lista de tus obras. Cada fila incluye el <strong>QR</strong> (en miniatura), el <strong>título</strong>, el <strong>año</strong> y el <strong>estado</strong>.</p>
-            <ul class="mt-2 text-sm space-y-1 list-disc list-inside">
-                <li><strong>New Artwork</strong> — crear una obra nueva.</li>
-                <li><strong>Series</strong> — administrar tus series.</li>
-                <li><strong>+ Expo</strong> / <strong>+ Propiedad</strong> — sumar historial a una obra.</li>
-                <li><strong>Edit</strong> — modificar los datos de la obra.</li>
+        <section id="tokens" class="mt-6 bg-white rounded-lg shadow-sm p-6">
+            <h2 class="font-semibold text-xl">{{ __('2. Tokens: cómo funcionan y cómo comprarlos') }}</h2>
+            <ul class="mt-3 text-sm space-y-2 list-disc list-inside">
+                <li>{{ __('1 token = QR + ficha básica de una obra, para siempre.') }}</li>
+                <li>{{ __('Al guardar una obra nueva se consume 1 token de tu saldo.') }}</li>
+                <li>{{ __('Para comprar: entra a tu panel → «Comprar tokens», elige un paquete y paga una sola vez con Paddle. Los tokens se acreditan a tu saldo automáticamente.') }}</li>
+                <li>{{ __('En «Mis tokens» ves tu saldo, los paquetes disponibles y el historial de movimientos (compras, tokens otorgados y consumos).') }}</li>
+                <li>{{ __('Si no te quedan tokens no puedes crear obras nuevas, pero sí editar y gestionar las existentes.') }}</li>
             </ul>
         </section>
 
         <!-- 3 -->
-        <section id="obra" class="mt-6 bg-white rounded-lg shadow-sm p-6">
-            <h2 class="font-semibold text-xl">3. Crear una obra</h2>
-            <ol class="mt-3 text-sm space-y-2 list-decimal list-inside">
-                <li>Panel → <strong>«New Artwork»</strong>.</li>
-                <li>Completa: título, año, edición (ej. <code>1/3</code>), serie y descripción.</li>
-                <li><strong>Artwork ID</strong> (opcional) — identificador permanente. Si lo dejas vacío se genera automáticamente del título.</li>
-                <li><strong>Técnicas</strong> — selecciona una o más. Escribe para filtrar y usa el <code>x</code> para quitar.</li>
-                <li><strong>Dimensiones</strong> (ej. <code>50 x 70 cm</code>) y sube la <strong>imagen</strong> de la obra.</li>
-                <li>Al guardar, se crea la obra y ya puedes ver su QR y su ficha.</li>
-            </ol>
+        <section id="panel" class="mt-6 bg-white rounded-lg shadow-sm p-6">
+            <h2 class="font-semibold text-xl">{{ __('3. El panel de obras') }}</h2>
+            <p class="mt-2 text-sm text-gray-600">{{ __('La página principal te muestra la lista de tus obras. Cada fila incluye el QR (en miniatura), el título, el año y el estado.') }}</p>
+            <ul class="mt-2 text-sm space-y-1 list-disc list-inside">
+                <li>{{ __('«New Artwork» — crear una obra nueva (consume 1 token).') }}</li>
+                <li>{{ __('«Series» — administrar tus series.') }}</li>
+                <li>{{ __('«+ Expo» / «+ Propiedad» — sumar historial a una obra.') }}</li>
+                <li>{{ __('«Edit» / «Delete» — modificar o eliminar la obra.') }}</li>
+                <li>{{ __('Filtros por estado: Todas / Activas / Inactivas. Las obras inactivas se muestran atenuadas.') }}</li>
+            </ul>
         </section>
 
         <!-- 4 -->
-        <section id="series" class="mt-6 bg-white rounded-lg shadow-sm p-6">
-            <h2 class="font-semibold text-xl">4. Organizar obras en series</h2>
-            <p class="mt-2 text-sm text-gray-600">Las <strong>series</strong> agrupan obras relacionadas; el nombre de la serie aparece en la ficha pública de cada obra.</p>
+        <section id="obra" class="mt-6 bg-white rounded-lg shadow-sm p-6">
+            <h2 class="font-semibold text-xl">{{ __('4. Crear una obra') }}</h2>
             <ol class="mt-3 text-sm space-y-2 list-decimal list-inside">
-                <li>Panel → <strong>«Series»</strong>.</li>
-                <li>Crea una serie con su nombre y una descripción.</li>
-                <li>Asigna la serie a tus obras desde el formulario de creación/edición.</li>
-                <li>Puedes <strong>editar</strong> o <strong>eliminar</strong> series existentes.</li>
+                <li>{{ __('Panel → «New Artwork».') }}</li>
+                <li>{{ __('Completa: título, año, edición (pieza única, tiraje o P/A con nº de copias), serie y descripción.') }}</li>
+                <li>{{ __('Artwork ID (opcional): identificador permanente; solo mayúsculas, guiones o puntos (ej. NATURAI-3.0). Si lo dejas vacío, se genera del título.') }}</li>
+                <li>{{ __('Técnicas: selecciona una o más. Escribe para filtrar y usa el «x» para quitar.') }}</li>
+                <li>{{ __('Dimensiones (alto x ancho x profundidad) y unidad.') }}</li>
+                <li>{{ __('Imagen: JPG o PNG, máximo 2 MB. Se optimiza automáticamente para la web.') }}</li>
+                <li>{{ __('Al guardar se crea la obra, se consume 1 token y ya puedes ver su QR y su ficha pública.') }}</li>
             </ol>
         </section>
 
         <!-- 5 -->
-        <section id="qr" class="mt-6 bg-white rounded-lg shadow-sm p-6">
-            <h2 class="font-semibold text-xl">5. Generar e imprimir el QR</h2>
+        <section id="series" class="mt-6 bg-white rounded-lg shadow-sm p-6">
+            <h2 class="font-semibold text-xl">{{ __('5. Organizar obras en series') }}</h2>
+            <p class="mt-2 text-sm text-gray-600">{{ __('Las series agrupan obras relacionadas; el nombre de la serie aparece en la ficha pública de cada obra.') }}</p>
             <ol class="mt-3 text-sm space-y-2 list-decimal list-inside">
-                <li>En la lista de obras verás el <strong>QR</strong> de cada una.</li>
-                <li>Haz clic sobre el QR para abrirlo en tamaño completo (SVG vectorial).</li>
-                <li>Guárdalo e imprímelo sobre la obra física.</li>
-                <li>El QR codifica una <strong>URL firmada</strong> que dirige a la ficha pública de la obra.</li>
+                <li>{{ __('Panel → «Series».') }}</li>
+                <li>{{ __('Crea una serie con su nombre y una descripción.') }}</li>
+                <li>{{ __('Asigna la serie a tus obras desde el formulario de creación o edición.') }}</li>
+                <li>{{ __('Puedes editar o eliminar series existentes.') }}</li>
             </ol>
         </section>
 
         <!-- 6 -->
-        <section id="ficha" class="mt-6 bg-white rounded-lg shadow-sm p-6">
-            <h2 class="font-semibold text-xl">6. La ficha pública</h2>
-            <p class="mt-2 text-sm text-gray-600">Al escanear el QR se abre la <strong>ficha pública</strong> de la obra, alojada por ARTid en <span class="font-mono">{{ config('artid.public_url') }}</span>. La ficha muestra:</p>
-            <ul class="mt-2 text-sm space-y-1 list-disc list-inside">
-                <li>La <strong>imagen</strong>, el <strong>título</strong> y el <strong>artista</strong>.</li>
-                <li>La <strong>metadata</strong> (año, edición, serie, técnica, dimensiones, descripción).</li>
-                <li>El <strong>historial</strong>: exposiciones y proveniencia.</li>
-                <li>Un sello <strong>«Verificado por ARTid»</strong> que confirma que la información es auténtica y está firmada.</li>
-            </ul>
-            <p class="mt-2 text-sm text-gray-600">La ficha es de solo lectura y pública: cualquiera con el QR puede verla.</p>
+        <section id="qr" class="mt-6 bg-white rounded-lg shadow-sm p-6">
+            <h2 class="font-semibold text-xl">{{ __('6. Generar e imprimir el QR') }}</h2>
+            <ol class="mt-3 text-sm space-y-2 list-decimal list-inside">
+                <li>{{ __('En la lista de obras verás el QR de cada una.') }}</li>
+                <li>{{ __('Haz clic sobre el QR para abrirlo en tamaño completo (SVG vectorial, listo para imprimir).') }}</li>
+                <li>{{ __('Guárdalo e imprímelo sobre la obra física, o inclúyelo donde quieras.') }}</li>
+                <li>{{ __('El QR codifica una URL firmada que dirige a la ficha pública de la obra.') }}</li>
+                <li>{{ __('El QR nunca cambia: aunque edites la obra, el QR y su ficha siguen siendo los mismos.') }}</li>
+            </ol>
         </section>
 
         <!-- 7 -->
-        <section id="exposiciones" class="mt-6 bg-white rounded-lg shadow-sm p-6">
-            <h2 class="font-semibold text-xl">7. Registrar exposiciones</h2>
-            <ol class="mt-3 text-sm space-y-2 list-decimal list-inside">
-                <li>Abre la obra → <strong>«+ Expo»</strong>.</li>
-                <li>Completa: nombre, <strong>fecha de inicio</strong>, <strong>fecha de fin</strong>, <strong>ubicación</strong> (ciudad y país) y una descripción.</li>
-                <li>Puedes usar la lista de sugerencias de ciudades o escribir la tuya.</li>
-                <li>Al guardar, la exposición aparece en la obra y en su <strong>ficha pública</strong>.</li>
-            </ol>
+        <section id="ficha" class="mt-6 bg-white rounded-lg shadow-sm p-6">
+            <h2 class="font-semibold text-xl">{{ __('7. La ficha pública y tu perfil público') }}</h2>
+            <p class="mt-2 text-sm text-gray-600">{{ __('Al escanear el QR se abre la ficha pública de la obra, alojada por ARTid en :url. Verifica la firma del QR: sin firma válida, la ficha no se muestra (404).', ['url' => config('artid.public_url')]) }}</p>
+            <ul class="mt-2 text-sm space-y-1 list-disc list-inside">
+                <li>{{ __('Muestra la imagen, el título y el artista.') }}</li>
+                <li>{{ __('La metadata: año, edición, serie, técnica, dimensiones y descripción.') }}</li>
+                <li>{{ __('El historial: exposiciones y proveniencia.') }}</li>
+                <li>{{ __('Un sello «Verificado por ARTid» que confirma que la información es auténtica y está firmada.') }}</li>
+            </ul>
+            <p class="mt-2 text-sm text-gray-600">{{ __('La ficha es de solo lectura y pública: cualquiera con el QR puede verla.') }}</p>
+            <p class="mt-2 text-sm text-gray-600">{{ __('También tienes un perfil público como artista, donde se muestran tu avatar, declaración (statement), CV, redes sociales y enlaces de perfil.') }}</p>
         </section>
 
         <!-- 8 -->
-        <section id="propiedad" class="mt-6 bg-white rounded-lg shadow-sm p-6">
-            <h2 class="font-semibold text-xl">8. Control de propiedad</h2>
-            <p class="mt-2 text-sm text-gray-600">El <strong>historial de propiedad</strong> (proveniencia) registra quién es el dueño de la obra y cómo fue pasando de mano en mano.</p>
-
-            <h3 class="mt-4 font-semibold">Primer propietario</h3>
-            <ol class="mt-2 text-sm space-y-2 list-decimal list-inside">
-                <li>Abre la obra → <strong>«+ Propiedad»</strong> → tipo <strong>«Initial owner (artist)»</strong>.</li>
-                <li>Indica el nombre, email opcional, fecha y notas.</li>
-                <li>El primer propietario queda registrado vislumbrable.</li>
+        <section id="exposiciones" class="mt-6 bg-white rounded-lg shadow-sm p-6">
+            <h2 class="font-semibold text-xl">{{ __('8. Registrar exposiciones') }}</h2>
+            <ol class="mt-3 text-sm space-y-2 list-decimal list-inside">
+                <li>{{ __('Abre la obra → «+ Expo».') }}</li>
+                <li>{{ __('Completa: nombre, fecha de inicio, fecha de fin, ubicación (ciudad y país) y una descripción.') }}</li>
+                <li>{{ __('Puedes usar la lista de sugerencias de ciudades o escribir la tuya.') }}</li>
+                <li>{{ __('Al guardar, la exposición aparece en la obra y en su ficha pública.') }}</li>
             </ol>
-
-            <h3 class="mt-4 font-semibold">Transferencia / venta</h3>
-            <ol class="mt-2 text-sm space-y-2 list-decimal list-inside">
-                <li>Abre la obra → <strong>«+ Propiedad»</strong> → tipo <strong>«Transfer / Sale»</strong>.</li>
-                <li>Completa los datos del nuevo propietario y guarda. ARTid genera una <strong>llave secreta</strong> (se muestra una sola vez, ¡guárdala!).</li>
-                <li>Entrega la llave al nuevo dueño junto con la obra.</li>
-                <li>El nuevo dueño (o tú) puede introducir la llave en <strong>«Secret key → Reveal»</strong> para ver los datos del propietario.</li>
-            </ol>
-            <p class="mt-3 text-sm text-gray-600">Los datos del propietario en una transferencia están <strong>cifrados</strong>: ARTid guarda la marca de que ocurrió la transferencia, pero solo quien posee la llave puede conocer quién es el dueño en ese momento.</p>
         </section>
 
-        <p class="mt-8 text-sm text-gray-500">{{ __('¿Dudas? Sigue estos pasos o contacta con soporte desde el panel.') }}</p>
+        <!-- 9 -->
+        <section id="propiedad" class="mt-6 bg-white rounded-lg shadow-sm p-6">
+            <h2 class="font-semibold text-xl">{{ __('9. Control de propiedad (proveniencia)') }}</h2>
+            <p class="mt-2 text-sm text-gray-700">{{ __('El historial de propiedad (proveniencia) registra quién es el dueño de la obra y cómo fue pasando de mano en mano.') }}</p>
+
+            <h3 class="mt-4 font-semibold">{{ __('Primer propietario') }}</h3>
+            <ol class="mt-2 text-sm space-y-2 list-decimal list-inside">
+                <li>{{ __('Abre la obra → «+ Propiedad» → tipo «Initial owner (artist)».') }}</li>
+                <li>{{ __('Indica el nombre, email opcional, fecha y notas.') }}</li>
+                <li>{{ __('El primer propietario queda registrado de forma visible.') }}</li>
+            </ol>
+
+            <h3 class="mt-4 font-semibold">{{ __('Transferencia / venta') }}</h3>
+            <ol class="mt-2 text-sm space-y-2 list-decimal list-inside">
+                <li>{{ __('Abre la obra → «+ Propiedad» → tipo «Transfer / Sale».') }}</li>
+                <li>{{ __('Completa los datos del nuevo propietario (pueden ser anónimos) y guarda. ARTid genera una llave secreta que se muestra una sola vez: ¡guárdala!') }}</li>
+                <li>{{ __('Entrega la llave al nuevo dueño junto con la obra.') }}</li>
+                <li>{{ __('Quien tenga la llave puede revelar los datos del propietario desde «Secret key → Reveal».') }}</li>
+            </ol>
+            <p class="mt-3 text-sm text-gray-700">{{ __('Los datos de una transferencia están cifrados: ARTid guarda la marca de que ocurrió, pero solo la llave desbloquea quién es el dueño en ese momento.') }}</p>
+        </section>
+
+        <!-- 10 -->
+        <section id="enlaces" class="mt-6 bg-white rounded-lg shadow-sm p-6">
+            <h2 class="font-semibold text-xl">{{ __('10. Enlaces externos en tu obra') }}</h2>
+            <ul class="mt-3 text-sm space-y-2 list-disc list-inside">
+                <li>{{ __('Puedes asociar hasta 10 enlaces a cada obra (tipo video, foto o blog).') }}</li>
+                <li>{{ __('Los enlaces aparecen en la ficha pública de la obra.') }}</li>
+            </ul>
+        </section>
+
+        <!-- 11 -->
+        <section id="perfil" class="mt-6 bg-white rounded-lg shadow-sm p-6">
+            <h2 class="font-semibold text-xl">{{ __('11. Tu perfil de artista') }}</h2>
+            <ul class="mt-3 text-sm space-y-2 list-disc list-inside">
+                <li>{{ __('En «Perfil» completas tu información pública: foto de perfil, nombre, email, declaración (statement), hoja de vida en PDF, página web y redes sociales (Instagram, Behance, ArtStation, YouTube, TikTok).') }}</li>
+                <li>{{ __('Puedes agregar hasta 5 enlaces de perfil (portafolio, CV o exposiciones).') }}</li>
+                <li>{{ __('Toda esa información se muestra en tu perfil público.') }}</li>
+            </ul>
+        </section>
+
+        <!-- 12 -->
+        <section id="configuracion" class="mt-6 bg-white rounded-lg shadow-sm p-6">
+            <h2 class="font-semibold text-xl">{{ __('12. Configuración y seguridad') }}</h2>
+            <ul class="mt-3 text-sm space-y-2 list-disc list-inside">
+                <li>{{ __('En «Configuración» administras tu email y contraseña, revisas tu saldo de tokens y puedes eliminar tu cuenta.') }}</li>
+                <li>{{ __('Para eliminar la cuenta debes escribir la palabra de confirmación. Esta acción no se puede deshacer.') }}</li>
+            </ul>
+        </section>
+
+        <p class="mt-8 text-sm text-gray-500">{{ __('¿Dudas? Sigue estos pasos o contáctanos desde el chat de soporte en la plataforma.') }}</p>
             </div>
         </div>
     </div>

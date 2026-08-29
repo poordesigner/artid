@@ -2,14 +2,19 @@
 
 Contexto del proyecto para agentes de IA. Leer antes de tocar código.
 
-## Qué es ARTid
+## Qué es ARTid (estado actual)
 
 Plataforma SaaS **ARTid by POORdesigner.com**: identidad digital para obras de arte físicas.
-El artista registra sus obras y cada una obtiene un **QR permanente** firmado criptográficamente
-que apunta a una **ficha pública verificada**. Incluye metadata, historial (exposiciones y
-proveniencia) y control cifrado de propiedad.
+El artista registra sus obras con **pago único por tokens** y cada obra obtiene un **QR permanente**
+firmado criptográficamente que apunta a una **ficha pública verificada** (`/o/{publicId}`).
+Incluye metadata, historial (exposiciones y proveniencia) y control cifrado de propiedad.
+Soporte al usuario: **Chatwoot** (ver abajo).
 
-Modelo: **SaaS centralizado** (datos en BD, imágenes en R2). No es open-source.
+- **Modelo de pago: tokens de consumo, NO suscripción.** `1 token = QR + ficha básica de una obra, para siempre`.
+- Crear una obra consume **1 token**; el gate es `Artist::canCreateArtwork()` (saldo > 0).
+- Los plan/suscripción (Paddle Billing subscriptions) son **legado**: el modelo de grants por plan está
+  deprecado ("El acceso por plan ya no se usa. Usa el otorgamiento de tokens."). No hay UI de artista para
+  suscripciones; `/planes` vende paquetes de tokens.
 
 ## Stack
 
@@ -17,130 +22,123 @@ Modelo: **SaaS centralizado** (datos en BD, imágenes en R2). No es open-source.
 - Almacenamiento de archivos: **R2** de Cloudflare (tipo `r2` en `config/filesystems.php`)
 - Auth: Google OAuth + email/password (Breeze). Usuario = **`Artist`** (Authenticatable)
 - QR: `simplesoftwareio/simple-qrcode`
-- Pagos: **Paddle Billing** (sandbox y live)
+- Pagos: **Paddle Billing** `PaddleService` (sandbox y live) — usado HOY para **pago único de paquetes de tokens**.
+
+## Tokens (modelo de negocio actual)
+
+- **Welcome tokens**: `config('artid.welcome_tokens')` (env `ARTID_WELCOME_TOKENS`, default 5) la primera vez
+  que el artista crea cuenta (`grantWelcomeTokens()`, idempotente vía `welcome_tokens_claimed`).
+- **Paquetes**: `TokenPackage` (admin los administra en Configuración → Paquetes). Checkout:
+  `TokenController@checkout` → `PaddleService::createTokenCheckout` → checkout alojado → cookie `pending_package`.
+  El webhook acredita tokens cuando llega `transaction.completed` con `custom_data.token_package_id`
+  (idempotente por transacción; nota "Compra de paquete").
+- **Consumo**: `Artist::consumeToken()` (1) atómico al crear obra; registra `TokenTransaction` type `consume`.
+- **Historial**: `TokenTransaction` (type `grant` / `purchase` / `consume`, amount ±, balance_after, ref, note).
+  Panel "Mis tokens" (`/tokens`): saldo, paquetes, funciones y movimientos.
+- **Admin otorga tokens** (no planes): `/configuracion/cuentas` → `AccountController@grant` (addTokens type 'grant').
+- Funciones (`TokenFunction` + acciones `TokenAction`) son configuración para la página de precios; el consumo
+  real de obra es fijo (1 token). No implementar otros consumos sin confirmar.
 
 ## Modelos principales
 
-- `Artist` — usuario (artista). Tiene `is_admin`, `granted_plan_id` + `granted_expires_at`
-  (cuenta especial: plan otorgado por el admin sin pagar), campos de perfil (avatar, CV, redes).
-- `Artwork` — obra. `artist_id`, `title`, `slug`, `artwork_id` (único, permanente), `public_id`
-  (UUID), `year`, `edition`, `status` (`created`, `archived` = inactiva por límite), `series_id`,
-  `technique`, `dimensions`, `description`, `image`.
-- `Series`, `Technique` (32 técnicas + Graffiti, Arte Urbano, Stencil), `Exhibition`
-  (start_date, end_date, location), `Ownership` (proveniencia cifrada).
-- Planes: `Plan` (name, description, is_active, sort_order, paddle_product_id, max_artworks,
-  is_free), `PlanPeriod` (number, period [monthly|quarterly|semiannual|annual], price,
-  paddle_product_id, paddle_price_id), `PlanFeature`, `PlanLegalTerm`.
-- Facturación: `Subscription` (artist_id, plan_id, plan_period_id, paddle_customer_id,
-  paddle_subscription_id, status, next_billed_at, current_period_start/end, canceled_at),
-  `Payment` (transacciones), `WebhookEvent` (idempotencia).
+- `Artist` — usuario (artista). `is_admin`, avatar, statement, cv_pdf, redes (instagram/behance/artstation/
+  youtube/tiktok), website_url, `links` (ArtistLink), `tokens_balance`, `welcome_tokens_claimed`,
+  `github_*` / `short_domain` (campos heredados del prototipo; ruta GitHub NO registrada → dormido).
+  Métodos clave: `tokenBalance()`, `canCreateArtwork()`, `addTokens()`, `consumeToken()`, `grantWelcomeTokens()`,
+  `activeSubscription()` / `effectivePlan()` / `enforcePlanLimits()` (legado, solo webhooks de suscripción).
+- `Artwork` — obra. `artist_id`, `title`, `slug`, `artwork_id` (único, permanente), `public_id` (UUID, se usa en
+  firma), `year`, `edition`, `status` (`created`|`archived`), `series_id`, `series`, `technique`, `dimensions`,
+  `description`, `image` (R2). Relaciones: exposiciones, ownerships, `links` (ArtworkLink, máx 10).
+- `Series`, `Technique`, `Exhibition` (start_date, end_date, location), `Ownership` (proveniencia cifrada, type
+  `initial`|`transfer`, llave secreta por transferencia).
+- Enlaces: `ArtworkLink` (video/foto/blog), `ArtistLink` (portafolio/CV/exposiciones, máx 5).
+- Tokens: `TokenPackage`, `TokenFunction`, `TokenAction` (pivot `token_function_action`), `TokenTransaction`.
+- Legacy (modelos/servicios aún presentes, sin UI de artista): `Plan`, `PlanPeriod`, `PlanFeature`,
+  `PlanLegalTerm`, `Subscription`, `Payment`, `WebhookEvent` (idempotencia de webhooks Paddle), `GitHubService`.
 
 ## QR firmado (ficha pública)
 
 - `Artwork::public_id` = UUID. Firma HMAC-SHA256 **versionada** en `config/artid.php`
   (`signing_keys['v1']`, `active_signing_version`).
 - `signedUrl()` → `{ARTID_PUBLIC_URL}/o/{public_id}?s={version}.{hmac}`.
-- La ficha pública `GET /o/{publicId}` verifica la firma; sin firma válida → 404.
-- `artwork_id` NO se usa en la firma; solo para display y rutas de imagen R2.
-
-## Planes y gates por plan
-
-- Cada plan tiene `max_artworks` y `is_free` (true = plan Free).
-- `Artist::effectivePlan()` determina el plan actual con prioridad:
-  **grant otorgado (si vigente) > suscripción paga > plan Free**.
-- `Artist::currentMaxArtworks()` y `activeArtworksCount()` gobiernan el gate de obras.
-- `Artist::enforcePlanLimits()`:
-  - archiva obras (status `archived`) si exceden el límite (conserva las más recientes);
-  - **reactiva** obras archivadas cuando sube el cupo (las más recientes primero).
-- Se llama al crear obra, al otorgar/revocar grant, y en webhooks de suscripción (on plan change).
-- Las obras con `status = 'archived'` son "inactivas" (atenuadas en la UI, filtrables).
-
-## Cuentas especiales (grant)
-
-- Admin asigna un plan a un artista **sin pago** mediante `granted_plan_id` + `granted_expires_at`.
-- Vigencia: 7 / 30 / 90 días o sin expiración. Al vencer, `effectivePlan()` vuelve al plan anterior.
-- NO interactúa con Paddle (no crea suscripción ni cambia cobros; la suscripción real sigue normal).
-- Gestión: `/configuracion/cuentas` (solo admin).
+- `GET /o/{publicId}` (`PublicArtworkController@show`) verifica la firma (`verifySignature`); sin firma válida → 404.
+- Hay también **perfil público de artista**: `GET /artist/{id}` (`PublicArtworkController@artist`).
+- `artwork_id` NO se usa en la firma; solo display y rutas de imagen R2.
 
 ## Roles y paneles
 
-- **Admin** (`Artist::isAdmin()`): panel `/admin` con stats y tarjetas de gestión
-  (cuentas, planes, configuración). Nav muestra "Panel".
-- **Artista**: dashboard `/panel` con bienvenida, stats, acciones y obras recientes.
-  Nav muestra "Panel" y "Obras".
+- **Admin** (`Artist::isAdmin()`): panel `/admin` con stats (artistas, paquetes activos, tokens entregados,
+  cobrado USD) y accesos a cuentas / config. Nav muestra "Panel".
+- **Artista**: dashboard `/panel` con bienvenida, stats (Obras/Series/Tokens), acciones y obras recientes.
 - `/dashboard` redirige según rol (admin → `/admin`, artista → `/panel`).
-- Middleware `admin` registrado en `bootstrap/app.php` (alias). **Ojo**: el `Base Controller`
-  de este proyecto es un `abstract class Controller {}` SIN `middleware()` — no usar
-  `$this->middleware()` en constructores (Laravel 11 no lo soporta acá); proteger con
-  `Route::middleware('admin')` en `web.php` o el middleware en bootstrap.
+- Middleware `admin` en `bootstrap/app.php` (alias). **Ojo**: el `Base Controller` es un `abstract class Controller {}`
+  SIN `middleware()` — no usar `$this->middleware()` en constructores (Laravel 11 no lo soporta acá); proteger con
+  `Route::middleware('admin')` en `web.php` (ver grupo en `routes/web.php`).
 
-## Paddle Billing
+## Paddle Billing (env vars en Coolify)
 
-- Env vars (`.env` / Coolify):
-  - `PADDLE_ENV=sandbox|production`
-  - `PADDLE_API_KEY` (server-side, prefijo `pdl_`)
-  - `PADDLE_WEBHOOK_SECRET` (endpoint secret key para firmas)
-  - `PADDLE_CLIENT_TOKEN` (client-side para Paddle.js, prefijo test_)
-  - `PADDLE_MIN_IMMEDIATE_CHARGE=10` (mínimo para cobro inmediato en upgrades)
-- `PaddleService` (app/Services): crea productos/precios, customer, transacciones checkout,
-  preview/update de suscripción, cancel, portal session, payment methods, credit balance.
-- URLs: sandbox `https://sandbox-api.paddle.com`, live `https://api.paddle.com`.
-- Flujo de suscripción:
-  1. Checkout alojado `/pay` con Paddle.js → paga → webhooks `subscription.created/activated`
-     + `transaction.*` → BD.
-  2. Upgrade/downgrade: **preview** → página de confirmación con montos prorrateados →
-     `subscriptions.update` con `proration_billing_mode`.
-  3. **Mínimo $10** (Opción C): si el cargo prorrateado < mínimo → usar
-     `prorated_next_billing_period` (se cobra en la próxima factura) y mostrar aviso claro.
-  4. Cancelación: `next_billing_period` (queda vigente hasta fin de período). Botón "Reactivar
-     plan" remueve el `scheduled_change` (`scheduled_change: null`).
-  5. Customer portal: `/subscribe/portal` devuelve JSON URL → se abre en nueva pestaña
-     (Paddle prohíbe iframe).
-- **Prorrateo y crédito**: preview muestra detalle. En upgrade de misma frecuencia el crédito
-  del plan viejo puede ser 0 (carga la diferencia); en downgrade aparece "crédito a favor".
-  Paddle descuenta el balance automáticamente (`credit` de la transacción inmediata).
-- Webhooks: `POST /webhooks/paddle` (excluido de CSRF en bootstrap). **Idempotencia**: se
-  registra cada `event_id` en `webhook_events` y se omite duplicados.
+- `PADDLE_ENV`, `PADDLE_API_KEY` (prefijo `pdl_`), `PADDLE_WEBHOOK_SECRET`, `PADDLE_CLIENT_TOKEN`,
+  `PADDLE_MIN_IMMEDIATE_CHARGE` (legado: suscripciones).
+- Uso activo: **checkout one-time de paquetes** (`createTokenCheckout`) + crediting por webhook + sync de
+  productos/precios de paquete (`TokenPackageController@syncToPaddle`).
+- Flujo legado de suscripción (planes/upgrade/downgrade/cancel/portal, checkout embebido `/pay` con Paddle.js):
+  sigue en el código (`SubscriptionController`, `PaddleService` preview/update/portal), sin UI actual de artista.
+- Webhooks: `POST /webhooks/paddle` (excluido de CSRF en bootstrap). **Idempotencia**: cada `event_id` en
+  `webhook_events` y se omite duplicados. Compra de tokens idempotente por transacción.
+
+## Páginas y flujo clave (artista)
+
+- Registro verify: crear cuenta + welcome tokens. Ingreso Google/email.
+- `/panel` dashboard → `/artworks` (filtros Todas/Activas/Inactivas; orden), crear obra (consume 1 token),
+  `/artworks/{id}` (resumen + QR + exposiciones + enlaces + propiedad), series, `+ Expo`, `+ Propiedad`
+  (initial/transfer + llave secreta + reveal), enlaces de obra.
+- `/tokens` — saldo/paquetes/historial. `/profile` — avatar, perfil, statement, CV PDF, redes, enlaces de perfil,
+  contraseña, eliminar cuenta. `/configuracion` — Seguridad + Mis tokens (artista); admin: Planes, Paquetes,
+  Usos de tokens. `/planes` — landing de paquetes público.
+- Portal de ayuda: `/ayuda` (`resources/views/ayuda.blade.php`, 12 secciones) — mantener al día con los flujos reales.
+
+## Chatwoot (soporte)
+
+- Chatwoot corre en el VPS (Coolify, stack `pgxhgejin4zgyjdovg0blaz3`, dominio `https://cwoot.poordesigner.com`).
+- **Alcance 1 acordado**: widget de chat en el SaaS (dashboard + landing) → inbox único de soporte.
+  Aún NO hay widget integrado en el código. No asumir ninguna integración sin implementarla.
 
 ## Localización (idioma)
 
-- No persistente: middleware `SetLocale` (agregado al grupo web en bootstrap) detecta cookie
-  `locale` o idioma del navegador.
-- Selector ES/EN en navbar, login y landing. `x-language-switcher` componente.
-- Traducciones en `lang/es.json` y `lang/en.json` (JSON keys = texto).
-- **Español colombiano** (tú/usted neutro, no argentino). Textos de la UI sin `__()` no se
-  traducen — envolver en `__()`.
+- No persistente: middleware `SetLocale` (grupo web en bootstrap) detecta cookie `locale` o idioma del navegador.
+- Selector ES/EN (`x-language-switcher`). Traducciones en `lang/es.json` y `lang/en.json` (JSON keys = texto
+  original; en.json traduce ES→EN). **Todo texto visible en blade debe ir en `__()`**; al agregar textos hay que
+  definir la clave en AMBOS JSON (`lang/es.json` valor = mismo texto; `lang/en.json` valor = inglés). Validar JSON
+  tras editar (duplicados y sintaxis). Español colombiano (tú/usted neutro).
 
 ## Deploy
 
-- VPS `207.180.242.253` vía **Coolify** (proyecto UUID `rdz28v6ov6rkafdgnteqo726`).
-- **No hay PHP/Composer/Node local en Windows**: migraciones y comandos se corren DENTRO del
-  contenedor de la app vía SSH (configurar `docker ps` para el nombre, cambia en cada deploy).
-- Git push se hace a `github.com/poordesigner/artid` (repo `main`). El token de push no debe
-  commitearse en el repo (GitHub push protection lo bloquea); se usa vía remote configurado
-  localmente o credencial del entorno, no en archivos del proyecto.
-- **Coolify NO auto-despliegas** en cada push: hay que validar en el dashboard de Coolify.
-  El usuario maneja el deploy y avisa.
+- VPS `207.180.242.253` vía **Coolify** (clave SSH local: `~/.ssh/codex_portal_b2b_nopass`, usuario root).
+- **No hay PHP/Composer/Node local en Windows**: migraciones y comandos se corren DENTRO del contenedor de la app
+  vía SSH (`docker ps` para el nombre; cambia en cada deploy). En Windows no hay `node` ni `php`; usar `python` si se
+  necesita validar JSON.
+- Git push a `github.com/poordesigner/artid` (repo `main`). El token de push no se commitea (GitHub push protection);
+  se usa vía remote configurado localmente o credencial del entorno.
+- **Coolify NO auto-despliega** en cada push: validar en el dashboard de Coolify. El usuario maneja el deploy y avisa.
 - Migraciones: `php artisan migrate --force` dentro del contenedor tras el deploy.
 - Env vars se setean en Coolify (dashboard), no en `.env` del repo.
-- Cuidado: **no usar `$this->middleware()`** en este proyecto (Controller base sin el método).
-- Scripts temporales de debug: crearlos en `storage/`, ejecutarlos vía `docker cp` al contenedor
-  y `docker exec php <archivo>`, luego **borrarlos** (no commitear `storage/*.php`).
+- Cuidado: **no usar `$this->middleware()`** en este proyecto.
+- Scripts temporales de debug: crearlos en `storage/`, ejecutarlos vía `docker cp` + `docker exec php <archivo>`,
+  luego **borrarlos** (no commitear `storage/*.php`).
 
 ## Assets / branding
 
-- Logos en `public/img/`:
-  - `navbar_240x110.png` — navbar y footer
-  - `logo_600x300.png` — login y checkout
-  - `logo_box_1024x1024.png` — imagen cuadrada para Paddle (también en R2 público:
-    `https://pub-10efd14d011c4a98a3d5281d393c13d1.r2.dev/logo_box_1024x1024.png`)
-- Los productos de Paddle (Free, Artist, Profesional) usan ese `logo_box` como `image_url`.
+- Logos en `public/img/`: `navbar_240x120.png` (navbar/footer), `logo_600x300.png` (login y checkout),
+  `favicon_192x192.png`, y `logo_box_1024x1024.png` (cuadrada para Paddle; también en R2 público).
+- Los productos de Paddle de paquetes usan ese `logo_box` como `image_url`.
 
 ## Convenciones de código
 
 - Vistas: Tailwind + Alpine.js. Componentes Blade en `resources/views/components/`
   (`x-breadcrumb`, `x-language-switcher`, `x-locations-datalist`).
 - Breadcrumbs: `x-breadcrumb` para páginas anidadas (editar/ver/crear obra, exposiciones, propiedad).
-- El formulario de obra tiene técnicas multi-select (Alpine `techniquePicker`), dimensiones en 3
-  campos (alto×ancho×profundidad + unidad), edición tipo (pieza única/tiraje/P-A), año limitado,
-  descripción máx 500, imagen máx 2MB.
+- Formulario de obra: técnicas multi-select (Alpine `techniquePicker`), edición tipo (pieza única/tiraje/P-A),
+  año limitado, descripción máx 500, imagen máx 2MB (se optimiza a WEBP ≤300KB en R2 `artworks/{artwork_id}/*.webp`).
+- `docs/` (`PROMPT.md`, `ROADMAP.md`, `CONTEXTO-ESTATICO.md`) documenta el **concepto original** (configurador con
+  GitHub del artista / short.io / tokens por acción). Es historia; el código actual pivotó a SaaS central con
+  tokens por obra. Tratar `docs/` como referencia histórica, no como spec.

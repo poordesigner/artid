@@ -35,5 +35,7 @@
                 {{ $slot }}
             </main>
         </div>
+
+        <x-chatwoot-widget />
     </body>
 </html>
