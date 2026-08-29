@@ -51,11 +51,20 @@
             </p>
 
             {{-- Bienvenida free --}}
-            <div class="mx-auto mt-10 inline-block bg-[#550044] text-white px-8 py-4">
-                <p class="text-xs uppercase tracking-gallery text-white/70">{{ __('Regalo de bienvenida') }}</p>
-                <p class="mt-1 text-lg sm:text-xl font-medium">
-                    {{ __('Recibe :count tokens gratis al registrarte.', ['count' => config('artid.welcome_tokens', 0)]) }}
-                </p>
+            <div class="mx-auto mt-10 max-w-5xl text-left border border-brand text-white p-10 sm:p-14 flex flex-col sm:flex-row items-center justify-between gap-8"
+                 style="background: #550044;">
+                <div>
+                    <p class="text-xs uppercase tracking-gallery text-gray-400">{{ __('Regalo de bienvenida') }}</p>
+                    <h2 class="mt-4 font-medium text-3xl sm:text-4xl">
+                        {{ __('Recibe :count tokens gratis al registrarte.', ['count' => config('artid.welcome_tokens', 0)]) }}
+                    </h2>
+                    <p class="mt-3 text-gray-300 max-w-xl">
+                        {{ __('Con ellos creas tu primera obra con QR y ficha básica. Sin suscripción, sin tarjeta.') }}
+                    </p>
+                </div>
+                <a href="{{ route('register') }}" class="shrink-0 px-10 py-4 border border-white text-white text-sm tracking-gallery uppercase hover:bg-white hover:text-gray-900 transition">
+                    {{ __('Crear cuenta gratis') }}
+                </a>
             </div>
 
             <div class="mt-10 flex flex-wrap items-center justify-center gap-5 sm:gap-6">
