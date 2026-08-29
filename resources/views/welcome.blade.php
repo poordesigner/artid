@@ -66,13 +66,13 @@
 
                 {{-- Derecha: botones de acción --}}
                 <div class="flex flex-col justify-center gap-5">
-                    <a href="{{ route('register') }}" class="px-10 py-4 border border-brand bg-brand text-white text-base tracking-gallery uppercase text-center hover:bg-white hover:text-gray-900 transition">
+                    <a href="{{ route('register') }}" class="px-10 py-4 border border-brand bg-white text-gray-900 text-base tracking-gallery uppercase text-center hover:bg-brand hover:text-white transition">
                         {{ __('Crear cuenta gratis') }}
                     </a>
-                    <a href="{{ route('planes') }}" class="px-10 py-4 border border-brand text-gray-900 text-base tracking-gallery uppercase text-center hover:bg-brand hover:text-white transition">
+                    <a href="{{ route('planes') }}" class="px-10 py-4 border border-brand bg-white text-gray-900 text-base tracking-gallery uppercase text-center hover:bg-brand hover:text-white transition">
                         {{ __('Ver Planes') }}
                     </a>
-                    <a href="{{ route('ayuda') }}" class="px-10 py-4 border border-brand text-gray-500 text-base tracking-gallery uppercase text-center hover:bg-brand hover:text-white transition">
+                    <a href="{{ route('ayuda') }}" class="px-10 py-4 border border-brand bg-white text-gray-900 text-base tracking-gallery uppercase text-center hover:bg-brand hover:text-white transition">
                         {{ __('Ver guía') }}
                     </a>
                 </div>
