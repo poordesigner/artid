@@ -21,7 +21,7 @@
                         @if ($artist->currentMaxArtworks() !== null && $artist->activeArtworksCount() >= $artist->currentMaxArtworks())
                             <span class="inline-flex items-center px-4 py-2 bg-gray-100 text-gray-500 rounded-md text-xs uppercase tracking-widest cursor-not-allowed">{{ __('Límite alcanzado') }}</span>
                         @else
-                            <a href="{{ route('artworks.create') }}" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                            <a href="{{ route('artworks.create') }}" class="inline-flex items-center px-4 py-2 bg-brand border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-brand-600 focus:bg-brand-600 active:bg-brand focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
                                 {{ __('New Artwork') }}
                             </a>
                         @endif
@@ -41,7 +41,7 @@
                     <div class="mb-4 flex flex-wrap items-center gap-2">
                         <a href="{{ route('artworks.index', ['status' => 'all', 'sort' => $sort]) }}"
                            class="px-3 py-1.5 rounded-md text-xs font-medium uppercase tracking-wider transition
-                                  {{ $status === 'all' ? 'bg-gray-800 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
+                                  {{ $status === 'all' ? 'bg-brand text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
                             {{ __('Todas') }}
                         </a>
                         <a href="{{ route('artworks.index', ['status' => 'active', 'sort' => $sort]) }}"

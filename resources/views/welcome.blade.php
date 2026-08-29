@@ -31,7 +31,7 @@
                 <div class="flex items-center gap-4 sm:gap-5">
                     <x-language-switcher />
                     <a href="{{ route('login') }}" class="hidden sm:inline text-lg uppercase text-gray-700 hover:text-gray-900 transition">{{ __('Login') }}</a>
-                    <a href="{{ route('register') }}" class="text-lg uppercase px-5 py-2.5 border border-gray-900 hover:bg-gray-900 hover:text-white transition">
+                    <a href="{{ route('register') }}" class="text-lg uppercase px-5 py-2.5 border border-brand hover:bg-brand hover:text-white transition">
                         {{ __('Empezar') }}
                     </a>
                 </div>
@@ -50,10 +50,10 @@
                 {{ __('Genera una ficha técnica permanente para cada obra. Código QR único, metadata verificada y control de propiedad cifrado.') }}
             </p>
             <div class="mt-14 flex flex-wrap items-center justify-center gap-5 sm:gap-6">
-                <a href="{{ route('register') }}" class="px-10 py-4 border border-gray-900 bg-gray-900 text-white text-base tracking-gallery uppercase hover:bg-white hover:text-gray-900 transition">
+                <a href="{{ route('register') }}" class="px-10 py-4 border border-brand bg-brand text-white text-base tracking-gallery uppercase hover:bg-white hover:text-gray-900 transition">
                     {{ __('Empezar ahora') }}
                 </a>
-                <a href="{{ route('planes') }}" class="px-10 py-4 border border-gray-900 text-gray-900 text-base tracking-gallery uppercase hover:bg-gray-900 hover:text-white transition">
+                <a href="{{ route('planes') }}" class="px-10 py-4 border border-brand text-gray-900 text-base tracking-gallery uppercase hover:bg-brand hover:text-white transition">
                     {{ __('Ver Planes') }}
                 </a>
                 <a href="{{ route('ayuda') }}" class="px-10 py-4 text-gray-500 text-base tracking-gallery uppercase hover:text-gray-900 transition">
@@ -69,7 +69,7 @@
     {{-- Bienvenida free --}}
     <section class="pb-24">
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <div class="border border-gray-900 bg-gray-900 text-white p-10 sm:p-14 flex flex-col sm:flex-row items-center justify-between gap-8">
+            <div class="border border-brand bg-brand text-white p-10 sm:p-14 flex flex-col sm:flex-row items-center justify-between gap-8">
                 <div>
                     <p class="text-xs uppercase tracking-gallery text-gray-400">{{ __('Regalo de bienvenida') }}</p>
                     <h2 class="mt-4 font-medium text-3xl sm:text-4xl">
@@ -121,7 +121,7 @@
                         <div class="w-24 h-24 bg-white flex items-center justify-center border border-gray-200">
                             <div class="grid grid-cols-5 gap-0.5">
                                 @for ($i = 0; $i < 25; $i++)
-                                    <div class="{{ in_array($i % 7, [0, 1, 3, 5]) ? 'bg-gray-900' : 'bg-white' }} w-2 h-2"></div>
+                                    <div class="{{ in_array($i % 7, [0, 1, 3, 5]) ? 'bg-brand' : 'bg-white' }} w-2 h-2"></div>
                                 @endfor
                             </div>
                         </div>
@@ -165,7 +165,7 @@
         <div class="max-w-4xl mx-auto px-6 lg:px-8 text-center">
             <h2 class="font-medium text-4xl sm:text-5xl text-gray-900">{{ __('Empieza a proteger tus obras hoy.') }}</h2>
             <p class="mt-6 text-lg text-gray-600">{{ __('Crea tu cuenta y genera la identidad digital de tu primera obra en minutos.') }}</p>
-            <a href="{{ route('register') }}" class="mt-10 inline-block px-10 py-3.5 border border-gray-900 bg-gray-900 text-white text-sm tracking-gallery uppercase hover:bg-white hover:text-gray-900 transition">
+            <a href="{{ route('register') }}" class="mt-10 inline-block px-10 py-3.5 border border-brand bg-brand text-white text-sm tracking-gallery uppercase hover:bg-white hover:text-gray-900 transition">
                 {{ __('Crear mi cuenta') }}
             </a>
         </div>

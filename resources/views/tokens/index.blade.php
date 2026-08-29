@@ -21,7 +21,7 @@
                         <p class="text-sm text-gray-500">{{ __('Tokens disponibles') }}</p>
                         <p class="mt-1 text-6xl font-bold text-gray-900">{{ $balance }}</p>
                     </div>
-                    <a href="#paquetes" class="shrink-0 px-6 py-3 bg-gray-900 text-white text-sm uppercase tracking-wider hover:bg-gray-700 transition">
+                    <a href="#paquetes" class="shrink-0 px-6 py-3 bg-brand text-white text-sm uppercase tracking-wider hover:bg-brand-600 transition">
                         {{ __('Comprar tokens') }}
                     </a>
                 </div>
@@ -46,7 +46,7 @@
                             @foreach ($packages as $package)
                                 <button type="button" @mouseenter="selected = {{ $package->id }}"
                                     @focus="selected = {{ $package->id }}"
-                                    :class="selected === {{ $package->id }} ? 'border-gray-900 bg-gray-900 text-white' : 'border-gray-200 bg-white text-gray-900 hover:border-gray-400'"
+                                    :class="selected === {{ $package->id }} ? 'border-brand bg-brand text-white' : 'border-gray-200 bg-white text-gray-900 hover:border-gray-400'"
                                     class="w-full flex items-center justify-between px-5 py-4 border rounded-lg text-left transition">
                                     <span class="font-semibold">{{ $package->name }}</span>
                                     <span class="text-sm">
@@ -83,7 +83,7 @@
                                     <form :action="p.url" method="POST" class="mt-8">
                                         @csrf
                                         <button type="submit"
-                                            class="inline-flex items-center justify-center w-full px-6 py-4 bg-gray-900 hover:bg-gray-700 text-white text-sm font-semibold uppercase tracking-wider transition">
+                                            class="inline-flex items-center justify-center w-full px-6 py-4 bg-brand hover:bg-brand-600 text-white text-sm font-semibold uppercase tracking-wider transition">
                                             {{ __('Comprar') }}
                                         </button>
                                     </form>

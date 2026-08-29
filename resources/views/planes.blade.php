@@ -32,7 +32,7 @@
             <div class="flex items-center gap-3 sm:gap-4">
                 <x-language-switcher />
                 <a href="{{ route('login') }}" class="text-lg font-medium uppercase text-gray-700 hover:text-gray-900 transition">{{ __('Login') }}</a>
-                <a href="{{ route('register') }}" class="inline-flex items-center px-5 py-2.5 bg-gray-900 hover:bg-gray-800 text-white text-lg font-semibold uppercase rounded-lg transition">
+                <a href="{{ route('register') }}" class="inline-flex items-center px-5 py-2.5 bg-brand hover:bg-brand-700 text-white text-lg font-semibold uppercase rounded-lg transition">
                     {{ __('Empezar') }}
                     <svg class="w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
@@ -53,7 +53,7 @@
     {{-- Bienvenida free --}}
     <section class="-mt-6 pb-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-gray-900 text-white p-8 sm:p-10 flex flex-col sm:flex-row items-center justify-between gap-8">
+            <div class="bg-brand text-white p-8 sm:p-10 flex flex-col sm:flex-row items-center justify-between gap-8">
                 <div>
                     <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Regalo de bienvenida') }}</p>
                     <h2 class="mt-3 text-2xl sm:text-3xl font-bold">
@@ -87,7 +87,7 @@
                         @foreach ($packages as $package)
                             <button type="button" @mouseenter="selected = {{ $package->id }}"
                                 @focus="selected = {{ $package->id }}"
-                                :class="selected === {{ $package->id }} ? 'border-gray-900 bg-gray-900 text-white' : 'border-gray-200 bg-white text-gray-900 hover:border-gray-400'"
+                                :class="selected === {{ $package->id }} ? 'border-brand bg-brand text-white' : 'border-gray-200 bg-white text-gray-900 hover:border-gray-400'"
                                 class="w-full flex items-center justify-between px-5 py-4 border rounded-lg text-left transition">
                                 <span class="font-semibold">{{ $package->name }}</span>
                                 <span class="text-sm">
@@ -121,7 +121,7 @@
                                         <span class="text-base text-gray-500">USD</span>
                                     </p>
                                     <a :href="'{{ route('register') }}'"
-                                        class="mt-8 inline-flex items-center justify-center w-full px-6 py-4 bg-gray-900 hover:bg-gray-700 text-white text-sm font-semibold uppercase tracking-gallery transition">
+                                        class="mt-8 inline-flex items-center justify-center w-full px-6 py-4 bg-brand hover:bg-brand-600 text-white text-sm font-semibold uppercase tracking-gallery transition">
                                         {{ __('Seleccionar') }}
                                     </a>
                                 </div>
@@ -164,7 +164,7 @@
     </section>
 
     {{-- Footer --}}
-    <footer class="py-12 bg-gray-950">
+    <footer class="py-12 bg-brand">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col md:flex-row items-center justify-between gap-8">
                 <div class="flex items-center gap-3">

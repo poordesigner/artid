@@ -190,7 +190,7 @@
                                     <a href="{{ route('accounts.index') }}" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-50 transition">
                                         {{ __('Gestionar cuentas') }}
                                     </a>
-                                    <button @click="showForm = !showForm; editingPlan = null; resetForm()" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                    <button @click="showForm = !showForm; editingPlan = null; resetForm()" class="inline-flex items-center px-4 py-2 bg-brand border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-brand-600 focus:bg-brand-600 active:bg-brand focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
                                         <span x-text="showForm ? 'Cancelar' : 'Nuevo Plan'"></span>
                                     </button>
                                 </div>
@@ -597,7 +597,7 @@
                     {{-- Modal: Función --}}
                     <div x-show="functionModalOpen" x-cloak class="fixed inset-0 z-50 overflow-y-auto" aria-modal="true" role="dialog">
                         <div class="flex items-center justify-center min-h-screen px-4">
-                            <div class="fixed inset-0 bg-gray-900/50" @click="functionModalOpen = false"></div>
+                            <div class="fixed inset-0 bg-brand-800/60" @click="functionModalOpen = false"></div>
                             <div class="relative bg-white rounded-xl shadow-xl w-full max-w-2xl p-6 my-8">
                                 <div class="flex items-center justify-between mb-4">
                                     <h3 class="font-semibold text-lg text-gray-900" x-text="editingFunction ? '{{ __('Editar función') }}' : '{{ __('Nueva función') }}'"></h3>
@@ -669,7 +669,7 @@
                     {{-- Modal: Acción --}}
                     <div x-show="actionModalOpen" x-cloak class="fixed inset-0 z-50 overflow-y-auto" aria-modal="true" role="dialog">
                         <div class="flex items-center justify-center min-h-screen px-4">
-                            <div class="fixed inset-0 bg-gray-900/50" @click="actionModalOpen = false"></div>
+                            <div class="fixed inset-0 bg-brand-800/60" @click="actionModalOpen = false"></div>
                             <div class="relative bg-white rounded-xl shadow-xl w-full max-w-lg p-6 my-8">
                                 <div class="flex items-center justify-between mb-4">
                                     <h3 class="font-semibold text-lg text-gray-900" x-text="editingAction ? '{{ __('Editar acción') }}' : '{{ __('Nueva acción') }}'"></h3>
