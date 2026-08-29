@@ -8,19 +8,19 @@
     <link href="https://fonts.bunny.net/css?family=Space+Grotesk:300,400,500,600,700&display=swap" rel="stylesheet" />
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: #473636; color: #f5f5f5; font-family: 'Space Grotesk', system-ui, sans-serif; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+        body { background: #333333; color: #f5f5f5; font-family: 'Space Grotesk', system-ui, sans-serif; line-height: 1.6; -webkit-font-smoothing: antialiased; }
         .container { max-width: 720px; margin: 0 auto; padding: 24px 16px 64px; }
-        .avatar { width: 96px; height: 96px; border-radius: 50%; object-fit: cover; border: 2px solid #533f3f; background: #332828; }
+        .avatar { width: 96px; height: 96px; border-radius: 50%; object-fit: cover; border: 2px solid #4a4a4a; background: #242424; }
         .name { font-size: 1.8rem; font-weight: 600; margin-top: 16px; line-height: 1.2; }
-        .verified { display: inline-flex; align-items: center; gap: 6px; margin-top: 8px; font-size: 0.8rem; color: #22c55e; border: 1px solid #473636; background: #332828; border-radius: 9999px; padding: 4px 12px; }
+        .verified { display: inline-flex; align-items: center; gap: 6px; margin-top: 8px; font-size: 0.8rem; color: #22c55e; border: 1px solid #333333; background: #242424; border-radius: 9999px; padding: 4px 12px; }
         .section { margin-top: 32px; }
-        .section h2 { font-size: 0.85rem; color: #ff0066; text-transform: uppercase; letter-spacing: 0.12em; border-bottom: 1px solid #533f3f; padding-bottom: 8px; }
+        .section h2 { font-size: 0.85rem; color: #ff0066; text-transform: uppercase; letter-spacing: 0.12em; border-bottom: 1px solid #4a4a4a; padding-bottom: 8px; }
         .statement { margin-top: 16px; color: #ccc; white-space: pre-line; font-size: 0.95rem; }
         .links { list-style: none; margin-top: 12px; display: flex; flex-wrap: wrap; gap: 10px; }
-        .links a { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border: 1px solid #533f3f; border-radius: 9999px; color: #f5f5f5; text-decoration: none; font-size: 0.85rem; transition: border-color 0.2s, color 0.2s; }
+        .links a { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border: 1px solid #4a4a4a; border-radius: 9999px; color: #f5f5f5; text-decoration: none; font-size: 0.85rem; transition: border-color 0.2s, color 0.2s; }
         .links a:hover { border-color: #ff0066; color: #ff0066; }
         .links a svg { width: 16px; height: 16px; fill: currentColor; }
-        .cv-link { display: inline-flex; align-items: center; gap: 6px; margin-top: 12px; padding: 8px 16px; background: #332828; border: 1px solid #533f3f; border-radius: 8px; color: #f5f5f5; text-decoration: none; font-size: 0.85rem; transition: border-color 0.2s; }
+        .cv-link { display: inline-flex; align-items: center; gap: 6px; margin-top: 12px; padding: 8px 16px; background: #242424; border: 1px solid #4a4a4a; border-radius: 8px; color: #f5f5f5; text-decoration: none; font-size: 0.85rem; transition: border-color 0.2s; }
         .cv-link:hover { border-color: #ff0066; }
         .artworks-count { margin-top: 8px; font-size: 0.85rem; color: #888; }
         .footer { margin-top: 40px; text-align: center; font-size: 0.75rem; color: #555; }

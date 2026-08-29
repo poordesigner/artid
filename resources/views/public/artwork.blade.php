@@ -8,20 +8,20 @@
     <link href="https://fonts.bunny.net/css?family=Space+Grotesk:300,400,500,600,700&display=swap" rel="stylesheet" />
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: #473636; color: #f5f5f5; font-family: 'Space Grotesk', system-ui, sans-serif; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+        body { background: #333333; color: #f5f5f5; font-family: 'Space Grotesk', system-ui, sans-serif; line-height: 1.6; -webkit-font-smoothing: antialiased; }
         .container { max-width: 720px; margin: 0 auto; padding: 24px 16px 64px; }
-        .image { width: 100%; max-height: 60vh; object-fit: contain; border-radius: 8px; background: #332828; }
+        .image { width: 100%; max-height: 60vh; object-fit: contain; border-radius: 8px; background: #242424; }
         .title { font-size: 2rem; font-weight: 600; margin-top: 20px; line-height: 1.2; }
         .artist { color: #ff0066; margin-top: 4px; font-weight: 500; }
-        .verified { display: inline-flex; align-items: center; gap: 6px; margin-top: 12px; font-size: 0.8rem; color: #22c55e; border: 1px solid #473636; background: #332828; border-radius: 9999px; padding: 4px 12px; }
+        .verified { display: inline-flex; align-items: center; gap: 6px; margin-top: 12px; font-size: 0.8rem; color: #22c55e; border: 1px solid #333333; background: #242424; border-radius: 9999px; padding: 4px 12px; }
         .meta { list-style: none; margin-top: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px 24px; }
         .meta li span { color: #888; display: block; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; }
         .meta li strong { font-weight: 500; color: #f0f0f0; word-break: break-word; }
         .description { margin-top: 20px; color: #ccc; white-space: pre-line; }
         .section { margin-top: 36px; }
-        .section h2 { font-size: 0.85rem; color: #ff0066; text-transform: uppercase; letter-spacing: 0.12em; border-bottom: 1px solid #533f3f; padding-bottom: 8px; }
+        .section h2 { font-size: 0.85rem; color: #ff0066; text-transform: uppercase; letter-spacing: 0.12em; border-bottom: 1px solid #4a4a4a; padding-bottom: 8px; }
         .events { list-style: none; margin-top: 8px; }
-        .event { padding: 14px 0; border-bottom: 1px solid #533f3f; }
+        .event { padding: 14px 0; border-bottom: 1px solid #4a4a4a; }
         .event-name { font-weight: 500; }
         .event-type { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: #888; }
         .owner { margin-top: 2px; font-weight: 500; }
