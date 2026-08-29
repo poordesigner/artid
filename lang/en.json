@@ -381,5 +381,13 @@
     "REGALO DE BIENVENIDA": "WELCOME GIFT",
     "Recibe :count tokens gratis al registrarte": "Get :count free tokens when you sign up",
     "Crea la identidad digital de tus primeras obras": "Create the digital identity of your first artworks",
-    "Sin Suscripción - Sin Tarjeta": "No Subscription - No Card"
+    "Sin Suscripción - Sin Tarjeta": "No Subscription - No Card",
+    "Ficha de Datos Digital": "Digital Data Record",
+    "Crea una ficha técnica básica de tu obra: título, año, edición, serie, técnicas, dimensiones, descripción, imagen y links externos.": "Create a basic technical record for your artwork: title, year, edition, series, techniques, dimensions, description, image and external links.",
+    "Cada obra se asocia con un QR único que nunca cambia y es el medio de acceso fácil a la ficha técnica de la misma. Lo puedes usar como quieras: imprimir, pegar a tu obra, incluir en páginas web o donde lo consideres conveniente.": "Each artwork is linked to a unique QR that never changes and is the easy access point to its technical record. Use it however you like: print it, attach it to your artwork, include it on web pages or wherever you see fit.",
+    "La relación entre la ficha técnica y la ruta de acceso del código QR está firmada criptográficamente. Solo la obra auténtica accede a su ficha.": "The link between the technical record and the QR code access path is cryptographically signed. Only the authentic artwork accesses its record.",
+    "Historial de Exposiciones": "Exhibition History",
+    "Documenta el historial de exposiciones asociadas a tu obra. Registrando el lugar, las fechas y links externos de cada exposición.": "Document the exhibition history associated with your artwork, recording the venue, dates and external links of each exhibition.",
+    "Procedencia (Historial de Propiedad) y Certificado de Autenticidad (COA)": "Provenance (Ownership History) and Certificate of Authenticity (COA)",
+    "Si la obra deja de ser de la tenencia del artista y pasa a un nuevo propietario, se puede crear un nuevo registro de procedencia (con los datos básicos o anónimos del nuevo propietario) y generar un Certificado de Autenticidad (COA) con un ID criptográfico especial. El nuevo propietario, al acceder a la ficha técnica de la obra con el código QR, podrá validar la legalidad de la misma usando el ID criptográfico asociado a su COA y tener una herramienta adicional para demostrar su derecho de tenencia de la obra.": "When an artwork leaves the artist's possession and passes to a new owner, a new provenance record can be created (with the new owner's basic or anonymous data) and a Certificate of Authenticity (COA) generated with a special cryptographic ID. The new owner, when accessing the artwork's technical record via the QR code, can validate its legality using the cryptographic ID associated with their COA, gaining an additional tool to prove their right of possession."
 }
