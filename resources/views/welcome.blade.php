@@ -40,47 +40,33 @@
     </header>
 
     {{-- Hero --}}
-    <section class="py-28 sm:py-36">
+    <section class="py-24 sm:py-32">
         <div class="max-w-7xl mx-auto px-6 lg:px-8 text-center">
             <h1 class="font-medium text-6xl sm:text-7xl lg:text-8xl leading-[1.05] tracking-tight text-gray-900 max-w-6xl mx-auto">
                 {{ __('Identidad digital para tus obras de arte.') }}
             </h1>
-            <div class="mx-auto mt-12 h-px w-32 bg-gray-300"></div>
-            <p class="mt-12 text-xl sm:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed font-light">
+            <div class="mx-auto mt-10 h-px w-32 bg-gray-300"></div>
+            <p class="mt-10 text-xl sm:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed font-light">
                 {{ __('Genera una ficha técnica permanente para cada obra. Código QR único, metadata verificada y control de propiedad cifrado.') }}
             </p>
-            <div class="mt-14 flex flex-wrap items-center justify-center gap-5 sm:gap-6">
+
+            {{-- Bienvenida free --}}
+            <div class="mx-auto mt-10 inline-block bg-[#550044] text-white px-8 py-4">
+                <p class="text-xs uppercase tracking-gallery text-white/70">{{ __('Regalo de bienvenida') }}</p>
+                <p class="mt-1 text-lg sm:text-xl font-medium">
+                    {{ __('Recibe :count tokens gratis al registrarte.', ['count' => config('artid.welcome_tokens', 0)]) }}
+                </p>
+            </div>
+
+            <div class="mt-10 flex flex-wrap items-center justify-center gap-5 sm:gap-6">
                 <a href="{{ route('register') }}" class="px-10 py-4 border border-brand bg-brand text-white text-base tracking-gallery uppercase hover:bg-white hover:text-gray-900 transition">
                     {{ __('Empezar ahora') }}
                 </a>
                 <a href="{{ route('planes') }}" class="px-10 py-4 border border-brand text-gray-900 text-base tracking-gallery uppercase hover:bg-brand hover:text-white transition">
                     {{ __('Ver Planes') }}
                 </a>
-                <a href="{{ route('ayuda') }}" class="px-10 py-4 text-gray-500 text-base tracking-gallery uppercase hover:text-gray-900 transition">
+                <a href="{{ route('ayuda') }}" class="px-10 py-4 border border-brand text-gray-500 text-base tracking-gallery uppercase hover:bg-brand hover:text-white transition">
                     {{ __('Ver guía') }}
-                </a>
-            </div>
-            <p class="mt-12 text-sm text-gray-400 max-w-lg mx-auto">
-                {{ __('QR permanente y firmado criptográficamente. Solo la obra auténtica accede a su ficha pública.') }}
-            </p>
-        </div>
-    </section>
-
-    {{-- Bienvenida free --}}
-    <section class="pb-24">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <div class="border border-brand bg-brand text-white p-10 sm:p-14 flex flex-col sm:flex-row items-center justify-between gap-8">
-                <div>
-                    <p class="text-xs uppercase tracking-gallery text-gray-400">{{ __('Regalo de bienvenida') }}</p>
-                    <h2 class="mt-4 font-medium text-3xl sm:text-4xl">
-                        {{ __('Recibe :count tokens gratis al registrarte.', ['count' => config('artid.welcome_tokens', 0)]) }}
-                    </h2>
-                    <p class="mt-3 text-gray-300 max-w-xl">
-                        {{ __('Con ellos creas tu primera obra con QR y ficha básica. Sin suscripción, sin tarjeta.') }}
-                    </p>
-                </div>
-                <a href="{{ route('register') }}" class="shrink-0 px-10 py-4 border border-white text-white text-sm tracking-gallery uppercase hover:bg-white hover:text-gray-900 transition">
-                    {{ __('Crear cuenta gratis') }}
                 </a>
             </div>
         </div>
@@ -136,8 +122,7 @@
     <section id="caracteristicas" class="pb-24">
         <div class="max-w-6xl mx-auto px-6 lg:px-8">
             <div class="text-center">
-                <p class="text-xs font-semibold uppercase tracking-gallery text-gray-500">{{ __('Cómo funciona') }}</p>
-                <h2 class="mt-4 font-medium text-3xl sm:text-4xl text-gray-900">{{ __('Todo lo que necesitas para autenticar tus obras.') }}</h2>
+                <p class="text-3xl sm:text-4xl font-medium tracking-gallery uppercase text-gray-900">{{ __('Cómo funciona') }}</p>
             </div>
             <hr class="mt-12 border-gray-200">
             <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-12">
@@ -160,17 +145,6 @@
         </div>
     </section>
 
-    {{-- CTA --}}
-    <section class="border-t border-gray-200 py-24">
-        <div class="max-w-4xl mx-auto px-6 lg:px-8 text-center">
-            <h2 class="font-medium text-4xl sm:text-5xl text-gray-900">{{ __('Empieza a proteger tus obras hoy.') }}</h2>
-            <p class="mt-6 text-lg text-gray-600">{{ __('Crea tu cuenta y genera la identidad digital de tu primera obra en minutos.') }}</p>
-            <a href="{{ route('register') }}" class="mt-10 inline-block px-10 py-3.5 border border-brand bg-brand text-white text-sm tracking-gallery uppercase hover:bg-white hover:text-gray-900 transition">
-                {{ __('Crear mi cuenta') }}
-            </a>
-        </div>
-    </section>
-
     {{-- Footer --}}
     <footer class="border-t border-gray-200 py-12">
         <div class="max-w-6xl mx-auto px-6 lg:px-8">
@@ -180,6 +154,7 @@
                     <span class="text-sm text-gray-400">by <a href="https://poordesigner.com" class="text-gray-500 hover:text-gray-900 transition" target="_blank" rel="noopener">POORdesigner.com</a></span>
                 </div>
                 <div class="flex items-center gap-8 text-sm text-gray-500">
+                    <a href="{{ route('login') }}" class="hover:text-gray-900 transition">{{ __('Login') }}</a>
                     <a href="{{ route('ayuda') }}" class="hover:text-gray-900 transition">{{ __('Ayuda') }}</a>
                     <a href="{{ route('planes') }}" class="hover:text-gray-900 transition">{{ __('Planes') }}</a>
                     <a href="#caracteristicas" class="hover:text-gray-900 transition">{{ __('Características') }}</a>
