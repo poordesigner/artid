@@ -368,5 +368,8 @@
     "Asociar Links de la Obra": "Attach artwork links",
     "Crear Perfil Artista": "Create artist profile",
     "Asociar Exposición": "Attach exhibition",
-    "Hacer Traslado de Propiedad": "Ownership transfer"
+    "Hacer Traslado de Propiedad": "Ownership transfer",
+    "Editar acción": "Edit action",
+    "Las funciones agrupan acciones y consumen tokens.": "Functions group actions and consume tokens.",
+    "Catálogo de acciones que puede incluir una función.": "Catalog of actions that a function can include."
 }

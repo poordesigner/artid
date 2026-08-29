@@ -472,150 +472,123 @@
 
             {{-- Tab: Usos de tokens (admin) --}}
             @if ($user->isAdmin())
-                <div x-show="tab === 'token-functions'" x-transition x-data="tokenMetricsState()">
-                    <div class="space-y-6">
+                <div x-show="tab === 'token-functions'" x-transition
+                     x-data="tokenUsages(@js($adminTokenActions), @js($adminTokenFunctions))">
 
-                        {{-- Sección: Acciones permitidas --}}
-                        <div class="bg-white shadow-sm sm:rounded-lg p-6">
-                            <div class="flex items-center justify-between mb-4">
-                                <h3 class="font-semibold text-lg text-gray-900">{{ __('Acciones permitidas') }}</h3>
-                                <div class="flex items-center gap-2">
-                                    <button @click="actionShowForm = true; editingAction = null; actionResetForm(); window.scrollTo({ top: 0, behavior: 'smooth' });"
-                                        class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-lg">
-                                        {{ __('Nueva acción') }}
-                                    </button>
-                                </div>
-                            </div>
+                    {{-- Sub-pestañas: Funciones | Acciones --}}
+                    <div class="border-b border-gray-200 mb-6">
+                        <nav class="-mb-px flex gap-6">
+                            <button @click="sub = 'functions'" :class="sub === 'functions' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
+                                class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition">
+                                {{ __('Funciones de tokens') }}
+                            </button>
+                            <button @click="sub = 'actions'" :class="sub === 'actions' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
+                                class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition">
+                                {{ __('Acciones permitidas') }}
+                            </button>
+                        </nav>
+                    </div>
 
-                            @if ($adminTokenActions->isEmpty())
-                                <p class="text-gray-500 text-center py-4">{{ __('No hay acciones creadas.') }}</p>
-                            @else
-                                <div class="space-y-3">
-                                    @foreach ($adminTokenActions as $action)
-                                        <div class="border border-gray-200 rounded-lg p-4">
-                                            <div class="flex items-start justify-between gap-4">
-                                                <div class="min-w-0 flex-1">
-                                                    <div class="flex items-center gap-2">
-                                                        <p class="font-medium text-gray-900">{{ $action->name }}</p>
-                                                        @if (!$action->is_active)
-                                                            <span class="px-2 py-0.5 text-xs bg-gray-100 text-gray-500 rounded">{{ __('Inactivo') }}</span>
-                                                        @endif
-                                                    </div>
-                                                    @if ($action->description)
-                                                        <p class="text-sm text-gray-600 mt-0.5">{{ $action->description }}</p>
-                                                    @endif
-                                                </div>
-                                                <div class="flex items-center gap-2 shrink-0">
-                                                    <button @click="actionEdit({{ $action->toJson() }})" class="text-sm text-indigo-600 hover:text-indigo-900">{{ __('Edit') }}</button>
-                                                    <form method="POST" action="{{ route('token-actions.destroy', $action) }}" onsubmit="return confirm('{{ __('Are you sure?') }}');">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="text-sm text-red-600 hover:text-red-900">{{ __('Delete') }}</button>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            @endif
-
-                            {{-- Formulario acción --}}
-                            <div x-show="actionShowForm" x-transition class="mt-6">
-                                <form :action="editingAction ? '{{ url('configuracion/token-actions') }}/' + editingAction.id : '{{ route('token-actions.store') }}'" method="POST">
-                                    @csrf
-                                    <template x-if="editingAction">
-                                        <input type="hidden" name="_method" value="PATCH">
-                                    </template>
-
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <div>
-                                            <x-input-label for="ta_name" :value="__('Nombre')" />
-                                            <x-text-input id="ta_name" class="block mt-1 w-full" type="text" name="name" x-model="actionForm.name" required />
-                                        </div>
-                                        <div>
-                                            <x-input-label for="ta_sort" :value="__('Orden')" />
-                                            <x-text-input id="ta_sort" class="block mt-1 w-full" type="number" min="0" name="sort_order" x-model="actionForm.sort_order" />
-                                        </div>
-                                        <div class="md:col-span-2">
-                                            <x-input-label for="ta_desc" :value="__('Descripción')" />
-                                            <x-text-input id="ta_desc" class="block mt-1 w-full" type="text" name="description" x-model="actionForm.description" />
-                                        </div>
-                                        <div class="md:col-span-2">
-                                            <label class="inline-flex items-center gap-2 text-sm text-gray-700">
-                                                <input type="checkbox" name="is_active" value="1" x-model="actionForm.is_active" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                                                {{ __('Activo') }}
-                                            </label>
-                                            <input type="hidden" name="is_active" value="0" :disabled="true">
-                                        </div>
-                                    </div>
-
-                                    <div class="mt-4 flex items-center justify-end">
-                                        <button type="button" @click="actionShowForm = false; editingAction = null; actionResetForm()" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                            {{ __('Cancelar') }}
-                                        </button>
-                                        <x-primary-button class="ms-4">
-                                            <span x-text="editingAction ? '{{ __('Guardar') }}' : '{{ __('Crear') }}'"></span>
-                                        </x-primary-button>
-                                    </div>
-                                </form>
-                            </div>
+                    {{-- Panel: Funciones --}}
+                    <div x-show="sub === 'functions'">
+                        <div class="flex items-center justify-between mb-4">
+                            <p class="text-sm text-gray-600">{{ __('Las funciones agrupan acciones y consumen tokens.') }}</p>
+                            <button @click="openFunctionModal()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-lg">
+                                {{ __('Nueva función') }}
+                            </button>
                         </div>
 
-                        {{-- Sección: Funciones (consumen tokens) --}}
-                        <div x-data="tokenFunctionForm(@js($adminTokenActions))" class="bg-white shadow-sm sm:rounded-lg p-6">
-                            <div class="flex items-center justify-between mb-4">
-                                <h3 class="font-semibold text-lg text-gray-900">{{ __('Funciones de tokens') }}</h3>
-                                <div class="flex items-center gap-2">
-                                    <button @click="showForm = true; editingFunction = null; resetForm(); window.scrollTo({ top: 0, behavior: 'smooth' });"
-                                        class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-lg">
-                                        {{ __('Nueva función') }}
-                                    </button>
-                                </div>
-                            </div>
-
-                            @if ($adminTokenFunctions->isEmpty())
-                                <p class="text-gray-500 text-center py-4">{{ __('No hay funciones creadas.') }}</p>
-                            @else
-                                <div class="space-y-4">
-                                    @foreach ($adminTokenFunctions as $tf)
-                                        <div class="border border-gray-200 rounded-lg p-4">
-                                            <div class="flex items-start justify-between gap-4">
-                                                <div class="min-w-0 flex-1">
-                                                    <div class="flex items-center gap-2">
-                                                        <p class="font-medium text-gray-900">{{ $tf->name }}</p>
-                                                        @if (!$tf->is_active)
-                                                            <span class="px-2 py-0.5 text-xs bg-gray-100 text-gray-500 rounded">{{ __('Inactivo') }}</span>
-                                                        @endif
-                                                    </div>
-                                                    <p class="text-sm text-gray-600 mt-1">{{ $tf->tokens }} {{ __('tokens') }}</p>
-                                                    @if ($tf->description)
-                                                        <p class="text-sm text-gray-600 mt-0.5">{{ $tf->description }}</p>
-                                                    @endif
-                                                    @if ($tf->actions->isNotEmpty())
-                                                        <div class="mt-2 flex flex-wrap gap-1.5">
-                                                            @foreach ($tf->actions as $action)
-                                                                <span class="px-2 py-0.5 text-xs bg-indigo-50 text-indigo-700 rounded-full">{{ $action->name }}</span>
-                                                            @endforeach
-                                                        </div>
-                                                    @endif
-                                                </div>
-                                                <div class="flex items-center gap-2 shrink-0">
-                                                    <button @click="editFunction({{ $tf->toJson() }})" class="text-sm text-indigo-600 hover:text-indigo-900">{{ __('Edit') }}</button>
-                                                    <form method="POST" action="{{ route('token-functions.destroy', $tf) }}" onsubmit="return confirm('{{ __('Are you sure?') }}');">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="text-sm text-red-600 hover:text-red-900">{{ __('Delete') }}</button>
-                                                    </form>
-                                                </div>
+                        @if ($adminTokenFunctions->isEmpty())
+                            <p class="text-gray-500 text-center py-8 bg-white shadow-sm sm:rounded-lg">{{ __('No hay funciones creadas.') }}</p>
+                        @else
+                            <div class="bg-white shadow-sm sm:rounded-lg divide-y divide-gray-100">
+                                @foreach ($adminTokenFunctions as $tf)
+                                    <div class="p-5 flex items-start justify-between gap-4">
+                                        <div class="min-w-0 flex-1">
+                                            <div class="flex items-center gap-2">
+                                                <p class="font-medium text-gray-900">{{ $tf->name }}</p>
+                                                @if (!$tf->is_active)
+                                                    <span class="px-2 py-0.5 text-xs bg-gray-100 text-gray-500 rounded">{{ __('Inactivo') }}</span>
+                                                @endif
                                             </div>
+                                            @if ($tf->description)
+                                                <p class="text-sm text-gray-600 mt-0.5">{{ $tf->description }}</p>
+                                            @endif
+                                            @if ($tf->actions->isNotEmpty())
+                                                <div class="mt-2 flex flex-wrap gap-1.5">
+                                                    @foreach ($tf->actions as $action)
+                                                        <span class="px-2 py-0.5 text-xs bg-indigo-50 text-indigo-700 rounded-full">{{ $action->name }}</span>
+                                                    @endforeach
+                                                </div>
+                                            @endif
                                         </div>
-                                    @endforeach
-                                </div>
-                            @endif
+                                        <div class="flex items-center gap-3 shrink-0">
+                                            <span class="text-sm font-semibold text-gray-700">
+                                                <span class="text-lg font-bold">{{ $tf->tokens }}</span>
+                                                {{ __('tokens') }}
+                                            </span>
+                                            <button @click="openFunctionModal({{ $tf->toJson() }})" class="text-sm text-indigo-600 hover:text-indigo-900">{{ __('Edit') }}</button>
+                                            <form method="POST" action="{{ route('token-functions.destroy', $tf) }}" onsubmit="return confirm('{{ __('Are you sure?') }}');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="text-sm text-red-600 hover:text-red-900">{{ __('Delete') }}</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endif
+                    </div>
 
-                            {{-- Formulario crear/editar función --}}
-                            <div x-show="showForm" x-transition class="mt-6">
-                                <h3 class="font-semibold text-lg text-gray-900 mb-4" x-text="editingFunction ? '{{ __('Editar función') }}' : '{{ __('Nueva función') }}'"></h3>
+                    {{-- Panel: Acciones --}}
+                    <div x-show="sub === 'actions'">
+                        <div class="flex items-center justify-between mb-4">
+                            <p class="text-sm text-gray-600">{{ __('Catálogo de acciones que puede incluir una función.') }}</p>
+                            <button @click="openActionModal()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-lg">
+                                {{ __('Nueva acción') }}
+                            </button>
+                        </div>
+
+                        @if ($adminTokenActions->isEmpty())
+                            <p class="text-gray-500 text-center py-8 bg-white shadow-sm sm:rounded-lg">{{ __('No hay acciones creadas.') }}</p>
+                        @else
+                            <div class="bg-white shadow-sm sm:rounded-lg divide-y divide-gray-100">
+                                @foreach ($adminTokenActions as $action)
+                                    <div class="p-5 flex items-start justify-between gap-4">
+                                        <div class="min-w-0 flex-1">
+                                            <div class="flex items-center gap-2">
+                                                <p class="font-medium text-gray-900">{{ $action->name }}</p>
+                                                @if (!$action->is_active)
+                                                    <span class="px-2 py-0.5 text-xs bg-gray-100 text-gray-500 rounded">{{ __('Inactivo') }}</span>
+                                                @endif
+                                            </div>
+                                            @if ($action->description)
+                                                <p class="text-sm text-gray-600 mt-0.5">{{ $action->description }}</p>
+                                            @endif
+                                        </div>
+                                        <div class="flex items-center gap-3 shrink-0">
+                                            <button @click="openActionModal({{ $action->toJson() }})" class="text-sm text-indigo-600 hover:text-indigo-900">{{ __('Edit') }}</button>
+                                            <form method="POST" action="{{ route('token-actions.destroy', $action) }}" onsubmit="return confirm('{{ __('Are you sure?') }}');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="text-sm text-red-600 hover:text-red-900">{{ __('Delete') }}</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endif
+                    </div>
+
+                    {{-- Modal: Función --}}
+                    <div x-show="functionModalOpen" x-cloak class="fixed inset-0 z-50 overflow-y-auto" aria-modal="true" role="dialog">
+                        <div class="flex items-center justify-center min-h-screen px-4">
+                            <div class="fixed inset-0 bg-gray-900/50" @click="functionModalOpen = false"></div>
+                            <div class="relative bg-white rounded-xl shadow-xl w-full max-w-2xl p-6 my-8">
+                                <div class="flex items-center justify-between mb-4">
+                                    <h3 class="font-semibold text-lg text-gray-900" x-text="editingFunction ? '{{ __('Editar función') }}' : '{{ __('Nueva función') }}'"></h3>
+                                    <button @click="functionModalOpen = false" class="text-gray-400 hover:text-gray-600 text-xl leading-none">&times;</button>
+                                </div>
 
                                 <form :action="editingFunction ? '{{ url('configuracion/token-functions') }}/' + editingFunction.id : '{{ route('token-functions.store') }}'" method="POST">
                                     @csrf
@@ -666,12 +639,63 @@
                                         </div>
                                     </div>
 
-                                    <div class="mt-6 flex items-center justify-end">
-                                        <button type="button" @click="showForm = false; editingFunction = null; resetForm()" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    <div class="mt-6 flex items-center justify-end gap-3">
+                                        <button type="button" @click="functionModalOpen = false" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                             {{ __('Cancelar') }}
                                         </button>
-                                        <x-primary-button class="ms-4">
+                                        <x-primary-button>
                                             <span x-text="editingFunction ? '{{ __('Guardar') }}' : '{{ __('Crear') }}'"></span>
+                                        </x-primary-button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Modal: Acción --}}
+                    <div x-show="actionModalOpen" x-cloak class="fixed inset-0 z-50 overflow-y-auto" aria-modal="true" role="dialog">
+                        <div class="flex items-center justify-center min-h-screen px-4">
+                            <div class="fixed inset-0 bg-gray-900/50" @click="actionModalOpen = false"></div>
+                            <div class="relative bg-white rounded-xl shadow-xl w-full max-w-lg p-6 my-8">
+                                <div class="flex items-center justify-between mb-4">
+                                    <h3 class="font-semibold text-lg text-gray-900" x-text="editingAction ? '{{ __('Editar acción') }}' : '{{ __('Nueva acción') }}'"></h3>
+                                    <button @click="actionModalOpen = false" class="text-gray-400 hover:text-gray-600 text-xl leading-none">&times;</button>
+                                </div>
+
+                                <form :action="editingAction ? '{{ url('configuracion/token-actions') }}/' + editingAction.id : '{{ route('token-actions.store') }}'" method="POST">
+                                    @csrf
+                                    <template x-if="editingAction">
+                                        <input type="hidden" name="_method" value="PATCH">
+                                    </template>
+
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <x-input-label for="ta_name" :value="__('Nombre')" />
+                                            <x-text-input id="ta_name" class="block mt-1 w-full" type="text" name="name" x-model="actionForm.name" required />
+                                        </div>
+                                        <div>
+                                            <x-input-label for="ta_sort" :value="__('Orden')" />
+                                            <x-text-input id="ta_sort" class="block mt-1 w-full" type="number" min="0" name="sort_order" x-model="actionForm.sort_order" />
+                                        </div>
+                                        <div class="md:col-span-2">
+                                            <x-input-label for="ta_desc" :value="__('Descripción')" />
+                                            <x-text-input id="ta_desc" class="block mt-1 w-full" type="text" name="description" x-model="actionForm.description" />
+                                        </div>
+                                        <div class="md:col-span-2">
+                                            <label class="inline-flex items-center gap-2 text-sm text-gray-700">
+                                                <input type="checkbox" name="is_active" value="1" x-model="actionForm.is_active" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                                                {{ __('Activo') }}
+                                            </label>
+                                            <input type="hidden" name="is_active" value="0" :disabled="true">
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-6 flex items-center justify-end gap-3">
+                                        <button type="button" @click="actionModalOpen = false" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                            {{ __('Cancelar') }}
+                                        </button>
+                                        <x-primary-button>
+                                            <span x-text="editingAction ? '{{ __('Guardar') }}' : '{{ __('Crear') }}'"></span>
                                         </x-primary-button>
                                     </div>
                                 </form>
@@ -684,10 +708,13 @@
     </div>
 
     <script>
-        function tokenFunctionForm(actionData) {
+        function tokenUsages(actionData, functionData) {
             return {
+                sub: 'functions',
                 actions: (actionData || []),
-                showForm: false,
+                functions: (functionData || []),
+                /* Modal función */
+                functionModalOpen: false,
                 editingFunction: null,
                 form: {
                     name: '',
@@ -697,7 +724,7 @@
                     is_active: true,
                     action_ids: [],
                 },
-                resetForm() {
+                resetFunctionForm() {
                     this.form = {
                         name: '',
                         description: '',
@@ -707,25 +734,27 @@
                         action_ids: [],
                     };
                 },
-                editFunction(tf) {
-                    this.editingFunction = tf;
-                    this.form = {
-                        name: tf.name,
-                        description: tf.description || '',
-                        tokens: tf.tokens,
-                        sort_order: tf.sort_order,
-                        is_active: tf.is_active,
-                        action_ids: (tf.actions || []).map(a => a.id),
-                    };
-                    this.showForm = true;
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                openFunctionModal(tf) {
+                    this.editingFunction = tf || null;
+                    this.resetFunctionForm();
+                    if (tf) {
+                        this.form = {
+                            name: tf.name,
+                            description: tf.description || '',
+                            tokens: tf.tokens,
+                            sort_order: tf.sort_order,
+                            is_active: tf.is_active,
+                            action_ids: (tf.actions || []).map(a => a.id),
+                        };
+                    }
+                    this.functionModalOpen = true;
                 },
-            };
-        }
-
-        function tokenMetricsState() {
-            return {
-                actionShowForm: false,
+                closeFunctionModal() {
+                    this.functionModalOpen = false;
+                    this.editingFunction = null;
+                },
+                /* Modal acción */
+                actionModalOpen: false,
                 editingAction: null,
                 actionForm: {
                     name: '',
@@ -733,7 +762,7 @@
                     sort_order: 0,
                     is_active: true,
                 },
-                actionResetForm() {
+                resetActionForm() {
                     this.actionForm = {
                         name: '',
                         description: '',
@@ -741,16 +770,22 @@
                         is_active: true,
                     };
                 },
-                actionEdit(action) {
-                    this.editingAction = action;
-                    this.actionForm = {
-                        name: action.name,
-                        description: action.description || '',
-                        sort_order: action.sort_order,
-                        is_active: action.is_active,
-                    };
-                    this.actionShowForm = true;
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                openActionModal(action) {
+                    this.editingAction = action || null;
+                    this.resetActionForm();
+                    if (action) {
+                        this.actionForm = {
+                            name: action.name,
+                            description: action.description || '',
+                            sort_order: action.sort_order,
+                            is_active: action.is_active,
+                        };
+                    }
+                    this.actionModalOpen = true;
+                },
+                closeActionModal() {
+                    this.actionModalOpen = false;
+                    this.editingAction = null;
                 },
             };
         }
