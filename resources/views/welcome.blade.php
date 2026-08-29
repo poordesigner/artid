@@ -31,9 +31,6 @@
                 <div class="flex items-center gap-4 sm:gap-5">
                     <x-language-switcher />
                     <a href="{{ route('login') }}" class="hidden sm:inline text-lg uppercase text-gray-700 hover:text-gray-900 transition">{{ __('Login') }}</a>
-                    <a href="{{ route('register') }}" class="text-lg uppercase px-5 py-2.5 border border-brand hover:bg-brand hover:text-white transition">
-                        {{ __('Empezar') }}
-                    </a>
                 </div>
             </div>
         </div>
@@ -55,13 +52,12 @@
                 {{-- Izquierda: regalo de bienvenida (66%) --}}
                 <div class="flex lg:col-span-2 border border-brand text-white p-8 sm:p-10 flex-col justify-center"
                      style="background: #550044;">
-                    <p class="text-xs uppercase tracking-gallery text-gray-400">{{ __('Regalo de bienvenida') }}</p>
+                    <p class="text-xs uppercase tracking-gallery text-gray-400">{{ __('REGALO DE BIENVENIDA') }}</p>
                     <h2 class="mt-4 font-medium text-2xl sm:text-3xl">
-                        {{ __('Recibe :count tokens gratis al registrarte.', ['count' => config('artid.welcome_tokens', 0)]) }}
+                        {{ __('Recibe :count tokens gratis al registrarte', ['count' => config('artid.welcome_tokens', 0)]) }}
                     </h2>
-                    <p class="mt-3 text-gray-300">
-                        {{ __('Con ellos creas tu primera obra con QR y ficha básica. Sin suscripción, sin tarjeta.') }}
-                    </p>
+                    <p class="mt-3 text-gray-300">{{ __('Crea la identidad digital de tus primeras obras') }}</p>
+                    <p class="mt-1 text-gray-300">{{ __('Sin Suscripción - Sin Tarjeta') }}</p>
                 </div>
 
                 {{-- Derecha: botones de acción --}}
@@ -109,38 +105,41 @@
                 </div>
 
                 {{-- Derecha: ficha simulada --}}
-                <div class="border border-gray-200 p-8 sm:p-10">
-                    <div class="flex items-start justify-between pb-8 border-b border-gray-200">
-                        <span class="text-base font-semibold uppercase tracking-gallery text-gray-900">{{ __('Obra autenticada') }}</span>
-                        <span class="px-3 py-1.5 text-sm uppercase tracking-wider text-gray-500 border border-gray-200">✓ {{ __('Verificado') }}</span>
+                <div class="bg-brand text-white p-8 sm:p-10">
+                    <p class="text-2xl font-semibold leading-tight">Paisajes Urbanos</p>
+                    <p class="mt-1 text-[#ff0066] font-medium">@artista</p>
+                    <span class="inline-flex items-center gap-2 mt-4 px-3 py-1 text-xs text-emerald-400 border border-brand-600 bg-white/5 rounded-full">✓ Verificado por ARTid</span>
+                    <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-6">
+                        <div>
+                            <p class="text-xs uppercase tracking-wider text-white/40">Año</p>
+                            <p class="mt-1 font-medium">2024</p>
+                        </div>
+                        <div>
+                            <p class="text-xs uppercase tracking-wider text-white/40">Edición</p>
+                            <p class="mt-1 font-medium">2 / 5</p>
+                        </div>
+                        <div>
+                            <p class="text-xs uppercase tracking-wider text-white/40">Serie</p>
+                            <p class="mt-1 font-medium">Paisajes Urbanos</p>
+                        </div>
+                        <div>
+                            <p class="text-xs uppercase tracking-wider text-white/40">Técnica</p>
+                            <p class="mt-1 font-medium">Óleo sobre lienzo</p>
+                        </div>
+                        <div>
+                            <p class="text-xs uppercase tracking-wider text-white/40">Dimensiones</p>
+                            <p class="mt-1 font-medium">50 x 70 cm</p>
+                        </div>
                     </div>
-                    <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-8">
-                        <div>
-                            <p class="text-sm text-gray-500">{{ __('Serie') }}</p>
-                            <p class="mt-2 text-lg font-medium text-gray-900">Paisajes Urbanos</p>
-                        </div>
-                        <div>
-                            <p class="text-sm text-gray-500">{{ __('Editorial') }}</p>
-                            <p class="mt-2 text-lg font-medium text-gray-900">2 / 5</p>
-                        </div>
-                        <div>
-                            <p class="text-sm text-gray-500">{{ __('Técnica') }}</p>
-                            <p class="mt-2 text-lg font-medium text-gray-900">Óleo sobre lienzo</p>
-                        </div>
-                        <div>
-                            <p class="text-sm text-gray-500">{{ __('Dimensiones') }}</p>
-                            <p class="mt-2 text-lg font-medium text-gray-900">50 x 70 cm</p>
-                        </div>
-                    </div>
-                    <div class="mt-8 flex items-center justify-center gap-6 p-6 bg-gray-50">
-                        <div class="w-20 h-20 bg-white flex items-center justify-center border border-gray-200">
+                    <div class="mt-8 flex items-center justify-between gap-6 p-5 bg-white/5 border border-white/10">
+                        <div class="w-16 h-16 bg-white flex items-center justify-center">
                             <div class="grid grid-cols-5 gap-0.5">
                                 @for ($i = 0; $i < 25; $i++)
                                     <div class="{{ in_array($i % 7, [0, 1, 3, 5]) ? 'bg-brand' : 'bg-white' }} w-1.5 h-1.5"></div>
                                 @endfor
                             </div>
                         </div>
-                        <p class="text-sm uppercase tracking-gallery text-gray-500">{{ __('Ficha pública verificada') }}</p>
+                        <p class="text-sm uppercase tracking-gallery text-white/50 text-right">{{ __('Ficha pública verificada') }}</p>
                     </div>
                 </div>
             </div>
