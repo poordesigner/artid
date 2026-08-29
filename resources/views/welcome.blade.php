@@ -51,9 +51,9 @@
             </p>
 
             {{-- Bienvenida + acciones (sección dividida) --}}
-            <div class="mt-14 grid grid-cols-1 lg:grid-cols-2 gap-10 items-stretch">
-                {{-- Izquierda: regalo de bienvenida --}}
-                <div class="flex border border-brand text-white p-8 sm:p-10 flex-col justify-center"
+            <div class="mt-14 grid grid-cols-1 lg:grid-cols-3 gap-10 items-stretch">
+                {{-- Izquierda: regalo de bienvenida (66%) --}}
+                <div class="flex lg:col-span-2 border border-brand text-white p-8 sm:p-10 flex-col justify-center"
                      style="background: #550044;">
                     <p class="text-xs uppercase tracking-gallery text-gray-400">{{ __('Regalo de bienvenida') }}</p>
                     <h2 class="mt-4 font-medium text-2xl sm:text-3xl">
