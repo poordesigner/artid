@@ -16,7 +16,7 @@ class TokenFunction extends Model
 {
     public function actions(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(TokenAction::class);
+        return $this->belongsToMany(TokenAction::class, 'token_function_action');
     }
 
     public function scopeActive($query)
