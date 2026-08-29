@@ -35,7 +35,7 @@ class TokenFunctionController extends Controller
 
         $function->actions()->sync($validated['action_ids']);
 
-        return redirect()->route('configuracion', ['tab' => 'token-functions'])
+        return redirect()->route('configuracion', ['tab' => 'token-functions', 'sub' => 'functions'])
             ->with('status', __('Función de tokens creada.'));
     }
 
@@ -61,7 +61,7 @@ class TokenFunctionController extends Controller
 
         $function->actions()->sync($validated['action_ids']);
 
-        return redirect()->route('configuracion', ['tab' => 'token-functions'])
+        return redirect()->route('configuracion', ['tab' => 'token-functions', 'sub' => 'functions'])
             ->with('status', __('Función de tokens actualizada.'));
     }
 
@@ -69,7 +69,7 @@ class TokenFunctionController extends Controller
     {
         $function->delete();
 
-        return redirect()->route('configuracion', ['tab' => 'token-functions'])
+        return redirect()->route('configuracion', ['tab' => 'token-functions', 'sub' => 'functions'])
             ->with('status', __('Función de tokens eliminada.'));
     }
 
@@ -91,7 +91,7 @@ class TokenFunctionController extends Controller
             'sort_order' => $validated['sort_order'] ?? 0,
         ]);
 
-        return redirect()->route('configuracion', ['tab' => 'token-functions'])
+        return redirect()->route('configuracion', ['tab' => 'token-functions', 'sub' => 'actions'])
             ->with('status', __('Acción creada.'));
     }
 
@@ -111,7 +111,7 @@ class TokenFunctionController extends Controller
             'sort_order' => $validated['sort_order'] ?? 0,
         ]);
 
-        return redirect()->route('configuracion', ['tab' => 'token-functions'])
+        return redirect()->route('configuracion', ['tab' => 'token-functions', 'sub' => 'actions'])
             ->with('status', __('Acción actualizada.'));
     }
 
@@ -119,7 +119,7 @@ class TokenFunctionController extends Controller
     {
         $action->delete();
 
-        return redirect()->route('configuracion', ['tab' => 'token-functions'])
+        return redirect()->route('configuracion', ['tab' => 'token-functions', 'sub' => 'actions'])
             ->with('status', __('Acción eliminada.'));
     }
 }

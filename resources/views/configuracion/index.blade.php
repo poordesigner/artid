@@ -19,7 +19,21 @@
         $initialTab = 'seguridad';
     }
 @endphp
-<div class="py-12">
+<div class="py-12 config-compact">
+        <style>
+            .config-compact .text-xs { font-size: 0.60rem; }
+            .config-compact .text-sm { font-size: 0.70rem; }
+            .config-compact .text-base { font-size: 0.80rem; }
+            .config-compact .text-lg { font-size: 0.90rem; }
+            .config-compact .text-xl { font-size: 1.00rem; }
+            .config-compact .text-2xl { font-size: 1.10rem; }
+            .config-compact .text-3xl { font-size: 1.30rem; }
+            .config-compact .text-4xl { font-size: 1.50rem; }
+            .config-compact .text-5xl { font-size: 1.80rem; }
+            .config-compact .text-6xl { font-size: 2.10rem; }
+            .config-compact .text-7xl { font-size: 2.40rem; }
+            .config-compact .text-8xl { font-size: 2.80rem; }
+        </style>
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8" x-data="{ tab: '{{ $initialTab }}', portalLoading: false, openPortal() {
             this.portalLoading = true;
             fetch('{{ route('subscribe.portal') }}', { headers: { 'Accept': 'application/json' } })
@@ -473,7 +487,7 @@
             {{-- Tab: Usos de tokens (admin) --}}
             @if ($user->isAdmin())
                 <div x-show="tab === 'token-functions'" x-transition
-                     x-data="tokenUsages(@js($adminTokenActions), @js($adminTokenFunctions))">
+                     x-data="tokenUsages(@js($adminTokenActions), @js($adminTokenFunctions), @js(request('sub', 'functions')))">
 
                     {{-- Sub-pestañas: Funciones | Acciones --}}
                     <div class="border-b border-gray-200 mb-6">
@@ -708,9 +722,9 @@
     </div>
 
     <script>
-        function tokenUsages(actionData, functionData) {
+        function tokenUsages(actionData, functionData, initialSub) {
             return {
-                sub: 'functions',
+                sub: (initialSub || 'functions'),
                 actions: (actionData || []),
                 functions: (functionData || []),
                 /* Modal función */
