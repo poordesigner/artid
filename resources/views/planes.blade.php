@@ -50,6 +50,24 @@
         </div>
     </section>
 
+    {{-- Bienvenida free --}}
+    <section class="-mt-6 pb-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-gray-900 text-white p-8 sm:p-10 flex flex-col sm:flex-row items-center justify-between gap-8">
+                <div>
+                    <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Regalo de bienvenida') }}</p>
+                    <h2 class="mt-3 text-2xl sm:text-3xl font-bold">
+                        {{ __(':count tokens gratis al registrarte', ['count' => config('artid.welcome_tokens', 0)]) }}
+                    </h2>
+                    <p class="mt-2 text-gray-300 max-w-xl">{{ __('Con ellos creas tu primera obra con QR y ficha básica. Sin suscripción, sin tarjeta.') }}</p>
+                </div>
+                <a href="{{ route('register') }}" class="shrink-0 px-8 py-3 bg-white text-gray-900 font-semibold text-sm uppercase tracking-wider hover:bg-gray-200 transition">
+                    {{ __('Crear cuenta gratis') }}
+                </a>
+            </div>
+        </div>
+    </section>
+
     {{-- Paquetes + usos --}}
     <section class="pb-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
