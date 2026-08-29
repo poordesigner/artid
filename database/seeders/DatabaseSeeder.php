@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
         // Artist::factory(10)->create();
 
         $this->call(TokenPackageSeeder::class);
+        $this->call(TokenActionSeeder::class);
         $this->call(TokenFunctionSeeder::class);
 
         Artist::factory()->create([

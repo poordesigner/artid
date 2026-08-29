@@ -353,5 +353,20 @@
     "USD/token": "USD/token",
     "Paquetes": "Packages",
     "Cada función consume la cantidad de tokens indicada.": "Each function consumes the indicated amount of tokens.",
-    "token": "token"
+    "token": "token",
+    "Acciones permitidas": "Allowed actions",
+    "Nueva acción": "New action",
+    "Acción creada.": "Action created.",
+    "Acción actualizada.": "Action updated.",
+    "Acción eliminada.": "Action deleted.",
+    "No hay acciones creadas.": "No actions created yet.",
+    "Funciones de tokens": "Token functions",
+    "Acciones incluidas": "Included actions",
+    "Selecciona una o más acciones.": "Select one or more actions.",
+    "Crear QR": "Create QR",
+    "Crear Ficha Básica de Obra": "Create Basic Artwork Record",
+    "Asociar Links de la Obra": "Attach artwork links",
+    "Crear Perfil Artista": "Create artist profile",
+    "Asociar Exposición": "Attach exhibition",
+    "Hacer Traslado de Propiedad": "Ownership transfer"
 }

@@ -416,5 +416,20 @@
     "USD/token": "USD/token",
     "Paquetes": "Paquetes",
     "Cada función consume la cantidad de tokens indicada.": "Cada función consume la cantidad de tokens indicada.",
-    "token": "token"
+    "token": "token",
+    "Acciones permitidas": "Acciones permitidas",
+    "Nueva acción": "Nueva acción",
+    "Acción creada.": "Acción creada.",
+    "Acción actualizada.": "Acción actualizada.",
+    "Acción eliminada.": "Acción eliminada.",
+    "No hay acciones creadas.": "No hay acciones creadas.",
+    "Funciones de tokens": "Funciones de tokens",
+    "Acciones incluidas": "Acciones incluidas",
+    "Selecciona una o más acciones.": "Selecciona una o más acciones.",
+    "Crear QR": "Crear QR",
+    "Crear Ficha Básica de Obra": "Crear Ficha Básica de Obra",
+    "Asociar Links de la Obra": "Asociar Links de la Obra",
+    "Crear Perfil Artista": "Crear Perfil Artista",
+    "Asociar Exposición": "Asociar Exposición",
+    "Hacer Traslado de Propiedad": "Hacer Traslado de Propiedad"
 }

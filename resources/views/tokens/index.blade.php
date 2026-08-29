@@ -98,12 +98,21 @@
                         <p class="mt-2 text-sm text-gray-600">{{ __('Cada función consume la cantidad de tokens indicada.') }}</p>
                         <div class="mt-4 space-y-3">
                             @forelse ($tokenFunctions as $tf)
-                                <div class="flex items-center justify-between border border-gray-200 rounded-lg px-5 py-4">
-                                    <span class="text-sm font-medium text-gray-900">{{ $tf->name }}</span>
-                                    <span class="text-sm font-semibold text-gray-700">
-                                        <span class="text-lg font-bold">{{ $tf->tokens }}</span>
-                                        {{ $tf->tokens === 1 ? __('token') : __('tokens') }}
-                                    </span>
+                                <div class="border border-gray-200 rounded-lg px-5 py-4">
+                                    <div class="flex items-center justify-between gap-4">
+                                        <span class="text-sm font-medium text-gray-900">{{ $tf->name }}</span>
+                                        <span class="text-sm font-semibold text-gray-700">
+                                            <span class="text-lg font-bold">{{ $tf->tokens }}</span>
+                                            {{ $tf->tokens === 1 ? __('token') : __('tokens') }}
+                                        </span>
+                                    </div>
+                                    @if ($tf->actions->isNotEmpty())
+                                        <div class="mt-2 flex flex-wrap gap-1.5">
+                                            @foreach ($tf->actions as $action)
+                                                <span class="px-2 py-0.5 text-[10px] bg-gray-100 text-gray-600 rounded-full">{{ $action->name }}</span>
+                                            @endforeach
+                                        </div>
+                                    @endif
                                 </div>
                             @empty
                                 <p class="text-sm text-gray-500">{{ __('No hay funciones definidas.') }}</p>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Payment;
 use App\Models\Plan;
+use App\Models\TokenAction;
 use App\Models\TokenFunction;
 use App\Models\TokenPackage;
 use App\Services\PaddleService;
@@ -25,7 +26,11 @@ class ConfigController extends Controller
             : [];
 
         $adminTokenFunctions = $user?->isAdmin()
-            ? TokenFunction::orderBy('sort_order')->get()
+            ? TokenFunction::with('actions')->orderBy('sort_order')->get()
+            : [];
+
+        $adminTokenActions = $user?->isAdmin()
+            ? TokenAction::orderBy('sort_order')->get()
             : [];
 
         $tokenFunctions = TokenFunction::active()->get();
@@ -52,6 +57,7 @@ class ConfigController extends Controller
             'adminPlans' => $adminPlans,
             'adminPackages' => $adminPackages,
             'adminTokenFunctions' => $adminTokenFunctions,
+            'adminTokenActions' => $adminTokenActions,
             'tokenFunctions' => $tokenFunctions,
             'plans' => $plans,
             'activeSubscription' => $activeSubscription,

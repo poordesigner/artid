@@ -8,17 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 #[Fillable([
     'name',
     'description',
-    'tokens',
     'is_active',
     'sort_order',
 ])]
-class TokenFunction extends Model
+class TokenAction extends Model
 {
-    public function actions(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
-    {
-        return $this->belongsToMany(TokenAction::class);
-    }
-
     public function scopeActive($query)
     {
         return $query->where('is_active', true)->orderBy('sort_order');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\TokenAction;
 use App\Models\TokenFunction;
 use Illuminate\Http\Request;
 
@@ -15,20 +16,24 @@ class TokenFunctionController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:token_functions,name',
             'description' => 'nullable|string',
             'tokens' => 'required|integer|min:1',
             'is_active' => 'boolean',
             'sort_order' => 'integer|min:0',
+            'action_ids' => ['required', 'array', 'min:1'],
+            'action_ids.*' => ['integer', 'exists:token_actions,id'],
         ]);
 
-        TokenFunction::create([
+        $function = TokenFunction::create([
             'name' => $validated['name'],
             'description' => $validated['description'] ?? null,
             'tokens' => $validated['tokens'],
             'is_active' => $validated['is_active'] ?? true,
             'sort_order' => $validated['sort_order'] ?? 0,
         ]);
+
+        $function->actions()->sync($validated['action_ids']);
 
         return redirect()->route('configuracion', ['tab' => 'token-functions'])
             ->with('status', __('Función de tokens creada.'));
@@ -37,11 +42,13 @@ class TokenFunctionController extends Controller
     public function update(Request $request, TokenFunction $function)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:token_functions,name,'.$function->id,
             'description' => 'nullable|string',
             'tokens' => 'required|integer|min:1',
             'is_active' => 'boolean',
             'sort_order' => 'integer|min:0',
+            'action_ids' => ['required', 'array', 'min:1'],
+            'action_ids.*' => ['integer', 'exists:token_actions,id'],
         ]);
 
         $function->update([
@@ -51,6 +58,8 @@ class TokenFunctionController extends Controller
             'is_active' => $validated['is_active'] ?? true,
             'sort_order' => $validated['sort_order'] ?? 0,
         ]);
+
+        $function->actions()->sync($validated['action_ids']);
 
         return redirect()->route('configuracion', ['tab' => 'token-functions'])
             ->with('status', __('Función de tokens actualizada.'));
@@ -62,5 +71,55 @@ class TokenFunctionController extends Controller
 
         return redirect()->route('configuracion', ['tab' => 'token-functions'])
             ->with('status', __('Función de tokens eliminada.'));
+    }
+
+    /* ---- Acciones (catálogo del sistema) ---- */
+
+    public function storeAction(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255|unique:token_actions,name',
+            'description' => 'nullable|string',
+            'is_active' => 'boolean',
+            'sort_order' => 'integer|min:0',
+        ]);
+
+        TokenAction::create([
+            'name' => $validated['name'],
+            'description' => $validated['description'] ?? null,
+            'is_active' => $validated['is_active'] ?? true,
+            'sort_order' => $validated['sort_order'] ?? 0,
+        ]);
+
+        return redirect()->route('configuracion', ['tab' => 'token-functions'])
+            ->with('status', __('Acción creada.'));
+    }
+
+    public function updateAction(Request $request, TokenAction $action)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255|unique:token_actions,name,'.$action->id,
+            'description' => 'nullable|string',
+            'is_active' => 'boolean',
+            'sort_order' => 'integer|min:0',
+        ]);
+
+        $action->update([
+            'name' => $validated['name'],
+            'description' => $validated['description'] ?? null,
+            'is_active' => $validated['is_active'] ?? true,
+            'sort_order' => $validated['sort_order'] ?? 0,
+        ]);
+
+        return redirect()->route('configuracion', ['tab' => 'token-functions'])
+            ->with('status', __('Acción actualizada.'));
+    }
+
+    public function destroyAction(TokenAction $action)
+    {
+        $action->delete();
+
+        return redirect()->route('configuracion', ['tab' => 'token-functions'])
+            ->with('status', __('Acción eliminada.'));
     }
 }

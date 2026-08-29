@@ -45,7 +45,7 @@ Route::get('/', function () {
 
 Route::get('/planes', function () {
     $packages = TokenPackage::active()->get();
-    $tokenFunctions = \App\Models\TokenFunction::active()->get();
+    $tokenFunctions = \App\Models\TokenFunction::with('actions')->active()->get();
 
     return view('planes', compact('packages', 'tokenFunctions'));
 })->name('planes');
@@ -104,6 +104,10 @@ Route::middleware('auth')->group(function () {
         Route::post('/configuracion/token-functions', [TokenFunctionController::class, 'store'])->name('token-functions.store');
         Route::patch('/configuracion/token-functions/{function}', [TokenFunctionController::class, 'update'])->name('token-functions.update');
         Route::delete('/configuracion/token-functions/{function}', [TokenFunctionController::class, 'destroy'])->name('token-functions.destroy');
+
+        Route::post('/configuracion/token-actions', [TokenFunctionController::class, 'storeAction'])->name('token-actions.store');
+        Route::patch('/configuracion/token-actions/{action}', [TokenFunctionController::class, 'updateAction'])->name('token-actions.update');
+        Route::delete('/configuracion/token-actions/{action}', [TokenFunctionController::class, 'destroyAction'])->name('token-actions.destroy');
     });
 
     Route::get('/artworks', [ArtworkController::class, 'index'])->name('artworks.index');

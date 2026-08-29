@@ -25,7 +25,7 @@ class TokenController extends Controller
             ->limit(30)
             ->get();
         $packages = TokenPackage::active()->get();
-        $tokenFunctions = TokenFunction::active()->get();
+        $tokenFunctions = TokenFunction::with('actions')->active()->get();
 
         return view('tokens.index', compact('balance', 'transactions', 'packages', 'tokenFunctions'));
     }
