@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password', 'google_id', 'github_id', 'github_token', 'github_nickname', 'github_repo', 'short_domain', 'avatar', 'statement', 'cv_pdf', 'website_url', 'instagram', 'behance', 'artstation', 'youtube', 'tiktok', 'is_admin', 'granted_plan_id', 'granted_expires_at', 'tokens_balance'])]
+#[Fillable(['name', 'email', 'password', 'google_id', 'github_id', 'github_token', 'github_nickname', 'github_repo', 'short_domain', 'avatar', 'statement', 'cv_pdf', 'website_url', 'instagram', 'behance', 'artstation', 'youtube', 'tiktok', 'is_admin', 'granted_plan_id', 'granted_expires_at', 'tokens_balance', 'welcome_tokens_claimed'])]
 #[Hidden(['password', 'remember_token'])]
 class Artist extends Authenticatable
 {
@@ -110,6 +110,52 @@ class Artist extends Authenticatable
         ]);
 
         return true;
+    }
+
+    /**
+     * Otorga los tokens de bienvenida al primer registro.
+     * Idempotente: solo se aplica una vez por artista.
+     *
+     * @return bool true si se otorgaron, false si ya estaban otorgados.
+     */
+    public function grantWelcomeTokens(): bool
+    {
+        if ($this->welcome_tokens_claimed) {
+            return false;
+        }
+
+        $amount = (int) config('artid.welcome_tokens', 0);
+
+        if ($amount <= 0) {
+            $this->update(['welcome_tokens_claimed' => true]);
+
+            return false;
+        }
+
+        $updated = \Illuminate\Support\Facades\DB::transaction(function () use ($amount) {
+            $claimed = self::where('id', $this->id)
+                ->where('welcome_tokens_claimed', false)
+                ->update(['welcome_tokens_claimed' => true]);
+
+            if (! $claimed) {
+                return false;
+            }
+
+            $this->refresh();
+            $this->increment('tokens_balance', $amount);
+            $this->refresh();
+
+            $this->tokenTransactions()->create([
+                'type' => 'grant',
+                'amount' => $amount,
+                'balance_after' => $this->tokens_balance,
+                'note' => __('Tokens de bienvenida (primer registro)'),
+            ]);
+
+            return true;
+        });
+
+        return (bool) $updated;
     }
 
     /**
@@ -274,6 +320,7 @@ class Artist extends Authenticatable
             'is_admin' => 'boolean',
             'granted_expires_at' => 'datetime',
             'tokens_balance' => 'integer',
+            'welcome_tokens_claimed' => 'boolean',
         ];
     }
 

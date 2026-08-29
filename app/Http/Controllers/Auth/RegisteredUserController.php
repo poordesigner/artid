@@ -42,6 +42,8 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        $artist->grantWelcomeTokens();
+
         event(new Registered($artist));
 
         Auth::login($artist);

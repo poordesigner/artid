@@ -371,5 +371,6 @@
     "Hacer Traslado de Propiedad": "Ownership transfer",
     "Editar acción": "Edit action",
     "Las funciones agrupan acciones y consumen tokens.": "Functions group actions and consume tokens.",
-    "Catálogo de acciones que puede incluir una función.": "Catalog of actions that a function can include."
+    "Catálogo de acciones que puede incluir una función.": "Catalog of actions that a function can include.",
+    "Tokens de bienvenida (primer registro)": "Welcome tokens (first registration)"
 }

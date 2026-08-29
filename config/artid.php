@@ -36,4 +36,17 @@ return [
 
     'public_url' => env('ARTID_PUBLIC_URL', 'https://poordesigner.com'),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Tokens de bienvenida (primer registro)
+    |--------------------------------------------------------------------------
+    |
+    | Cantidad de tokens gratis que recibe un artista la primera vez que crea
+    | su cuenta. Solo se otorga una vez; se controla con la columna
+    | `welcome_tokens_claimed`.
+    |
+    */
+
+    'welcome_tokens' => (int) env('ARTID_WELCOME_TOKENS', 5),
+
 ];

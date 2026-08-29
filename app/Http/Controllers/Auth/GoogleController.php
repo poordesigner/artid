@@ -47,6 +47,8 @@ class GoogleController extends Controller
                 'google_id' => $googleUser->getId(),
                 'email_verified_at' => now(),
             ]);
+
+            $artist->grantWelcomeTokens();
         } elseif (! $artist->google_id) {
             $artist->update([
                 'google_id' => $googleUser->getId(),
