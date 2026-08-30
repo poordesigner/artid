@@ -98,8 +98,10 @@ return [
         ],
 
         'otros' => [
-            'Consulta fuera del alcance de soporte de QRTE (temas ajenos, asuntos internos o personales, legal).',
-            'Responde de forma educada que la consulta excede el alcance de soporte de QRTE y que un agente humano la atenderá. No profundices ni des mas detalles.',
+            'Tema fuera del alcance de QRTE.',
+            'Responde de forma amable y breve, declinando sin inventar contenido ni responder la consulta.',
+            'Si el usuario insiste o pide asistencia humana, invítalo a escribir a qart@poordesigner.com con su solicitud.',
+            'Termina SIEMPRE tu respuesta con esta linea exacta, sin nada despues: @@OOC@@',
         ],
     ],
 ];
