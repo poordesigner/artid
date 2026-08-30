@@ -1,4 +1,4 @@
-<header class="border-b border-gray-100">
+<header class="border-b border-gray-100" x-data="{ open: false }">
     <div class="max-w-[75rem] mx-auto px-6 lg:px-8">
         <div class="flex items-center justify-between h-20 gap-4">
             <a href="{{ url('/') }}" class="shrink-0">
@@ -13,7 +13,23 @@
             <div class="flex items-center gap-4 sm:gap-5">
                 <x-language-switcher />
                 <a href="{{ route('login') }}" class="hidden sm:inline text-lg uppercase text-gray-700 hover:text-gray-900 transition">{{ __('Login') }}</a>
+                <button @click="open = !open" class="md:hidden flex flex-col justify-center items-center w-10 h-10 gap-1.5 focus:outline-none" aria-label="menu">
+                    <span class="block w-6 h-0.5 bg-gray-900 transition" :class="open ? 'translate-y-2 rotate-45' : ''"></span>
+                    <span class="block w-6 h-0.5 bg-gray-900 transition" :class="open ? 'opacity-0' : ''"></span>
+                    <span class="block w-6 h-0.5 bg-gray-900 transition" :class="open ? '-translate-y-2 -rotate-45' : ''"></span>
+                </button>
             </div>
+        </div>
+    </div>
+
+    {{-- Menú móvil --}}
+    <div :class="open ? 'block' : 'hidden'" class="md:hidden border-t border-gray-100">
+        <div class="px-6 py-4 flex flex-col gap-3 text-base uppercase text-gray-600">
+            <a href="{{ url('/') }}" class="hover:text-gray-900 transition" @click="open = false">{{ __('Inicio') }}</a>
+            <a href="{{ route('caracteristicas') }}" class="hover:text-gray-900 transition" @click="open = false">{{ __('Características') }}</a>
+            <a href="{{ route('planes') }}" class="hover:text-gray-900 transition" @click="open = false">{{ __('Planes') }}</a>
+            <a href="{{ route('ayuda') }}" class="hover:text-gray-900 transition" @click="open = false">{{ __('Ayuda') }}</a>
+            <a href="{{ route('login') }}" class="hover:text-gray-900 transition" @click="open = false">{{ __('Login') }}</a>
         </div>
     </div>
 </header>

@@ -36,7 +36,7 @@
                      style="background: #550044;">
                     <p class="text-xs uppercase tracking-gallery text-gray-400">{{ __('REGALO DE BIENVENIDA') }}</p>
                     <h2 class="mt-4 font-medium text-2xl sm:text-3xl">
-                        {{ __('Recibe :count tokens gratis al registrarte', ['count' => config('QRTE.welcome_tokens', 0)]) }}
+                        {{ __('Recibe :count tokens gratis al registrarte', ['count' => config('artid.welcome_tokens', 0)]) }}
                     </h2>
                     <p class="mt-3 text-gray-300">{{ __('Crea la Identidad Digital de tus primeras obras') }}</p>
                     <p class="mt-1 text-gray-300">{{ __('Sin Suscripción - Sin Tarjeta') }}</p>

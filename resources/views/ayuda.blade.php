@@ -49,7 +49,7 @@
             <ol class="mt-3 text-sm space-y-2 list-decimal list-inside">
                 <li>{{ __('Entra a :app.', ['app' => config('app.url')]) }}</li>
                 <li>{{ __('Haz clic en «Continue with Google» o regístrate con email y contraseña.') }}</li>
-                <li>{{ __('Se crea tu cuenta de artista y recibes :count tokens de bienvenida, gratis y sin tarjeta.', ['count' => config('QRTE.welcome_tokens', 0)]) }}</li>
+                <li>{{ __('Se crea tu cuenta de artista y recibes :count tokens de bienvenida, gratis y sin tarjeta.', ['count' => config('artid.welcome_tokens', 0)]) }}</li>
             </ol>
         </section>
 
@@ -119,7 +119,7 @@
         <!-- 7 -->
         <section id="ficha" class="mt-6 bg-white rounded-lg shadow-sm p-6">
             <h2 class="font-semibold text-xl">{{ __('7. La ficha pública y tu perfil público') }}</h2>
-            <p class="mt-2 text-sm text-gray-600">{{ __('Al escanear el QR se abre la ficha pública de la obra, alojada por QRTE en :url. Verifica la firma del QR: sin firma válida, la ficha no se muestra (404).', ['url' => config('QRTE.public_url')]) }}</p>
+            <p class="mt-2 text-sm text-gray-600">{{ __('Al escanear el QR se abre la ficha pública de la obra, alojada por QRTE en :url. Verifica la firma del QR: sin firma válida, la ficha no se muestra (404).', ['url' => config('artid.public_url')]) }}</p>
             <ul class="mt-2 text-sm space-y-1 list-disc list-inside">
                 <li>{{ __('Muestra la imagen, el título y el artista.') }}</li>
                 <li>{{ __('La metadata: año, edición, serie, técnica, dimensiones y descripción.') }}</li>

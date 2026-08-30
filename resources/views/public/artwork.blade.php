@@ -117,7 +117,7 @@
         @endif
 
         <div class="footer">
-            <a href="{{ config('QRTE.public_url') }}" target="_blank" rel="noopener">QRTE</a> — by POORdesigner.com
+            <a href="{{ config('artid.public_url') }}" target="_blank" rel="noopener">QRTE</a> — by POORdesigner.com
         </div>
     </div>
 </body>

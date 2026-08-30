@@ -33,7 +33,7 @@
                 <div>
                     <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Regalo de bienvenida') }}</p>
                     <h2 class="mt-3 text-2xl sm:text-3xl font-bold">
-                        {{ __(':count tokens gratis al registrarte', ['count' => config('QRTE.welcome_tokens', 0)]) }}
+                        {{ __(':count tokens gratis al registrarte', ['count' => config('artid.welcome_tokens', 0)]) }}
                     </h2>
                     <p class="mt-2 text-gray-300 max-w-xl">{{ __('Con ellos creas tu primera obra con QR y ficha básica. Sin suscripción, sin tarjeta.') }}</p>
                 </div>
