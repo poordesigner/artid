@@ -1,5 +1,5 @@
 @extends('layouts.public')
-@section('title', __('Ayuda') . ' — ARTid')
+@section('title', __('Ayuda') . ' — QRTE')
 @section('content')
     <div class="py-12">
         <div class="max-w-[75rem] mx-auto sm:px-6 lg:px-8">
@@ -9,12 +9,12 @@
 
         <!-- Introducción -->
         <section id="intro" class="mt-6 bg-white rounded-lg shadow-sm p-6">
-            <h2 class="font-semibold text-xl">{{ __('¿Qué es ARTid?') }}</h2>
+            <h2 class="font-semibold text-xl">{{ __('¿Qué es QRTE?') }}</h2>
             <p class="mt-2 text-sm text-gray-700">
-                <strong>ARTid</strong> — by <a href="https://poordesigner.com" class="text-indigo-600 hover:underline" target="_blank" rel="noopener">POORdesigner.com</a> — {{ __('es una herramienta diseñada para que los artistas puedan generar una Identidad Digital para sus obras físicas.') }}
+                <strong>QRTE</strong> — by <a href="https://poordesigner.com" class="text-indigo-600 hover:underline" target="_blank" rel="noopener">POORdesigner.com</a> — {{ __('es una herramienta diseñada para que los artistas puedan generar una Identidad Digital para sus obras físicas.') }}
             </p>
 
-            <h3 class="mt-4 font-semibold">{{ __('¿Cómo está estructurado ARTid?') }}</h3>
+            <h3 class="mt-4 font-semibold">{{ __('¿Cómo está estructurado QRTE?') }}</h3>
             <ul class="mt-2 text-sm space-y-2 list-disc list-inside text-gray-700">
                 <li><strong>{{ __('Ficha de Datos') }}</strong> — {{ __('Crea una ficha técnica básica de tu obra: título, año, edición, serie, técnicas, dimensiones, descripción, imagen y links externos.') }}</li>
                 <li><strong>{{ __('QR Permanente') }}</strong> — {{ __('Cada obra tiene un código QR único que nunca cambia. Se imprime sobre la obra y dirige a la ficha pública.') }}</li>
@@ -49,7 +49,7 @@
             <ol class="mt-3 text-sm space-y-2 list-decimal list-inside">
                 <li>{{ __('Entra a :app.', ['app' => config('app.url')]) }}</li>
                 <li>{{ __('Haz clic en «Continue with Google» o regístrate con email y contraseña.') }}</li>
-                <li>{{ __('Se crea tu cuenta de artista y recibes :count tokens de bienvenida, gratis y sin tarjeta.', ['count' => config('artid.welcome_tokens', 0)]) }}</li>
+                <li>{{ __('Se crea tu cuenta de artista y recibes :count tokens de bienvenida, gratis y sin tarjeta.', ['count' => config('QRTE.welcome_tokens', 0)]) }}</li>
             </ol>
         </section>
 
@@ -119,12 +119,12 @@
         <!-- 7 -->
         <section id="ficha" class="mt-6 bg-white rounded-lg shadow-sm p-6">
             <h2 class="font-semibold text-xl">{{ __('7. La ficha pública y tu perfil público') }}</h2>
-            <p class="mt-2 text-sm text-gray-600">{{ __('Al escanear el QR se abre la ficha pública de la obra, alojada por ARTid en :url. Verifica la firma del QR: sin firma válida, la ficha no se muestra (404).', ['url' => config('artid.public_url')]) }}</p>
+            <p class="mt-2 text-sm text-gray-600">{{ __('Al escanear el QR se abre la ficha pública de la obra, alojada por QRTE en :url. Verifica la firma del QR: sin firma válida, la ficha no se muestra (404).', ['url' => config('QRTE.public_url')]) }}</p>
             <ul class="mt-2 text-sm space-y-1 list-disc list-inside">
                 <li>{{ __('Muestra la imagen, el título y el artista.') }}</li>
                 <li>{{ __('La metadata: año, edición, serie, técnica, dimensiones y descripción.') }}</li>
                 <li>{{ __('El historial: exposiciones y proveniencia.') }}</li>
-                <li>{{ __('Un sello «Verificado por ARTid» que confirma que la información es auténtica y está firmada.') }}</li>
+                <li>{{ __('Un sello «Verificado por QRTE» que confirma que la información es auténtica y está firmada.') }}</li>
             </ul>
             <p class="mt-2 text-sm text-gray-600">{{ __('La ficha es de solo lectura y pública: cualquiera con el QR puede verla.') }}</p>
             <p class="mt-2 text-sm text-gray-600">{{ __('También tienes un perfil público como artista, donde se muestran tu avatar, declaración (statement), CV, redes sociales y enlaces de perfil.') }}</p>
@@ -156,11 +156,11 @@
             <h3 class="mt-4 font-semibold">{{ __('Transferencia / venta') }}</h3>
             <ol class="mt-2 text-sm space-y-2 list-decimal list-inside">
                 <li>{{ __('Abre la obra → «+ Propiedad» → tipo «Transfer / Sale».') }}</li>
-                <li>{{ __('Completa los datos del nuevo propietario (pueden ser anónimos) y guarda. ARTid genera una llave secreta que se muestra una sola vez: ¡guárdala!') }}</li>
+                <li>{{ __('Completa los datos del nuevo propietario (pueden ser anónimos) y guarda. QRTE genera una llave secreta que se muestra una sola vez: ¡guárdala!') }}</li>
                 <li>{{ __('Entrega la llave al nuevo dueño junto con la obra.') }}</li>
                 <li>{{ __('Quien tenga la llave puede revelar los datos del propietario desde «Secret key → Reveal».') }}</li>
             </ol>
-            <p class="mt-3 text-sm text-gray-700">{{ __('Los datos de una transferencia están cifrados: ARTid guarda la marca de que ocurrió, pero solo la llave desbloquea quién es el dueño en ese momento.') }}</p>
+            <p class="mt-3 text-sm text-gray-700">{{ __('Los datos de una transferencia están cifrados: QRTE guarda la marca de que ocurrió, pero solo la llave desbloquea quién es el dueño en ese momento.') }}</p>
         </section>
 
         <!-- 10 -->

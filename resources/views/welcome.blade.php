@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="{{ asset('img/favicon_192x192.png') }}" type="image/png">
     <link rel="apple-touch-icon" href="{{ asset('img/favicon_192x192.png') }}">
-    <title>{{ __('Identidad Digital para Obras de Arte') }} — ARTid</title>
+    <title>{{ __('Identidad Digital para Obras de Arte') }} — QRTE</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Space+Grotesk:300,400,500,600,700&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -36,7 +36,7 @@
                      style="background: #550044;">
                     <p class="text-xs uppercase tracking-gallery text-gray-400">{{ __('REGALO DE BIENVENIDA') }}</p>
                     <h2 class="mt-4 font-medium text-2xl sm:text-3xl">
-                        {{ __('Recibe :count tokens gratis al registrarte', ['count' => config('artid.welcome_tokens', 0)]) }}
+                        {{ __('Recibe :count tokens gratis al registrarte', ['count' => config('QRTE.welcome_tokens', 0)]) }}
                     </h2>
                     <p class="mt-3 text-gray-300">{{ __('Crea la Identidad Digital de tus primeras obras') }}</p>
                     <p class="mt-1 text-gray-300">{{ __('Sin Suscripción - Sin Tarjeta') }}</p>

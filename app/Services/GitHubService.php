@@ -47,7 +47,7 @@ class GitHubService
             'name' => $name,
             'private' => false,
             'auto_init' => true,
-            'description' => 'Framework ARTid de identidad digital',
+            'description' => 'Framework QRTE de identidad digital',
         ]);
 
         if ($res->failed()) {

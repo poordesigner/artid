@@ -6,7 +6,7 @@
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ Auth::user()?->isAdmin() ? route('admin.dashboard') : route('dashboard.artist') }}">
-                        <img src="{{ asset('img/navbar_240x120.png') }}" alt="artid" class="block h-10 w-auto">
+                        <img src="{{ asset('img/navbar_240x120.png') }}" alt="QRTE" class="block h-10 w-auto">
                     </a>
                 </div>
             </div>

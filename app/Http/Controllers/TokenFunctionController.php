@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\TokenAction;
 use App\Models\TokenFunction;
+use App\Support\SupportContext;
 use Illuminate\Http\Request;
 
 class TokenFunctionController extends Controller
@@ -35,6 +36,8 @@ class TokenFunctionController extends Controller
 
         $function->actions()->sync($validated['action_ids']);
 
+        SupportContext::forgetAll();
+
         return redirect()->route('configuracion', ['tab' => 'token-functions', 'sub' => 'functions'])
             ->with('status', __('Función de tokens creada.'));
     }
@@ -61,6 +64,8 @@ class TokenFunctionController extends Controller
 
         $function->actions()->sync($validated['action_ids']);
 
+        SupportContext::forgetAll();
+
         return redirect()->route('configuracion', ['tab' => 'token-functions', 'sub' => 'functions'])
             ->with('status', __('Función de tokens actualizada.'));
     }
@@ -68,6 +73,8 @@ class TokenFunctionController extends Controller
     public function destroy(TokenFunction $function)
     {
         $function->delete();
+
+        SupportContext::forgetAll();
 
         return redirect()->route('configuracion', ['tab' => 'token-functions', 'sub' => 'functions'])
             ->with('status', __('Función de tokens eliminada.'));
@@ -91,6 +98,8 @@ class TokenFunctionController extends Controller
             'sort_order' => $validated['sort_order'] ?? 0,
         ]);
 
+        SupportContext::forgetAll();
+
         return redirect()->route('configuracion', ['tab' => 'token-functions', 'sub' => 'actions'])
             ->with('status', __('Acción creada.'));
     }
@@ -110,6 +119,8 @@ class TokenFunctionController extends Controller
             'is_active' => $validated['is_active'] ?? true,
             'sort_order' => $validated['sort_order'] ?? 0,
         ]);
+
+        SupportContext::forgetAll();
 
         return redirect()->route('configuracion', ['tab' => 'token-functions', 'sub' => 'actions'])
             ->with('status', __('Acción actualizada.'));

@@ -10,7 +10,7 @@ class SyncPaddleCatalog extends Command
 {
     protected $signature = 'paddle:sync';
 
-    protected $description = 'Sincroniza los planes de ARTid con el catálogo de Paddle (productos y precios).';
+    protected $description = 'Sincroniza los planes de QRTE con el catálogo de Paddle (productos y precios).';
 
     public function handle(PaddleService $paddle): int
     {

@@ -47,7 +47,7 @@
         <h1 class="title">{{ $artwork->title }}</h1>
         <p class="artist"><a href="{{ route('public.artist', $artwork->artist_id) }}" style="color:inherit;text-decoration:none;">{{ '@'.($artwork->artist->name) }}</a></p>
 
-        <div class="verified">&#10003; Verificado por ARTid</div>
+        <div class="verified">&#10003; Verificado por QRTE</div>
 
         <ul class="meta">
             @if ($artwork->year)<li><span>Año</span><strong>{{ $artwork->year }}</strong></li>@endif
@@ -117,7 +117,7 @@
         @endif
 
         <div class="footer">
-            <a href="{{ config('artid.public_url') }}" target="_blank" rel="noopener">ARTid</a> — by POORdesigner.com
+            <a href="{{ config('QRTE.public_url') }}" target="_blank" rel="noopener">QRTE</a> — by POORdesigner.com
         </div>
     </div>
 </body>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ $artist->name }} — ARTid</title>
+    <title>{{ $artist->name }} — QRTE</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Space+Grotesk:300,400,500,600,700&display=swap" rel="stylesheet" />
     <style>
@@ -36,7 +36,7 @@
         @endif
 
         <h1 class="name">{{ $artist->name }}</h1>
-        <div class="verified">&#10003; ARTid</div>
+        <div class="verified">&#10003; QRTE</div>
         <p class="artworks-count">{{ $artist->artworks_count }} {{ $artist->artworks_count === 1 ? 'obra' : 'obras' }}</p>
 
         @if ($artist->statement)
@@ -87,7 +87,7 @@
         @endif
 
         <div class="footer">
-            <a href="{{ config('artid.public_url') }}" target="_blank" rel="noopener">ARTid</a> — by POORdesigner.com
+            <a href="{{ config('QRTE.public_url') }}" target="_blank" rel="noopener">QRTE</a> — by POORdesigner.com
         </div>
     </div>
 </body>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\TokenPackage;
 use App\Services\PaddleService;
+use App\Support\SupportContext;
 use Illuminate\Http\Request;
 
 class TokenPackageController extends Controller
@@ -33,6 +34,8 @@ class TokenPackageController extends Controller
             'sort_order' => $validated['sort_order'] ?? 0,
         ]);
 
+        SupportContext::forgetAll();
+
         $this->syncToPaddle($package, $paddle);
 
         return redirect()->route('configuracion', ['tab' => 'packages'])
@@ -59,6 +62,8 @@ class TokenPackageController extends Controller
             'sort_order' => $validated['sort_order'] ?? 0,
         ]);
 
+        SupportContext::forgetAll();
+
         $this->syncToPaddle($package, $paddle);
 
         return redirect()->route('configuracion', ['tab' => 'packages'])
@@ -76,6 +81,8 @@ class TokenPackageController extends Controller
         }
 
         $package->delete();
+
+        SupportContext::forgetAll();
 
         return redirect()->route('configuracion', ['tab' => 'packages'])
             ->with('status', __('Paquete de tokens eliminado.'));

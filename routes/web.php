@@ -15,6 +15,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicArtworkController;
 use App\Http\Controllers\SeriesController;
 use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\SupportContextController;
 use App\Http\Controllers\TokenController;
 use App\Http\Controllers\TokenFunctionController;
 use App\Http\Controllers\TokenPackageController;
@@ -53,6 +54,8 @@ Route::get('/planes', function () {
 Route::get('/o/{publicId}', [PublicArtworkController::class, 'show'])->name('public.artwork');
 
 Route::get('/artist/{id}', [PublicArtworkController::class, 'artist'])->name('public.artist');
+
+Route::get('/api/support/context', [SupportContextController::class, '__invoke'])->name('support.context');
 
 Route::post('/webhooks/paddle', [WebhookController::class, 'handle'])->name('webhooks.paddle');
 

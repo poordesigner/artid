@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="{{ asset('img/favicon_192x192.png') }}" type="image/png">
     <link rel="apple-touch-icon" href="{{ asset('img/favicon_192x192.png') }}">
-    <title>{{ __('Características') }} — ARTid</title>
+    <title>{{ __('Características') }} — QRTE</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Space+Grotesk:300,400,500,600,700&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -54,7 +54,7 @@
                 <div class="bg-brand text-white p-8 sm:p-10">
                     <p class="text-2xl font-semibold leading-tight">Paisajes Urbanos</p>
                     <p class="mt-1 text-[#ff0066] font-medium">@artista</p>
-                    <span class="inline-flex items-center gap-2 mt-4 px-3 py-1 text-xs text-emerald-400 border border-brand-600 bg-white/5 rounded-full">✓ Verificado por ARTid</span>
+                    <span class="inline-flex items-center gap-2 mt-4 px-3 py-1 text-xs text-emerald-400 border border-brand-600 bg-white/5 rounded-full">✓ Verificado por QRTE</span>
                     <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-6">
                         <div>
                             <p class="text-xs uppercase tracking-wider text-white/40">Año</p>

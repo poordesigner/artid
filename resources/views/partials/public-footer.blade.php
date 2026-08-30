@@ -2,7 +2,7 @@
     <div class="max-w-[75rem] mx-auto px-6 lg:px-8">
         <div class="flex flex-col md:flex-row items-center justify-between gap-8">
             <div class="flex items-center gap-3">
-                <img src="{{ asset('img/navbar_240x120.png') }}" alt="ARTid" class="h-8 w-auto">
+                <img src="{{ asset('img/navbar_240x120.png') }}" alt="QRTE" class="h-8 w-auto">
                 <span class="text-sm text-gray-400">by <a href="https://poordesigner.com" class="text-gray-500 hover:text-gray-900 transition" target="_blank" rel="noopener">POORdesigner.com</a></span>
             </div>
             <div class="flex items-center gap-8 text-sm text-gray-500">

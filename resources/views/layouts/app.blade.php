@@ -8,7 +8,7 @@
         <link rel="icon" href="{{ asset('img/favicon_192x192.png') }}" type="image/png">
         <link rel="apple-touch-icon" href="{{ asset('img/favicon_192x192.png') }}">
 
-        <title>artid</title>
+        <title>QRTE</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">

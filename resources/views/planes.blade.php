@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="{{ asset('img/favicon_192x192.png') }}" type="image/png">
     <link rel="apple-touch-icon" href="{{ asset('img/favicon_192x192.png') }}">
-    <title>{{ __('Planes') }} — ARTid</title>
+    <title>{{ __('Planes') }} — QRTE</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Space+Grotesk:300,400,500,600,700&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -33,7 +33,7 @@
                 <div>
                     <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">{{ __('Regalo de bienvenida') }}</p>
                     <h2 class="mt-3 text-2xl sm:text-3xl font-bold">
-                        {{ __(':count tokens gratis al registrarte', ['count' => config('artid.welcome_tokens', 0)]) }}
+                        {{ __(':count tokens gratis al registrarte', ['count' => config('QRTE.welcome_tokens', 0)]) }}
                     </h2>
                     <p class="mt-2 text-gray-300 max-w-xl">{{ __('Con ellos creas tu primera obra con QR y ficha básica. Sin suscripción, sin tarjeta.') }}</p>
                 </div>
