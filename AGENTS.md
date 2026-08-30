@@ -10,7 +10,7 @@ Plataforma SaaS **QRTE** (`artid.poordesigner.com`, alias `qrte.poordesigner.com
 El artista registra sus obras con **pago único por tokens** y cada obra obtiene un **QR permanente**
 firmado criptográficamente que apunta a una **ficha pública verificada** (`/o/{publicId}`).
 Incluye metadata, historial (exposiciones y proveniencia) y control cifrado de propiedad.
-Soporte al usuario: **Chatwoot** (ver abajo).
+Soporte al usuario: **Chatwoot** (widget + bot) y **tickets de soporte** privados (`/tickets`, ver abajo).
 
 - **Modelo de pago: tokens de consumo, NO suscripción.** `1 token = QR + ficha básica de una obra, para siempre`.
 - Crear una obra consume **1 token**; el gate es `Artist::canCreateArtwork()` (saldo > 0).
@@ -55,6 +55,9 @@ Soporte al usuario: **Chatwoot** (ver abajo).
   `initial`|`transfer`, llave secreta por transferencia).
 - Enlaces: `ArtworkLink` (video/foto/blog), `ArtistLink` (portafolio/CV/exposiciones, máx 5).
 - Tokens: `TokenPackage`, `TokenFunction`, `TokenAction` (pivot `token_function_action`), `TokenTransaction`.
+- Tickets de soporte: `SupportTicket` (consecutivo `TKT-####`, artist_id, topic, subject, message,
+  status `open`|`closed`; relación `Artist::supportTickets()`), `SupportTicketAttachment` (disk r2, path,
+  original_name, mime, size; `SupportTicket::attachments()`).
 - Legacy (modelos/servicios aún presentes, sin UI de artista): `Plan`, `PlanPeriod`, `PlanFeature`,
   `PlanLegalTerm`, `Subscription`, `Payment`, `WebhookEvent` (idempotencia de webhooks Paddle), `GitHubService`.
 
@@ -97,7 +100,13 @@ Soporte al usuario: **Chatwoot** (ver abajo).
 - `/tokens` — saldo/paquetes/historial. `/profile` — avatar, perfil, statement, CV PDF, redes, enlaces de perfil,
   contraseña, eliminar cuenta. `/configuracion` — Seguridad + Mis tokens (artista); admin: Planes, Paquetes,
   Usos de tokens. `/planes` — landing de paquetes público.
-- Portal de ayuda: `/ayuda` (`resources/views/ayuda.blade.php`, 12 secciones) — mantener al día con los flujos reales.
+- `/tickets` — mis tickets de soporte (index), `/tickets/crear` (form: topic, subject, message, hasta 3 adjuntos
+  imagen/PDF ≤5MB en R2), `/tickets/{number}` (detalle; el número llega vía flash `ticket_number`), descarga de
+  adjuntos `/tickets/{number}/adjunto/{attachment}`. Acceso: dueño del ticket o admin (403 si no).
+- Portal de ayuda: `/ayuda` — mismo contenido loggeado/no loggeado: `resources/views/ayuda/content.blade.php`
+  (12 secciones) incluido desde `ayuda.blade.php` (no autenticado, header público) o `ayuda/panel.blade.php`
+  (autenticado, header de panel). Botón "Crear un ticket de soporte" (solo loggeado). Mantener al día con los
+  flujos reales.
 
 ## Chatwoot (soporte)
 
@@ -109,6 +118,19 @@ Soporte al usuario: **Chatwoot** (ver abajo).
   cache TTL 5 min invalidado vía `App\Support\SupportContext::forgetAll()` al editar paquetes/usuos de tokens).
   Temas: `introduccion` (default), `conocer`, `cuenta`, `obras`, `qr-ficha`, `historial`, `enlaces`, `facturacion` (dinámico:
   TokenPackage/TokenFunction/welcome) , `configuracion`, `otros`. Protocolo `@@CONTEXTO:<key>@@` para cambio de tema por el LLM.
+
+## Tickets de soporte
+
+- Complemento de Chatwoot para consultas **privadas y estructuradas** (con adjuntos). Creados por el artista,
+  gestionados por admin; no hay respuestas dentro del propio ticket (se atienden por mail/Chatwoot).
+- Numero: consecutivo `TKT-####` (padding de 4 sobre el `id`, set `forceFill` con `str_pad` justo tras el create).
+- Temas (`SupportTicket::TOPICS`): `cuenta`, `obras`, `facturacion`, `tecnico`, `otro` (labels en `TOPICS_LABELS`).
+- Adjuntos: hasta **3** (imagen jpeg/jpg/png/webp/gif o PDF, ≤5MB) en R2 bajo `support_tickets/{number}/{random}`;
+  nombre original preservado solo como `original_name`, el archivo se guarda con nombre aleatorio.
+- Acceso (`authorizeAccess`): `user->isAdmin() || ticket->artist_id === user->id`, si no → 403.
+- Admin: `/configuracion/tickets` (índice con filtro por status, últimas 100, `tickets.admin`) y
+  `POST /configuracion/tickets/{ticket}/status` para abrir/cerrar (`tickets.admin-status`). Enlace desde
+  `/admin/dashboard` (en `admin/dashboard.blade.php`).
 
 ## Localización (idioma)
 

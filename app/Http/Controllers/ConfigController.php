@@ -62,6 +62,11 @@ class ConfigController extends Controller
             'plans' => $plans,
             'activeSubscription' => $activeSubscription,
             'creditBalance' => $creditBalance,
+            'aiSettings' => [
+                'router_model' => \App\Models\AppSetting::get('ai.router_model', (string) \App\Http\Controllers\AiConfigController::DEFAULTS['router_model']),
+                'chat_model' => \App\Models\AppSetting::get('ai.chat_model', (string) \App\Http\Controllers\AiConfigController::DEFAULTS['chat_model']),
+                'backup_model' => \App\Models\AppSetting::get('ai.backup_model'),
+            ],
             'payments' => Payment::query()
                 ->where('artist_id', $user?->id)
                 ->latest('billed_at')

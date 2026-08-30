@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AiConfigController;
 use App\Http\Controllers\ArtworkController;
 use App\Http\Controllers\ArtworkLinkController;
 use App\Http\Controllers\ArtistLinkController;
@@ -57,6 +58,8 @@ Route::get('/o/{publicId}', [PublicArtworkController::class, 'show'])->name('pub
 Route::get('/artist/{id}', [PublicArtworkController::class, 'artist'])->name('public.artist');
 
 Route::get('/api/support/context', [SupportContextController::class, '__invoke'])->name('support.context');
+
+Route::get('/api/support/llm', [AiConfigController::class, 'config'])->name('support.llm');
 
 Route::post('/webhooks/paddle', [WebhookController::class, 'handle'])->name('webhooks.paddle');
 
@@ -127,6 +130,8 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/configuracion/tickets', [SupportTicketController::class, 'adminIndex'])->name('tickets.admin');
         Route::post('/configuracion/tickets/{ticket}/status', [SupportTicketController::class, 'adminUpdateStatus'])->name('tickets.admin-status');
+
+        Route::post('/configuracion/ai', [AiConfigController::class, 'update'])->name('ai.update');
     });
 
     Route::get('/artworks', [ArtworkController::class, 'index'])->name('artworks.index');

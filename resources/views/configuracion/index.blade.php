@@ -14,6 +14,7 @@
         $allowedTabs[] = 'planes';
         $allowedTabs[] = 'packages';
         $allowedTabs[] = 'token-functions';
+        $allowedTabs[] = 'ia';
     }
     if (! in_array($initialTab, $allowedTabs)) {
         $initialTab = 'seguridad';
@@ -67,6 +68,9 @@
                         </button>
                         <button @click="tab = 'token-functions'" :class="tab === 'token-functions' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition">
                             {{ __('Usos de tokens') }}
+                        </button>
+                        <button @click="tab = 'ia'" :class="tab === 'ia' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition">
+                            {{ __('IA') }}
                         </button>
                     @endif
                 </nav>
@@ -715,6 +719,44 @@
                                 </form>
                             </div>
                         </div>
+                    </div>
+                </div>
+            @endif
+
+            {{-- Tab: IA (admin) --}}
+            @if ($user->isAdmin())
+                <div x-show="tab === 'ia'" x-transition>
+                    <div class="bg-white shadow-sm sm:rounded-lg p-6">
+                        <h3 class="font-semibold text-lg text-gray-900">{{ __('IA (modelos de Groq)') }}</h3>
+                        <p class="mt-1 text-sm text-gray-600">{{ __('Modelos que usará el asistente de soporte y demás agentes.') }}</p>
+
+                        <form method="POST" action="{{ route('ai.update') }}" class="mt-6 space-y-6">
+                            @csrf
+                            <div>
+                                <x-input-label for="chat_model" :value="__('Modelo de chat')" />
+                                <x-text-input id="chat_model" name="chat_model" type="text" class="mt-1 block w-full" :value="old('chat_model', $aiSettings['chat_model'] ?? '')" required />
+                                <p class="mt-1 text-xs text-gray-400">{{ __('Respuestas del soporte (ej. qwen/qwen3.8-27b).') }}</p>
+                                <x-input-error :messages="$errors->get('chat_model')" class="mt-2" />
+                            </div>
+                            <div>
+                                <x-input-label for="router_model" :value="__('Modelo de ruteo')" />
+                                <x-text-input id="router_model" name="router_model" type="text" class="mt-1 block w-full" :value="old('router_model', $aiSettings['router_model'] ?? '')" required />
+                                <p class="mt-1 text-xs text-gray-400">{{ __('Clasificación del tema de cada mensaje (barato y rápido).') }}</p>
+                                <x-input-error :messages="$errors->get('router_model')" class="mt-2" />
+                            </div>
+                            <div>
+                                <x-input-label for="backup_model" :value="__('Modelo de respaldo (opcional)')" />
+                                <x-text-input id="backup_model" name="backup_model" type="text" class="mt-1 block w-full" :value="old('backup_model', $aiSettings['backup_model'] ?? '')" />
+                                <p class="mt-1 text-xs text-gray-400">{{ __('Si el principal falla, se intenta con este.') }}</p>
+                                <x-input-error :messages="$errors->get('backup_model')" class="mt-2" />
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <x-primary-button>{{ __('Guardar') }}</x-primary-button>
+                                @if (session('status') === 'ai-updated')
+                                    <p class="text-sm text-gray-600">{{ __('Guardado.') }}</p>
+                                @endif
+                            </div>
+                        </form>
                     </div>
                 </div>
             @endif

@@ -499,5 +499,14 @@
     "Cerrar": "Close",
     "Tickets": "Tickets",
     "Gestiona los tickets elevados por los artistas.": "Manage tickets raised by artists.",
-    "Crear un ticket de soporte": "Create a support ticket"
+    "Crear un ticket de soporte": "Create a support ticket",
+    "IA": "AI",
+    "IA (modelos de Groq)": "AI (Groq models)",
+    "Modelos que usará el asistente de soporte y demás agentes.": "Models used by the support assistant and other agents.",
+    "Modelo de chat": "Chat model",
+    "Modelo de ruteo": "Routing model",
+    "Modelo de respaldo (opcional)": "Backup model (optional)",
+    "Respuestas del soporte (ej. qwen/qwen3.8-27b).": "Support answers (e.g. qwen/qwen3.8-27b).",
+    "Clasificación del tema de cada mensaje (barato y rápido).": "Classifies the topic of each message (cheap and fast).",
+    "Si el principal falla, se intenta con este.": "If the main one fails, it tries with this one."
 }
