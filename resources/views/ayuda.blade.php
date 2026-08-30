@@ -5,13 +5,13 @@
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white shadow-sm sm:rounded-lg p-6 sm:p-8">
         <h1 class="font-semibold text-xl text-gray-900">{{ __('Ayuda') }}</h1>
-        <p class="mt-2 text-gray-600">{{ __('Conoce tu plataforma de identidad digital para obras de arte, paso a paso.') }}</p>
+        <p class="mt-2 text-gray-600">{{ __('Conoce tu plataforma de Identidad Digital para obras de arte, paso a paso.') }}</p>
 
         <!-- Introducción -->
         <section id="intro" class="mt-6 bg-white rounded-lg shadow-sm p-6">
             <h2 class="font-semibold text-xl">{{ __('¿Qué es ARTid?') }}</h2>
             <p class="mt-2 text-sm text-gray-700">
-                <strong>ARTid</strong> — by <a href="https://poordesigner.com" class="text-indigo-600 hover:underline" target="_blank" rel="noopener">POORdesigner.com</a> — {{ __('es una herramienta diseñada para que los artistas puedan generar una identidad digital para sus obras físicas.') }}
+                <strong>ARTid</strong> — by <a href="https://poordesigner.com" class="text-indigo-600 hover:underline" target="_blank" rel="noopener">POORdesigner.com</a> — {{ __('es una herramienta diseñada para que los artistas puedan generar una Identidad Digital para sus obras físicas.') }}
             </p>
 
             <h3 class="mt-4 font-semibold">{{ __('¿Cómo está estructurado ARTid?') }}</h3>

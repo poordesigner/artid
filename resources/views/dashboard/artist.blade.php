@@ -4,7 +4,7 @@
             {{-- Bienvenida --}}
             <div class="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-8 text-white shadow-lg">
                 <h2 class="text-2xl font-bold">{{ __('Hola, :name!', ['name' => Auth::user()->name]) }}</h2>
-                <p class="mt-2 text-indigo-100">{{ __('Bienvenido a tu panel de ARTid. Registra tus obras y genera su identidad digital.') }}</p>
+                <p class="mt-2 text-indigo-100">{{ __('Bienvenido a tu panel de ARTid. Registra tus obras y genera su Identidad Digital.') }}</p>
                 @if (! $canCreate)
                     <p class="mt-4 inline-flex items-center px-3 py-1 bg-white/20 rounded-full text-sm font-medium">
                         {{ __('No tienes tokens disponibles. Compra un paquete de tokens para registrar obras.') }}
@@ -49,7 +49,7 @@
                             </svg>
                         </div>
                         <h3 class="mt-4 font-semibold text-gray-900">{{ __('Nueva obra') }}</h3>
-                        <p class="mt-1 text-sm text-gray-600">{{ __('Registra una obra y genera su identidad digital.') }}</p>
+                        <p class="mt-1 text-sm text-gray-600">{{ __('Registra una obra y genera su Identidad Digital.') }}</p>
                     </a>
                 @else
                     <a href="{{ route('tokens.index') }}" class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 hover:border-indigo-300 hover:shadow transition">

@@ -39,8 +39,8 @@
     {{-- Hero --}}
     <section class="py-24 sm:py-32">
         <div class="max-w-[75rem] mx-auto px-6 lg:px-8 text-center">
-            <h1 class="font-medium text-[5rem] leading-[1.05] tracking-tight text-gray-900 max-w-6xl mx-auto">
-                {{ __('Identidad digital para tus obras de arte.') }}
+            <h1 class="font-medium text-4xl sm:text-5xl md:text-[5rem] leading-[1.1] sm:leading-[1.05] tracking-tight text-gray-900 max-w-6xl mx-auto">
+                {{ __('Identidad Digital para tus obras de arte.') }}
             </h1>
             <div class="mx-auto mt-10 h-px w-32 bg-gray-300"></div>
             <p class="mt-10 text-xl sm:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed font-light">
@@ -56,7 +56,7 @@
                     <h2 class="mt-4 font-medium text-2xl sm:text-3xl">
                         {{ __('Recibe :count tokens gratis al registrarte', ['count' => config('artid.welcome_tokens', 0)]) }}
                     </h2>
-                    <p class="mt-3 text-gray-300">{{ __('Crea la identidad digital de tus primeras obras') }}</p>
+                    <p class="mt-3 text-gray-300">{{ __('Crea la Identidad Digital de tus primeras obras') }}</p>
                     <p class="mt-1 text-gray-300">{{ __('Sin Suscripción - Sin Tarjeta') }}</p>
                 </div>
 
