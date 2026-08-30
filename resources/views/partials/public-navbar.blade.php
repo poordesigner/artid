@@ -1,35 +1,69 @@
-<header class="border-b border-gray-100" x-data="{ open: false }">
-    <div class="max-w-[75rem] mx-auto px-6 lg:px-8">
-        <div class="flex items-center justify-between h-20 gap-4">
-            <a href="{{ url('/') }}" class="shrink-0">
-                <img src="{{ asset('img/navbar_240x120.png') }}" alt="QRTE" class="h-14 w-auto max-w-[55vw] sm:max-w-none">
-            </a>
-            <nav class="hidden md:flex items-center gap-10 text-[19px] uppercase text-gray-500">
-                <a href="{{ url('/') }}" @class(['hover:text-gray-900 transition', 'text-gray-900' => request()->is('/')])>{{ __('Inicio') }}</a>
-                <a href="{{ route('caracteristicas') }}" @class(['hover:text-gray-900 transition', 'text-gray-900' => request()->routeIs('caracteristicas')])>{{ __('Características') }}</a>
-                <a href="{{ route('planes') }}" @class(['hover:text-gray-900 transition', 'text-gray-900' => request()->routeIs('planes')])>{{ __('Planes') }}</a>
-                <a href="{{ route('ayuda') }}" @class(['hover:text-gray-900 transition', 'text-gray-900' => request()->routeIs('ayuda')])>{{ __('Ayuda') }}</a>
-            </nav>
-            <div class="flex items-center gap-4 sm:gap-5">
+<nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
+    <!-- Primary Navigation Menu -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+            <div class="flex">
+                <!-- Logo -->
+                <div class="shrink-0 flex items-center">
+                    <a href="{{ url('/') }}">
+                        <img src="{{ asset('img/navbar_240x120.png') }}" alt="QRTE" class="block h-10 w-auto">
+                    </a>
+                </div>
+            </div>
+
+            <!-- Right side: menu -->
+            <div class="hidden sm:flex sm:items-center sm:gap-8">
+                <!-- Navigation Links -->
+                <x-nav-link :href="url('/')" :active="request()->is('/')">
+                    {{ __('Inicio') }}
+                </x-nav-link>
+                <x-nav-link :href="route('caracteristicas')" :active="request()->routeIs('caracteristicas')">
+                    {{ __('Características') }}
+                </x-nav-link>
+                <x-nav-link :href="route('planes')" :active="request()->routeIs('planes')">
+                    {{ __('Planes') }}
+                </x-nav-link>
+                <x-nav-link :href="route('ayuda')" :active="request()->routeIs('ayuda')">
+                    {{ __('Ayuda') }}
+                </x-nav-link>
+
                 <x-language-switcher />
-                <a href="{{ route('login') }}" class="hidden sm:inline text-lg uppercase text-gray-700 hover:text-gray-900 transition">{{ __('Login') }}</a>
-                <button @click="open = !open" class="md:hidden flex flex-col justify-center items-center w-10 h-10 gap-1.5 focus:outline-none" aria-label="menu">
-                    <span class="block w-6 h-0.5 bg-gray-900 transition" :class="open ? 'translate-y-2 rotate-45' : ''"></span>
-                    <span class="block w-6 h-0.5 bg-gray-900 transition" :class="open ? 'opacity-0' : ''"></span>
-                    <span class="block w-6 h-0.5 bg-gray-900 transition" :class="open ? '-translate-y-2 -rotate-45' : ''"></span>
+
+                <a href="{{ route('login') }}" class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 transition">
+                    {{ __('Login') }}
+                </a>
+            </div>
+
+            <!-- Hamburger (móvil) -->
+            <div class="-me-2 flex items-center sm:hidden">
+                <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
+                    <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                        <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
                 </button>
             </div>
         </div>
     </div>
 
-    {{-- Menú móvil --}}
-    <div :class="open ? 'block' : 'hidden'" class="md:hidden border-t border-gray-100">
-        <div class="px-6 py-4 flex flex-col gap-3 text-base uppercase text-gray-600">
-            <a href="{{ url('/') }}" class="hover:text-gray-900 transition" @click="open = false">{{ __('Inicio') }}</a>
-            <a href="{{ route('caracteristicas') }}" class="hover:text-gray-900 transition" @click="open = false">{{ __('Características') }}</a>
-            <a href="{{ route('planes') }}" class="hover:text-gray-900 transition" @click="open = false">{{ __('Planes') }}</a>
-            <a href="{{ route('ayuda') }}" class="hover:text-gray-900 transition" @click="open = false">{{ __('Ayuda') }}</a>
-            <a href="{{ route('login') }}" class="hover:text-gray-900 transition" @click="open = false">{{ __('Login') }}</a>
+    <!-- Responsive Navigation Menu -->
+    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
+        <div class="pt-2 pb-3 space-y-1">
+            <x-responsive-nav-link :href="url('/')" :active="request()->is('/')">
+                {{ __('Inicio') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('caracteristicas')" :active="request()->routeIs('caracteristicas')">
+                {{ __('Características') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('planes')" :active="request()->routeIs('planes')">
+                {{ __('Planes') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('ayuda')" :active="request()->routeIs('ayuda')">
+                {{ __('Ayuda') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('login')">
+                {{ __('Login') }}
+            </x-responsive-nav-link>
         </div>
     </div>
-</header>
+</nav>

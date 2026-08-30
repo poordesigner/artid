@@ -61,7 +61,9 @@ Route::get('/api/support/context', [SupportContextController::class, '__invoke']
 Route::post('/webhooks/paddle', [WebhookController::class, 'handle'])->name('webhooks.paddle');
 
 Route::get('/ayuda', function () {
-    return view('ayuda');
+    return auth()->check()
+        ? view('ayuda.panel')
+        : view('ayuda');
 })->name('ayuda');
 
 Route::get('/caracteristicas', function () {
