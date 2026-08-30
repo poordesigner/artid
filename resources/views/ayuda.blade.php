@@ -2,7 +2,7 @@
 @section('title', __('Ayuda') . ' — ARTid')
 @section('content')
     <div class="py-12">
-        <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-[75rem] mx-auto sm:px-6 lg:px-8">
             <div class="bg-white shadow-sm sm:rounded-lg p-6 sm:p-8">
         <h1 class="font-semibold text-xl text-gray-900">{{ __('Ayuda') }}</h1>
         <p class="mt-2 text-gray-600">{{ __('Conoce tu plataforma de Identidad Digital para obras de arte, paso a paso.') }}</p>
