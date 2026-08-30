@@ -32,7 +32,7 @@ return [
         ],
 
         'conocer' => [
-            'QRTE (antes ARTid) es una plataforma de identidad digital para obras de arte fisicas.',
+            'QRTE es una plataforma de identidad digital para obras de arte fisicas.',
             'El artista registra sus obras y cada una obtiene un QR permanente firmado que lleva a una ficha publica verificada.',
             'Incluye: ficha tecnica con metadata, historial (exposiciones y proveniencia), control de propiedad cifrado y perfil publico de artista.',
             'El QR se imprime sobre la obra; quien lo escanea ve la ficha con sello de verificacion.',
