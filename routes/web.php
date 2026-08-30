@@ -16,6 +16,7 @@ use App\Http\Controllers\PublicArtworkController;
 use App\Http\Controllers\SeriesController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\SupportContextController;
+use App\Http\Controllers\SupportTicketController;
 use App\Http\Controllers\TokenController;
 use App\Http\Controllers\TokenFunctionController;
 use App\Http\Controllers\TokenPackageController;
@@ -87,6 +88,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/tokens', [TokenController::class, 'index'])->name('tokens.index');
     Route::post('/tokens/checkout/{package}', [TokenController::class, 'checkout'])->name('tokens.checkout');
 
+    Route::get('/tickets', [SupportTicketController::class, 'index'])->name('tickets.index');
+    Route::get('/tickets/crear', [SupportTicketController::class, 'create'])->name('tickets.create');
+    Route::post('/tickets', [SupportTicketController::class, 'store'])->name('tickets.store');
+    Route::get('/tickets/{number}', [SupportTicketController::class, 'show'])->name('tickets.show');
+    Route::get('/tickets/{number}/adjunto/{attachment}', [SupportTicketController::class, 'attachment'])->name('tickets.attachment');
+
     Route::post('/subscribe/cancel', [SubscriptionController::class, 'cancel'])->name('subscribe.cancel');
     Route::post('/subscribe/reactivate', [SubscriptionController::class, 'reactivate'])->name('subscribe.reactivate');
     Route::get('/subscribe/portal', [SubscriptionController::class, 'portal'])->name('subscribe.portal');
@@ -115,6 +122,9 @@ Route::middleware('auth')->group(function () {
         Route::post('/configuracion/token-actions', [TokenFunctionController::class, 'storeAction'])->name('token-actions.store');
         Route::patch('/configuracion/token-actions/{action}', [TokenFunctionController::class, 'updateAction'])->name('token-actions.update');
         Route::delete('/configuracion/token-actions/{action}', [TokenFunctionController::class, 'destroyAction'])->name('token-actions.destroy');
+
+        Route::get('/configuracion/tickets', [SupportTicketController::class, 'adminIndex'])->name('tickets.admin');
+        Route::post('/configuracion/tickets/{ticket}/status', [SupportTicketController::class, 'adminUpdateStatus'])->name('tickets.admin-status');
     });
 
     Route::get('/artworks', [ArtworkController::class, 'index'])->name('artworks.index');

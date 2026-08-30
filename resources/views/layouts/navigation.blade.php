@@ -35,6 +35,9 @@
                 <x-nav-link :href="route('ayuda')" :active="request()->routeIs('ayuda')">
                     {{ __('Ayuda') }}
                 </x-nav-link>
+                <x-nav-link :href="route('tickets.index')" :active="request()->routeIs('tickets.*')">
+                    {{ __('Tickets') }}
+                </x-nav-link>
 
                 <x-language-switcher />
 
@@ -110,6 +113,9 @@
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('ayuda')" :active="request()->routeIs('ayuda')">
                 {{ __('Ayuda') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('tickets.index')" :active="request()->routeIs('tickets.*')">
+                {{ __('Tickets') }}
             </x-responsive-nav-link>
         </div>
 

@@ -47,6 +47,11 @@ class Artist extends Authenticatable
         return $this->hasMany(ArtistLink::class)->orderBy('sort_order');
     }
 
+    public function supportTickets(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(SupportTicket::class);
+    }
+
     /**
      * Saldo actual de tokens disponible.
      */
