@@ -192,6 +192,13 @@
         </section>
 
         <p class="mt-8 text-sm text-gray-500">{{ __('¿Dudas? Sigue estos pasos o contáctanos desde el chat de soporte en la plataforma.') }}</p>
+
+        <div class="mt-10 text-center">
+            <a href="{{ route('tickets.create') }}"
+               class="inline-flex items-center justify-center px-8 py-3 bg-brand text-white text-sm font-semibold uppercase tracking-wider rounded-lg hover:bg-brand-700 transition">
+                {{ __('Crear un ticket de soporte') }}
+            </a>
+        </div>
             </div>
         </div>
     </div>
