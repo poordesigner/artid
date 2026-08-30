@@ -60,6 +60,10 @@ Route::get('/ayuda', function () {
     return view('ayuda');
 })->name('ayuda');
 
+Route::get('/caracteristicas', function () {
+    return view('caracteristicas');
+})->name('caracteristicas');
+
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
         return auth()->user()->isAdmin()

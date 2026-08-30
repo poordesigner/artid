@@ -16,31 +16,7 @@
 </head>
 <body class="bg-white text-gray-900 antialiased">
 
-    {{-- Navbar --}}
-    <header class="bg-white border-b border-gray-100 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
-            <div class="flex items-center gap-8">
-                <a href="{{ url('/') }}" class="shrink-0">
-                    <img src="{{ asset('img/navbar_240x120.png') }}" alt="ARTid" class="h-14 w-auto max-w-[45vw] sm:max-w-none">
-                </a>
-                <nav class="hidden md:flex items-center gap-8 text-[19px] uppercase">
-                    <a href="{{ url('/') }}" class="text-gray-500 hover:text-gray-900 transition">{{ __('Inicio') }}</a>
-                    <a href="{{ url('/#caracteristicas') }}" class="text-gray-500 hover:text-gray-900 transition">{{ __('Características') }}</a>
-                    <a href="{{ route('ayuda') }}" class="text-gray-500 hover:text-gray-900 transition">{{ __('Ayuda') }}</a>
-                </nav>
-            </div>
-            <div class="flex items-center gap-3 sm:gap-4">
-                <x-language-switcher />
-                <a href="{{ route('login') }}" class="text-lg font-medium uppercase text-gray-700 hover:text-gray-900 transition">{{ __('Login') }}</a>
-                <a href="{{ route('register') }}" class="inline-flex items-center px-5 py-2.5 bg-brand hover:bg-brand-700 text-white text-lg font-semibold uppercase rounded-lg transition">
-                    {{ __('Empezar') }}
-                    <svg class="w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                    </svg>
-                </a>
-            </div>
-        </div>
-    </header>
+    @include('partials.public-navbar')
 
     {{-- Hero --}}
     <section class="py-16 sm:py-20">
@@ -163,26 +139,6 @@
         </div>
     </section>
 
-    {{-- Footer --}}
-    <footer class="py-12 bg-brand">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row items-center justify-between gap-8">
-                <div class="flex items-center gap-3">
-                    <img src="{{ asset('img/navbar_240x120.png') }}" alt="ARTid" class="h-9 w-auto">
-                    <span class="text-sm text-gray-400">by <a href="https://poordesigner.com" class="text-gray-300 hover:text-white" target="_blank" rel="noopener">POORdesigner.com</a></span>
-                </div>
-                <div class="flex items-center gap-8 text-sm text-gray-400">
-                    <a href="{{ route('ayuda') }}" class="hover:text-white transition">{{ __('Ayuda') }}</a>
-                    <a href="{{ url('/') }}" class="hover:text-white transition">{{ __('Inicio') }}</a>
-                    <a href="{{ url('/#caracteristicas') }}" class="hover:text-white transition">{{ __('Características') }}</a>
-                </div>
-            </div>
-            <div class="mt-8 pt-8 border-t border-gray-800 text-center">
-                <p class="text-sm text-gray-500">
-                    &copy; {{ date('Y') }} POORdesigner.com. {{ __('Todos los derechos reservados.') }}
-                </p>
-            </div>
-        </div>
-    </footer>
+    @include('partials.public-footer')
 </body>
 </html>
