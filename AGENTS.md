@@ -4,7 +4,9 @@ Contexto del proyecto para agentes de IA. Leer antes de tocar código.
 
 ## Qué es ARTid (estado actual)
 
-Plataforma SaaS **ARTid by POORdesigner.com**: identidad digital para obras de arte físicas.
+**Marca actual: QRTE** (antes ARTid), por POORdesigner.com.
+
+Plataforma SaaS **QRTE** (`artid.poordesigner.com`, alias `qrte.poordesigner.com`, cuenta Chatwoot "QRTE"): identidad digital para obras de arte físicas.
 El artista registra sus obras con **pago único por tokens** y cada obra obtiene un **QR permanente**
 firmado criptográficamente que apunta a una **ficha pública verificada** (`/o/{publicId}`).
 Incluye metadata, historial (exposiciones y proveniencia) y control cifrado de propiedad.
@@ -100,8 +102,13 @@ Soporte al usuario: **Chatwoot** (ver abajo).
 ## Chatwoot (soporte)
 
 - Chatwoot corre en el VPS (Coolify, stack `pgxhgejin4zgyjdovg0blaz3`, dominio `https://cwoot.poordesigner.com`).
-- **Alcance 1 acordado**: widget de chat en el SaaS (dashboard + landing) → inbox único de soporte.
-  Aún NO hay widget integrado en el código. No asumir ninguna integración sin implementarla.
+- **Alcance 1 acordado**: widget de chat en el SaaS (dashboard + landing) → inbox único de soporte. Widget ya integrado
+  (`x-chatwoot-widget` en `layouts/app`, `layouts/public` y `welcome`; config `config/chatwoot.php`).
+- **Bot de soporte** (Fase A): workflow n8n `qrte-support-agent` responde en el inbox "Soporte ARTid". Usa **contexto por
+  paquetes**: `GET /api/support/context?topic={key}` (controller `SupportContextController`, packs en `config/support_packs.php`,
+  cache TTL 5 min invalidado vía `App\Support\SupportContext::forgetAll()` al editar paquetes/usuos de tokens).
+  Temas: `introduccion` (default), `conocer`, `cuenta`, `obras`, `qr-ficha`, `historial`, `enlaces`, `facturacion` (dinámico:
+  TokenPackage/TokenFunction/welcome) , `configuracion`, `otros`. Protocolo `@@CONTEXTO:<key>@@` para cambio de tema por el LLM.
 
 ## Localización (idioma)
 

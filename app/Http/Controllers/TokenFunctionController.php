@@ -130,6 +130,8 @@ class TokenFunctionController extends Controller
     {
         $action->delete();
 
+        SupportContext::forgetAll();
+
         return redirect()->route('configuracion', ['tab' => 'token-functions', 'sub' => 'actions'])
             ->with('status', __('Acción eliminada.'));
     }
