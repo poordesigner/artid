@@ -55,6 +55,11 @@ class AnalyzeTicketJob implements ShouldQueue
 
             $data = $response->json() ?? [];
 
+            // n8n con respondToWebhook "allIncomingItems" devuelve [{...}]; normalizar al primer item.
+            if (array_is_list($data) && isset($data[0]) && is_array($data[0])) {
+                $data = $data[0];
+            }
+
             $summary = isset($data['summary']) ? (string) $data['summary'] : null;
             $priority = in_array($data['priority'] ?? null, ['normal', 'alta'], true) ? $data['priority'] : null;
             $draft = isset($data['draft_reply']) ? (string) $data['draft_reply'] : null;
