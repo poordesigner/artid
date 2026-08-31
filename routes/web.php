@@ -10,6 +10,7 @@ use App\Http\Controllers\CheckoutPageController;
 use App\Http\Controllers\ConfigController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExhibitionController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\OwnershipController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\ProfileController;
@@ -102,6 +103,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/tickets/{number}', [SupportTicketController::class, 'show'])->name('tickets.show');
     Route::get('/tickets/{number}/adjunto/{attachment}', [SupportTicketController::class, 'attachment'])->name('tickets.attachment');
     Route::post('/tickets/{number}/reply', [SupportTicketController::class, 'reply'])->name('tickets.reply');
+
+    Route::get('/notificaciones', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('/notificaciones/{notification}/read', [NotificationController::class, 'markRead'])->name('notifications.read');
+    Route::post('/notificaciones/read-all', [NotificationController::class, 'markAllRead'])->name('notifications.read-all');
 
     Route::post('/subscribe/cancel', [SubscriptionController::class, 'cancel'])->name('subscribe.cancel');
     Route::post('/subscribe/reactivate', [SubscriptionController::class, 'reactivate'])->name('subscribe.reactivate');

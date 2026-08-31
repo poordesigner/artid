@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Jobs\AnalyzeTicketJob;
 use App\Mail\TicketReplyMail;
+use App\Models\ArtistNotification;
 use App\Models\SupportTicket;
 use App\Models\SupportTicketReply;
 use App\Models\TicketAnalysis;
@@ -64,6 +65,13 @@ class TicketAnalysisController extends Controller
         ]);
 
         $ticket->update(['status' => SupportTicket::STATUS_CLOSED]);
+
+        $artist->notifications()->create([
+            'type' => 'ticket_reply',
+            'title' => __('Tu ticket :number tiene una respuesta', ['number' => $ticket->number]),
+            'body' => $validated['body'],
+            'url' => route('tickets.show', $ticket->number),
+        ]);
 
         try {
             Mail::to($artist)->send(new TicketReplyMail($ticket, $artist, $validated['body']));

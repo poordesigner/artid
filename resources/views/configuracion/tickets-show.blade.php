@@ -233,35 +233,35 @@
                             <x-primary-button type="button" @click="preview = true">{{ __('Vista previa y enviar') }}</x-primary-button>
                         </div>
                     </form>
-                </div>
-            </div>
 
-            {{-- Modal: vista previa del correo --}}
-            <div x-show="preview" x-cloak x-transition class="fixed inset-0 z-50 overflow-y-auto" style="display: none;">
-                <div class="flex items-end sm:items-center justify-center min-h-full p-4">
-                    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" @click="preview = false"></div>
-                    <div class="relative bg-white rounded-lg shadow-xl max-w-2xl w-full">
-                        <div class="px-6 py-4 border-b">
-                            <h3 class="text-base font-semibold text-gray-900">{{ __('Vista previa del correo') }}</h3>
-                        </div>
-                        <div class="px-6 py-4 space-y-4 text-sm">
-                            <div class="grid grid-cols-3 gap-3 text-xs">
-                                <div class="text-gray-500">{{ __('Para') }}</div>
-                                <div class="col-span-2 font-medium text-gray-900">{{ $ticket->artist?->email }}</div>
-                                <div class="text-gray-500">{{ __('Asunto') }}</div>
-                                <div class="col-span-2 font-medium text-gray-900">{{ __('Tu ticket :number ha sido respondido', ['number' => $ticket->number]) }}</div>
-                                <div class="text-gray-500">{{ __('Ticket') }}</div>
-                                <div class="col-span-2 font-medium text-gray-900">{{ $ticket->number }}</div>
+                    {{-- Modal: vista previa del correo --}}
+                    <div x-show="preview" x-cloak x-transition class="fixed inset-0 z-50 overflow-y-auto" style="display: none;">
+                        <div class="flex items-end sm:items-center justify-center min-h-full p-4">
+                            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" @click="preview = false"></div>
+                            <div class="relative bg-white rounded-lg shadow-xl max-w-2xl w-full">
+                                <div class="px-6 py-4 border-b">
+                                    <h3 class="text-base font-semibold text-gray-900">{{ __('Vista previa del correo') }}</h3>
+                                </div>
+                                <div class="px-6 py-4 space-y-4 text-sm">
+                                    <div class="grid grid-cols-3 gap-3 text-xs">
+                                        <div class="text-gray-500">{{ __('Para') }}</div>
+                                        <div class="col-span-2 font-medium text-gray-900">{{ $ticket->artist?->email }}</div>
+                                        <div class="text-gray-500">{{ __('Asunto') }}</div>
+                                        <div class="col-span-2 font-medium text-gray-900">{{ __('Tu ticket :number ha sido respondido', ['number' => $ticket->number]) }}</div>
+                                        <div class="text-gray-500">{{ __('Ticket') }}</div>
+                                        <div class="col-span-2 font-medium text-gray-900">{{ $ticket->number }}</div>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-gray-500 mb-1">{{ __('Mensaje') }}</p>
+                                        <div class="p-4 bg-gray-50 rounded-md border border-gray-200 text-gray-800 whitespace-pre-wrap" x-text="replyBody"></div>
+                                    </div>
+                                    <p class="text-xs text-gray-400">{{ __('El correo se envía a nombre del soporte. El artista podrá responder desde su ticket en la plataforma; este email es solo de aviso.') }}</p>
+                                </div>
+                                <div class="px-6 py-4 border-t flex items-center justify-end gap-3">
+                                    <button type="button" @click="preview = false" class="text-sm text-gray-600 hover:underline">{{ __('Cancelar') }}</button>
+                                    <x-primary-button type="button" @click="$refs.replyForm.submit()">{{ __('Enviar por email') }}</x-primary-button>
+                                </div>
                             </div>
-                            <div>
-                                <p class="text-xs text-gray-500 mb-1">{{ __('Mensaje') }}</p>
-                                <div class="p-4 bg-gray-50 rounded-md border border-gray-200 text-gray-800 whitespace-pre-wrap" x-text="replyBody"></div>
-                            </div>
-                            <p class="text-xs text-gray-400">{{ __('El correo se envía a nombre del soporte. El artista podrá responder desde su ticket en la plataforma; este email es solo de aviso.') }}</p>
-                        </div>
-                        <div class="px-6 py-4 border-t flex items-center justify-end gap-3">
-                            <button type="button" @click="preview = false" class="text-sm text-gray-600 hover:underline">{{ __('Cancelar') }}</button>
-                            <x-primary-button type="button" @click="$refs.replyForm.submit()">{{ __('Enviar por email') }}</x-primary-button>
                         </div>
                     </div>
                 </div>

@@ -52,6 +52,11 @@ class Artist extends Authenticatable
         return $this->hasMany(SupportTicket::class);
     }
 
+    public function notifications(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(ArtistNotification::class)->orderByDesc('id');
+    }
+
     /**
      * Saldo actual de tokens disponible.
      */

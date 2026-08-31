@@ -628,5 +628,12 @@
     "Respuesta registrada. El soporte la revisará pronto.": "Respuesta registrada. El soporte la revisará pronto.",
     "Ver mi ticket y responder": "Ver mi ticket y responder",
     "Este correo no admite respuestas. Para continuar la conversación, abre tu ticket de soporte en la plataforma y deja tu mensaje allí.": "Este correo no admite respuestas. Para continuar la conversación, abre tu ticket de soporte en la plataforma y deja tu mensaje allí.",
-    "Artista": "Artista"
+    "Artista": "Artista",
+    "Notificaciones": "Notificaciones",
+    "No tienes notificaciones.": "No tienes notificaciones.",
+    "Marcar todas como leídas": "Marcar todas como leídas",
+    "Abrir": "Abrir",
+    "Ver todas": "Ver todas",
+    "Tu ticket :number tiene una respuesta": "Tu ticket :number tiene una respuesta",
+    "El ticket está cerrado: al enviar un mensaje se reabrirá.": "El ticket está cerrado: al enviar un mensaje se reabrirá."
 }

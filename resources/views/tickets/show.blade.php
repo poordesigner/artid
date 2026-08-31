@@ -69,9 +69,11 @@
                 </div>
             @endif
 
-            @if (! $ticket->isClosed())
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                     <h3 class="text-sm font-medium text-gray-900">{{ __('Añadir un mensaje') }}</h3>
+                    @if ($ticket->isClosed())
+                        <p class="mt-1 text-xs text-gray-500">{{ __('El ticket está cerrado: al enviar un mensaje se reabrirá.') }}</p>
+                    @endif
                     <form method="POST" action="{{ route('tickets.reply', $ticket->number) }}" class="mt-3">
                         @csrf
                         <textarea name="body" rows="5" required
@@ -83,7 +85,6 @@
                         </div>
                     </form>
                 </div>
-            @endif
 
             <a href="{{ route('tickets.index') }}" class="text-sm text-indigo-600 hover:underline">{{ __('Volver a mis tickets') }}</a>
         </div>

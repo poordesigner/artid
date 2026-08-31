@@ -565,5 +565,12 @@
     "Respuesta registrada. El soporte la revisará pronto.": "Reply recorded. Support will review it soon.",
     "Ver mi ticket y responder": "View and reply to my ticket",
     "Este correo no admite respuestas. Para continuar la conversación, abre tu ticket de soporte en la plataforma y deja tu mensaje allí.": "This email cannot receive replies. To continue the conversation, open your support ticket on the platform and leave your message there.",
-    "Artista": "Artist"
+    "Artista": "Artist",
+    "Notificaciones": "Notifications",
+    "No tienes notificaciones.": "You have no notifications.",
+    "Marcar todas como leídas": "Mark all as read",
+    "Abrir": "Open",
+    "Ver todas": "View all",
+    "Tu ticket :number tiene una respuesta": "Your ticket :number has a reply",
+    "El ticket está cerrado: al enviar un mensaje se reabrirá.": "This ticket is closed: sending a message will reopen it."
 }
