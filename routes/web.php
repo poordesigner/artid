@@ -18,6 +18,7 @@ use App\Http\Controllers\SeriesController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\SupportContextController;
 use App\Http\Controllers\SupportTicketController;
+use App\Http\Controllers\TicketAnalysisController;
 use App\Http\Controllers\TokenController;
 use App\Http\Controllers\TokenFunctionController;
 use App\Http\Controllers\TokenPackageController;
@@ -60,6 +61,8 @@ Route::get('/artist/{id}', [PublicArtworkController::class, 'artist'])->name('pu
 Route::get('/api/support/context', [SupportContextController::class, '__invoke'])->name('support.context');
 
 Route::get('/api/support/llm', [AiConfigController::class, 'config'])->name('support.llm');
+
+Route::get('/api/tickets/{ticket}/context', [TicketAnalysisController::class, 'context'])->name('api.tickets.context');
 
 Route::post('/webhooks/paddle', [WebhookController::class, 'handle'])->name('webhooks.paddle');
 
@@ -130,6 +133,9 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/configuracion/tickets', [SupportTicketController::class, 'adminIndex'])->name('tickets.admin');
         Route::post('/configuracion/tickets/{ticket}/status', [SupportTicketController::class, 'adminUpdateStatus'])->name('tickets.admin-status');
+
+        Route::get('/configuracion/tickets/{ticket}', [TicketAnalysisController::class, 'show'])->name('tickets.admin-show');
+        Route::post('/configuracion/tickets/{ticket}/analyze', [TicketAnalysisController::class, 'analyze'])->name('tickets.admin-analyze');
 
         Route::post('/configuracion/ai', [AiConfigController::class, 'update'])->name('ai.update');
     });

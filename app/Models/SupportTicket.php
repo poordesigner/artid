@@ -37,6 +37,11 @@ class SupportTicket extends Model
         return $this->belongsTo(Artist::class);
     }
 
+    public function analysis(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(TicketAnalysis::class, 'support_ticket_id')->latestOfMany();
+    }
+
     public function attachments(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(SupportTicketAttachment::class);

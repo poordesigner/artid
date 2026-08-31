@@ -119,6 +119,47 @@ Soporte al usuario: **Chatwoot** (widget + bot) y **tickets de soporte** privado
   Temas: `introduccion` (default), `conocer`, `cuenta`, `obras`, `qr-ficha`, `historial`, `enlaces`, `facturacion` (dinámico:
   TokenPackage/TokenFunction/welcome) , `configuracion`, `otros`. Protocolo `@@CONTEXTO:<key>@@` para cambio de tema por el LLM.
 
+## Configuración de IA (modelos Groq)
+
+- **Central**: `AppSetting` (tabla key-value) + `AiConfigController`. El admin edita en `/configuracion` → tab **IA**
+  (`router_model`, `chat_model`, `backup_model`; defaults `qwen/qwen3.8-27b`).
+- **`GET /api/support/llm`** (`AiConfigController@config`, cache 5 min) expone `{router_model, chat_model, backup_model}`;
+  los workflows n8n lo consultan dinámicamente al empezar. Groq es el único proveedor; la credencial Bearer vive en n8n,
+  NO en Laravel.
+- `AppSetting::get/set(key, default)`. Al editar se invalida el cache (`Cache::forget(AiConfigController::CACHE_KEY)`).
+
+## Gestor de tickets (agente 2, triage con IA)
+
+- **Objetivo (asist-first)**: al abrir un ticket en admin hay un botón **"Analizar con IA"** que documenta en el ticket:
+  resumen, prioridad sugerida (normal/alta), contexto del usuario y borrador de respuesta con acciones sugeridas. NADO se
+  envía automáticamente; el admin decide.
+- **Flujo**: admin `GET /configuracion/tickets/{ticket}` (`TicketAnalysisController@show`, vista
+  `configuracion/tickets-show.blade.php`) → botón → `POST .../analyze` crea `TicketAnalysis` (status pending) y despacha
+  `AnalyzeTicketJob` (cola Redis) → el job hace POST al webhook de n8n (`config/ticket_agent.php`) → n8n workflow
+  `qrte-ticket-analyzer` consulta `GET /api/tickets/{id}/context?secret=` + `GET /api/support/llm`, llama a Groq y
+  responde síncronamente `{summary, priority, draft_reply, suggested_actions[], model}` → el job persiste en
+  `ticket_analyses` (status completed/failed) → la vista hace reload cada 4s mientras `pending`.
+- **`GET /api/tickets/{id}/context`** (con `?secret=` = `TICKET_AGENT_WEBHOOK_SECRET`, 403 si no): devuelve el ticket,
+  el artista (email verificado, antigüedad, tokens, obras, series, tickets previos, perfil público) y el pack de
+  conocimiento (mapeo `config/ticket_agent.topic_pack_map`: cuenta→cuenta, obras→obras, facturacion→facturacion,
+  tecnico→configuracion, otro→otros) vía `SupportContextBuilder::pack()`.
+- **Modelos**: `TicketAnalysis` (ticket_id, status pending|processing|completed|failed, summary, priority, draft_reply,
+  suggested_actions json, analysis json, error, model, analyzed_at; relación `SupportTicket::analysis()` hasOne
+  latestOfMany), `AnalyzeTicketJob` (timeout 90, 1 intento). `SupportContextBuilder` (app/Support) reúne el prompt base +
+  packs; `SupportContextController` delega en él.
+- **Config**: `config/ticket_agent.php` (n8n_webhook_url `TICKET_AGENT_N8N_WEBHOOK_URL`, secret
+  `TICKET_AGENT_WEBHOOK_SECRET`, timeout `TICKET_AGENT_TIMEOUT`). Env vars se setean en Coolify.
+- **Contrato del workflow n8n `qrte-ticket-analyzer`** (webhook POST; responde síncrono):
+  - **Entrada**: `{secret, ticket_id, ticket_number, context_url, llm_url}`.
+  - **Pasos**: validar `secret` (≈ `TICKET_AGENT_WEBHOOK_SECRET`) → `GET {{ $json.context_url }}` con `?secret=` →
+    `GET {{ $json.llm_url }}` (modelo Groq `chat_model`, fallback `backup_model`) → sistema con el `knowledge.pack` del
+    contexto + instrucciones (resumen ES/EN, prioridad normal|alta, borrador en el idioma del artista, acciones)
+    → Groq (`POST https://api.groq.com/openai/v1/chat/completions`, misma credencial Bearer del agente 1, `response_format: json_object`)
+    → responder JSON exacto `{summary, priority, draft_reply, suggested_actions[], model}` (llaves en español
+    opción 0 = `{resumen, prioridad, borrador, acciones}`).
+  - Las llaves del result JSON deben verse en Laravel como `priority` ∈ `normal|alta`. Si el modelo usa otro
+    formato, mapearlo en n8n (nodo Code) antes de responder.
+
 ## Tickets de soporte
 
 - Complemento de Chatwoot para consultas **privadas y estructuradas** (con adjuntos). Creados por el artista,
@@ -128,9 +169,10 @@ Soporte al usuario: **Chatwoot** (widget + bot) y **tickets de soporte** privado
 - Adjuntos: hasta **3** (imagen jpeg/jpg/png/webp/gif o PDF, ≤5MB) en R2 bajo `support_tickets/{number}/{random}`;
   nombre original preservado solo como `original_name`, el archivo se guarda con nombre aleatorio.
 - Acceso (`authorizeAccess`): `user->isAdmin() || ticket->artist_id === user->id`, si no → 403.
-- Admin: `/configuracion/tickets` (índice con filtro por status, últimas 100, `tickets.admin`) y
-  `POST /configuracion/tickets/{ticket}/status` para abrir/cerrar (`tickets.admin-status`). Enlace desde
-  `/admin/dashboard` (en `admin/dashboard.blade.php`).
+- Admin: `/configuracion/tickets` (índice con filtro por status, últimas 100, `tickets.admin`),
+  `POST /configuracion/tickets/{ticket}/status` para abrir/cerrar (`tickets.admin-status`) y
+  `GET /configuracion/tickets/{ticket}` (`tickets.admin-show`) para el detalle con contexto del usuario + botón
+  "Analizar con IA" (ver "Gestor de tickets"). Enlace desde `/admin/dashboard` (en `admin/dashboard.blade.php`).
 
 ## Localización (idioma)
 

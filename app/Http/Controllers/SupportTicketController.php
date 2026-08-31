@@ -96,7 +96,7 @@ class SupportTicketController extends Controller
 
     public function adminIndex(Request $request): View
     {
-        $tickets = SupportTicket::with(['artist', 'attachments'])->latest();
+        $tickets = SupportTicket::with(['artist', 'attachments', 'analysis'])->latest();
 
         if ($request->query('status') === 'open') {
             $tickets->where('status', SupportTicket::STATUS_OPEN);

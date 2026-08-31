@@ -51,9 +51,12 @@
                                             </td>
                                             <td class="px-4 py-3 text-gray-600">{{ $ticket->topicLabel() }}</td>
                                             <td class="px-4 py-3 text-gray-900 max-w-xs">
-                                                <a href="{{ route('tickets.show', $ticket->number) }}" class="hover:text-indigo-600 font-medium truncate block">{{ $ticket->subject }}</a>
+                                                <a href="{{ route('tickets.admin-show', $ticket) }}" class="hover:text-indigo-600 font-medium truncate block">{{ $ticket->subject }}</a>
                                                 @if ($ticket->attachments->isNotEmpty())
                                                     <span class="text-xs text-gray-400">{{ $ticket->attachments->count() }} {{ $ticket->attachments->count() === 1 ? __('adjunto') : __('adjuntos') }}</span>
+                                                @endif
+                                                @if ($ticket->analysis && $ticket->analysis->isCompleted())
+                                                    <span class="block text-xs text-indigo-500">{{ __('Analizado con IA') }}</span>
                                                 @endif
                                             </td>
                                             <td class="px-4 py-3">
@@ -62,7 +65,7 @@
                                                 </span>
                                             </td>
                                             <td class="px-4 py-3 text-right whitespace-nowrap">
-                                                <a href="{{ route('tickets.show', $ticket->number) }}" class="text-indigo-600 hover:text-indigo-900 text-sm">{{ __('Ver') }}</a>
+                                                <a href="{{ route('tickets.admin-show', $ticket) }}" class="text-indigo-600 hover:text-indigo-900 text-sm">{{ __('Ver') }}</a>
                                                 <form method="POST" action="{{ route('tickets.admin-status', $ticket) }}" class="inline">
                                                     @csrf
                                                     <button type="submit" name="status" value="{{ $ticket->isClosed() ? 'open' : 'closed' }}"
