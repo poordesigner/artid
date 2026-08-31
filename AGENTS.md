@@ -196,6 +196,9 @@ Soporte al usuario: **Chatwoot** (widget + bot) y **tickets de soporte** privado
 - Cuidado: **no usar `$this->middleware()`** en este proyecto.
 - Scripts temporales de debug: crearlos en `storage/`, ejecutarlos vía `docker cp` + `docker exec php <archivo>`,
   luego **borrarlos** (no commitear `storage/*.php`).
+- **JSON exportables de workflows n8n NO se versionan**: contienen secrets (webhook/chatewoot/ticket). El JSON de
+  `qrte-ticket-analyzer` se mantiene en `C:\Users\DELL\AppData\Local\Temp\opencode\` y se guarda local (n8n import =
+  desde ese archivo). No crear una carpeta `n8n/` ni `docs/workflows/` en el repo con secrets.
 
 ## Assets / branding
 
