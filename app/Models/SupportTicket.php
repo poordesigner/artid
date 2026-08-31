@@ -42,6 +42,11 @@ class SupportTicket extends Model
         return $this->hasOne(TicketAnalysis::class, 'support_ticket_id')->latestOfMany();
     }
 
+    public function replies(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(SupportTicketReply::class)->orderBy('sent_at');
+    }
+
     public function attachments(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(SupportTicketAttachment::class);

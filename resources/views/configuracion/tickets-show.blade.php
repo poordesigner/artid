@@ -14,6 +14,12 @@
                         {{ __('El gestor de tickets está analizando este ticket. Esta página se actualizará sola.') }}
                     @elseif (session('status') === 'analysis-pending')
                         {{ __('Ya hay un análisis en curso para este ticket.') }}
+                    @elseif (session('status') === 'reply-sent')
+                        {{ __('Respuesta enviada por email al artista.') }}
+                    @elseif (session('status') === 'reply-saved-mail-failed')
+                        {{ __('La respuesta quedó en el hilo pero el correo no se pudo enviar.') }}
+                    @elseif (session('status') === 'reply-no-artist')
+                        {{ __('No se puede responder: el artista ya no existe.') }}
                     @else
                         {{ session('status') }}
                     @endif
@@ -180,6 +186,49 @@
                         @endif
                     </div>
                 @endif
+            </div>
+
+            {{-- Hilo de respuestas --}}
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+                <h3 class="text-base font-semibold text-gray-900">{{ __('Hilo de la conversación') }}</h3>
+
+                @if ($ticket->replies->isEmpty())
+                    <p class="mt-2 text-sm text-gray-500">{{ __('Aún no hay respuestas en este ticket.') }}</p>
+                @else
+                    <ul class="mt-4 space-y-4">
+                        @foreach ($ticket->replies as $reply)
+                            <li class="flex gap-3">
+                                <div class="shrink-0 flex items-center justify-center w-8 h-8 rounded-full {{ $reply->sender === 'agent' ? 'bg-indigo-100 text-indigo-700' : 'bg-emerald-100 text-emerald-700' }} text-xs font-semibold">
+                                    {{ $reply->sender === 'agent' ? 'AI' : 'A' }}
+                                </div>
+                                <div class="min-w-0 flex-1">
+                                    <div class="flex items-center justify-between gap-2">
+                                        <p class="text-xs font-medium text-gray-500">
+                                            {{ $reply->sender === 'agent' ? __('Agente IA') : __('Administrador') }}
+                                        </p>
+                                        <span class="text-xs text-gray-400">{{ $reply->sent_at?->format('d/m/Y H:i') }}</span>
+                                    </div>
+                                    <p class="mt-1 text-sm text-gray-800 whitespace-pre-line">{{ $reply->body }}</p>
+                                </div>
+                            </li>
+                        @endforeach
+                    </ul>
+                @endif
+
+                @if ($ticket->replies->isNotEmpty())
+                    <div class="mt-6 border-t pt-4">
+                    <form method="POST" action="{{ route('tickets.admin-reply', $ticket) }}">
+                        @csrf
+                        <x-input-label for="reply_body" :value="__('Responder por email')" />
+                        <textarea id="reply_body" name="body" rows="6" required
+                                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                  placeholder="{{ __('Borrador de respuesta (el análisis lo pre-completa; puedes editarlo).') }}">{{ is_string($analysis?->draft_reply) ? $analysis->draft_reply : '' }}</textarea>
+                        <x-input-error :messages="$errors->get('body')" class="mt-2" />
+                        <div class="mt-4 flex items-center gap-4">
+                            <x-primary-button>{{ __('Enviar por email') }}</x-primary-button>
+                        </div>
+                    </form>
+                </div>
             </div>
 
             <div class="flex items-center justify-between gap-3">

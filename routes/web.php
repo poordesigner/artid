@@ -136,6 +136,7 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/configuracion/tickets/{ticket}', [TicketAnalysisController::class, 'show'])->name('tickets.admin-show');
         Route::post('/configuracion/tickets/{ticket}/analyze', [TicketAnalysisController::class, 'analyze'])->name('tickets.admin-analyze');
+        Route::post('/configuracion/tickets/{ticket}/reply', [TicketAnalysisController::class, 'reply'])->name('tickets.admin-reply');
 
         Route::post('/configuracion/ai', [AiConfigController::class, 'update'])->name('ai.update');
     });

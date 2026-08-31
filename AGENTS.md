@@ -57,7 +57,8 @@ Soporte al usuario: **Chatwoot** (widget + bot) y **tickets de soporte** privado
 - Tokens: `TokenPackage`, `TokenFunction`, `TokenAction` (pivot `token_function_action`), `TokenTransaction`.
 - Tickets de soporte: `SupportTicket` (consecutivo `TKT-####`, artist_id, topic, subject, message,
   status `open`|`closed`; relación `Artist::supportTickets()`), `SupportTicketAttachment` (disk r2, path,
-  original_name, mime, size; `SupportTicket::attachments()`).
+  original_name, mime, size; `SupportTicket::attachments()`), `SupportTicketReply` (hilo: sender `admin`|`agent`,
+  body, sent_at; `SupportTicket::replies()`, ver "Respuesta por email").
 - Legacy (modelos/servicios aún presentes, sin UI de artista): `Plan`, `PlanPeriod`, `PlanFeature`,
   `PlanLegalTerm`, `Subscription`, `Payment`, `WebhookEvent` (idempotencia de webhooks Paddle), `GitHubService`.
 
@@ -159,6 +160,18 @@ Soporte al usuario: **Chatwoot** (widget + bot) y **tickets de soporte** privado
     opción 0 = `{resumen, prioridad, borrador, acciones}`).
   - Las llaves del result JSON deben verse en Laravel como `priority` ∈ `normal|alta`. Si el modelo usa otro
     formato, mapearlo en n8n (nodo Code) antes de responder.
+
+## Respuesta por email (hilo de ticket)
+
+- Al responder un ticket desde admin (`POST /configuracion/tickets/{ticket}/reply`, `tickets.admin-reply`) se guarda
+  una `SupportTicketReply` (sender `admin`|`agent`, body, sent_at) en el hilo (`SupportTicket::replies()`) y se envía
+  el correo al artista con `TicketReplyMail` (`resources/views/emails/ticket-reply.blade.php`, HTML plano, sin
+  `x-mail::*` que requiere el paquete `laravel/mail` no instalado). Se cierra el ticket tras responder.
+- El borrador del análisis (`draft_reply`) pre-completa el textarea editable en `configuracion/tickets-show.blade.php`.
+- **Email (env en Coolify)**: cuenta GoDaddy `qrte-soporte@poordesigner.com` (SMTP
+  `smtpout.secureserver.net`, puerto 465 SSL / 587 STARTTLS). Setear: `MAIL_MAILER=smtp`, `MAIL_HOST`,
+  `MAIL_PORT`, `MAIL_USERNAME=qrte-soporte@poordesigner.com`, `MAIL_PASSWORD`, `MAIL_FROM_ADDRESS=qrte-soporte@poordesigner.com`,
+  `MAIL_FROM_NAME=QRTE`. Sin env → `config/mail.php` default `log` (no sale correo).
 
 ## Tickets de soporte
 

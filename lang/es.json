@@ -597,5 +597,21 @@
     "Reabrir ticket": "Reabrir ticket",
     "Cerrar ticket": "Cerrar ticket",
     "Normal": "Normal",
-    "Alta": "Alta"
+    "Alta": "Alta",
+    "Hilo de la conversación": "Hilo de la conversación",
+    "Aún no hay respuestas en este ticket.": "Aún no hay respuestas en este ticket.",
+    "Agente IA": "Agente IA",
+    "Administrador": "Administrador",
+    "Responder por email": "Responder por email",
+    "Enviar por email": "Enviar por email",
+    "Borrador de respuesta (el análisis lo pre-completa; puedes editarlo).": "Borrador de respuesta (el análisis lo pre-completa; puedes editarlo).",
+    "Respuesta enviada por email al artista.": "Respuesta enviada por email al artista.",
+    "La respuesta quedó en el hilo pero el correo no se pudo enviar.": "La respuesta quedó en el hilo pero el correo no se pudo enviar.",
+    "No se puede responder: el artista ya no existe.": "No se puede responder: el artista ya no existe.",
+    "Hola, :name": "Hola, :name",
+    "Soporte": "Soporte",
+    "Mis tickets": "Mis tickets",
+    "Tu ticket :number ha sido respondido": "Tu ticket :number ha sido respondido",
+    "Si necesitas continuar esta conversación, crea un nuevo ticket en tu panel o contáctanos por el chat de soporte.": "Si necesitas continuar esta conversación, crea un nuevo ticket en tu panel o contáctanos por el chat de soporte.",
+    "Identidad digital para obras de arte": "Identidad digital para obras de arte"
 }

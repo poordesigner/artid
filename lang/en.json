@@ -534,5 +534,21 @@
     "Reabrir ticket": "Reopen ticket",
     "Cerrar ticket": "Close ticket",
     "Normal": "Normal",
-    "Alta": "High"
+    "Alta": "High",
+    "Hilo de la conversación": "Conversation thread",
+    "Aún no hay respuestas en este ticket.": "There are no replies on this ticket yet.",
+    "Agente IA": "AI agent",
+    "Administrador": "Administrator",
+    "Responder por email": "Reply by email",
+    "Enviar por email": "Send by email",
+    "Borrador de respuesta (el análisis lo pre-completa; puedes editarlo).": "Reply draft (the analysis pre-fills it; you can edit it).",
+    "Respuesta enviada por email al artista.": "Reply sent by email to the artist.",
+    "La respuesta quedó en el hilo pero el correo no se pudo enviar.": "The reply was saved to the thread but the email could not be sent.",
+    "No se puede responder: el artista ya no existe.": "Cannot reply: the artist no longer exists.",
+    "Hola, :name": "Hello, :name",
+    "Soporte": "Support",
+    "Mis tickets": "My tickets",
+    "Tu ticket :number ha sido respondido": "Your ticket :number has been answered",
+    "Si necesitas continuar esta conversación, crea un nuevo ticket en tu panel o contáctanos por el chat de soporte.": "If you need to continue this conversation, create a new ticket in your panel or contact us through the support chat.",
+    "Identidad digital para obras de arte": "Digital identity for artworks"
 }

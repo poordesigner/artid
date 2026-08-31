@@ -3,12 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\AnalyzeTicketJob;
+use App\Mail\TicketReplyMail;
 use App\Models\SupportTicket;
+use App\Models\SupportTicketReply;
 use App\Models\TicketAnalysis;
 use App\Support\SupportContextBuilder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 
 class TicketAnalysisController extends Controller
@@ -17,7 +21,7 @@ class TicketAnalysisController extends Controller
 
     public function show(Request $request, SupportTicket $ticket): View
     {
-        $ticket->load(['artist', 'attachments', 'analysis']);
+        $ticket->load(['artist', 'attachments', 'analysis', 'replies']);
 
         $artist = $ticket->artist;
         $artist?->loadCount(['artworks', 'series']);
@@ -39,6 +43,41 @@ class TicketAnalysisController extends Controller
         dispatch(new AnalyzeTicketJob($ticket, $analysis));
 
         return back()->with('status', 'analysis-started');
+    }
+
+    public function reply(Request $request, SupportTicket $ticket): RedirectResponse
+    {
+        $validated = $request->validate([
+            'body' => ['required', 'string', 'max:10000'],
+        ]);
+
+        $artist = $ticket->artist;
+
+        if (! $artist) {
+            return back()->with('status', 'reply-no-artist');
+        }
+
+        $reply = $ticket->replies()->create([
+            'sender' => 'admin',
+            'body' => $validated['body'],
+            'sent_at' => now(),
+        ]);
+
+        $ticket->update(['status' => SupportTicket::STATUS_CLOSED]);
+
+        try {
+            Mail::to($artist)->send(new TicketReplyMail($ticket, $artist, $validated['body']));
+        } catch (\Throwable $e) {
+            Log::error('TicketReplyMail error', [
+                'ticket' => $ticket->number,
+                'error' => $e->getMessage(),
+            ]);
+
+            // la reply ya quedó registrada en el hilo; el admin sabrá que el mail falló
+            return back()->with('status', 'reply-saved-mail-failed');
+        }
+
+        return back()->with('status', 'reply-sent');
     }
 
     /* ---- API para n8n ---- */
