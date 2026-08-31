@@ -76,7 +76,7 @@ class SupportTicketController extends Controller
 
     public function show(Request $request, string $number): View
     {
-        $ticket = SupportTicket::with('attachments')->where('number', $number)->firstOrFail();
+        $ticket = SupportTicket::with(['attachments', 'replies'])->where('number', $number)->firstOrFail();
 
         $this->authorizeAccess($request->user(), $ticket);
 

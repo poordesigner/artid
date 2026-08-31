@@ -39,6 +39,30 @@
                 @endif
             </div>
 
+            @if ($ticket->replies->isNotEmpty())
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+                    <h3 class="text-sm font-medium text-gray-900">{{ __('Hilo de la conversación') }}</h3>
+                    <ul class="mt-4 space-y-4">
+                        @foreach ($ticket->replies as $reply)
+                            <li class="flex gap-3">
+                                <div class="shrink-0 flex items-center justify-center w-8 h-8 rounded-full {{ $reply->sender === 'agent' ? 'bg-indigo-100 text-indigo-700' : 'bg-emerald-100 text-emerald-700' }} text-xs font-semibold">
+                                    {{ $reply->sender === 'agent' ? 'AI' : 'A' }}
+                                </div>
+                                <div class="min-w-0 flex-1">
+                                    <div class="flex items-center justify-between gap-2">
+                                        <p class="text-xs font-medium text-gray-500">
+                                            {{ $reply->sender === 'agent' ? __('Agente IA') : __('Soporte') }}
+                                        </p>
+                                        <span class="text-xs text-gray-400">{{ $reply->sent_at?->format('d/m/Y H:i') }}</span>
+                                    </div>
+                                    <p class="mt-1 text-sm text-gray-800 whitespace-pre-line">{{ $reply->body }}</p>
+                                </div>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             <a href="{{ route('tickets.index') }}" class="text-sm text-indigo-600 hover:underline">{{ __('Volver a mis tickets') }}</a>
         </div>
     </div>
