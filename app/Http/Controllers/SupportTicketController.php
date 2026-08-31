@@ -92,6 +92,30 @@ class SupportTicketController extends Controller
         return Storage::disk($attachment->disk)->response($attachment->path, $attachment->original_name);
     }
 
+    public function reply(Request $request, string $number): RedirectResponse
+    {
+        $ticket = SupportTicket::where('number', $number)->firstOrFail();
+
+        $this->authorizeAccess($request->user(), $ticket);
+
+        $validated = $request->validate([
+            'body' => ['required', 'string', 'max:5000'],
+        ]);
+
+        $ticket->replies()->create([
+            'sender' => 'artist',
+            'body' => $validated['body'],
+            'sent_at' => now(),
+        ]);
+
+        // Al responder, el ticket vuelve a abrirse para que el admin lo vea.
+        if ($ticket->isClosed()) {
+            $ticket->update(['status' => SupportTicket::STATUS_OPEN]);
+        }
+
+        return back()->with('status', __('Respuesta registrada. El soporte la revisará pronto.'));
+    }
+
     /* ---- Admin ---- */
 
     public function adminIndex(Request $request): View

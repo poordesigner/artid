@@ -30,9 +30,10 @@
                 {{ $ticket->topicLabel() }} · {{ $ticket->created_at->format('d/m/Y H:i') }}
             </div>
             <div class="msg">{!! nl2br(e($replyBody)) !!}</div>
-            <a class="btn" href="{{ url('/tickets') }}">{{ __('Mis tickets') }}</a>
+            <a class="btn" href="{{ url('/tickets/'.$ticket->number) }}">{{ __('Ver mi ticket y responder') }}</a>
             <p style="font-size: 12px; color: #6b7280; margin-top: 24px;">
-                {{ __('Si necesitas continuar esta conversación, crea un nuevo ticket en tu panel o contáctanos por el chat de soporte.') }}
+                {{ __('Este correo no admite respuestas. Para continuar la conversación, abre tu ticket de soporte en la plataforma y deja tu mensaje allí.') }}<br>
+                <a href="{{ url('/tickets/'.$ticket->number) }}" style="color: #4f46e5;">{{ url('/tickets/'.$ticket->number) }}</a>
             </p>
         </div>
         <div class="foot">

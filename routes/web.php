@@ -101,6 +101,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/tickets', [SupportTicketController::class, 'store'])->name('tickets.store');
     Route::get('/tickets/{number}', [SupportTicketController::class, 'show'])->name('tickets.show');
     Route::get('/tickets/{number}/adjunto/{attachment}', [SupportTicketController::class, 'attachment'])->name('tickets.attachment');
+    Route::post('/tickets/{number}/reply', [SupportTicketController::class, 'reply'])->name('tickets.reply');
 
     Route::post('/subscribe/cancel', [SubscriptionController::class, 'cancel'])->name('subscribe.cancel');
     Route::post('/subscribe/reactivate', [SubscriptionController::class, 'reactivate'])->name('subscribe.reactivate');

@@ -550,5 +550,20 @@
     "Mis tickets": "My tickets",
     "Tu ticket :number ha sido respondido": "Your ticket :number has been answered",
     "Si necesitas continuar esta conversación, crea un nuevo ticket en tu panel o contáctanos por el chat de soporte.": "If you need to continue this conversation, create a new ticket in your panel or contact us through the support chat.",
-    "Identidad digital para obras de arte": "Digital identity for artworks"
+    "Identidad digital para obras de arte": "Digital identity for artworks",
+    "Vista previa y enviar": "Preview and send",
+    "Vista previa del correo": "Email preview",
+    "Para": "To",
+    "Asunto": "Subject",
+    "Mensaje": "Message",
+    "Cancelar": "Cancel",
+    "El correo se envía a nombre del soporte. El artista podrá responder desde su ticket en la plataforma; este email es solo de aviso.": "This email is sent on behalf of support. The artist can reply from their ticket on the platform; this email is for notification only.",
+    "Tú": "You",
+    "Añadir un mensaje": "Add a message",
+    "Escribe aquí tu respuesta para el soporte…": "Write your reply for support here…",
+    "Enviar mensaje": "Send message",
+    "Respuesta registrada. El soporte la revisará pronto.": "Reply recorded. Support will review it soon.",
+    "Ver mi ticket y responder": "View and reply to my ticket",
+    "Este correo no admite respuestas. Para continuar la conversación, abre tu ticket de soporte en la plataforma y deja tu mensaje allí.": "This email cannot receive replies. To continue the conversation, open your support ticket on the platform and leave your message there.",
+    "Artista": "Artist"
 }

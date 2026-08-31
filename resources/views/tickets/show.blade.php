@@ -45,13 +45,19 @@
                     <ul class="mt-4 space-y-4">
                         @foreach ($ticket->replies as $reply)
                             <li class="flex gap-3">
-                                <div class="shrink-0 flex items-center justify-center w-8 h-8 rounded-full {{ $reply->sender === 'agent' ? 'bg-indigo-100 text-indigo-700' : 'bg-emerald-100 text-emerald-700' }} text-xs font-semibold">
-                                    {{ $reply->sender === 'agent' ? 'AI' : 'A' }}
+                                <div class="shrink-0 flex items-center justify-center w-8 h-8 rounded-full {{ $reply->sender === 'artist' ? 'bg-brand-100 text-brand-700' : ($reply->sender === 'agent' ? 'bg-indigo-100 text-indigo-700' : 'bg-emerald-100 text-emerald-700') }} text-xs font-semibold">
+                                    {{ $reply->sender === 'artist' ? 'Tú' : ($reply->sender === 'agent' ? 'AI' : 'A') }}
                                 </div>
                                 <div class="min-w-0 flex-1">
                                     <div class="flex items-center justify-between gap-2">
                                         <p class="text-xs font-medium text-gray-500">
-                                            {{ $reply->sender === 'agent' ? __('Agente IA') : __('Soporte') }}
+                                            @if ($reply->sender === 'artist')
+                                                {{ __('Tú') }}
+                                            @elseif ($reply->sender === 'agent')
+                                                {{ __('Agente IA') }}
+                                            @else
+                                                {{ __('Soporte') }}
+                                            @endif
                                         </p>
                                         <span class="text-xs text-gray-400">{{ $reply->sent_at?->format('d/m/Y H:i') }}</span>
                                     </div>
@@ -60,6 +66,22 @@
                             </li>
                         @endforeach
                     </ul>
+                </div>
+            @endif
+
+            @if (! $ticket->isClosed())
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+                    <h3 class="text-sm font-medium text-gray-900">{{ __('Añadir un mensaje') }}</h3>
+                    <form method="POST" action="{{ route('tickets.reply', $ticket->number) }}" class="mt-3">
+                        @csrf
+                        <textarea name="body" rows="5" required
+                                  class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                  placeholder="{{ __('Escribe aquí tu respuesta para el soporte…') }}"></textarea>
+                        <x-input-error :messages="$errors->get('body')" class="mt-2" />
+                        <div class="mt-4">
+                            <x-primary-button>{{ __('Enviar mensaje') }}</x-primary-button>
+                        </div>
+                    </form>
                 </div>
             @endif
 
