@@ -22,6 +22,12 @@ class TicketAnalysis extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'suggested_actions' => 'array',
+        'analysis' => 'array',
+        'analyzed_at' => 'datetime',
+    ];
+
     public const STATUS_PENDING = 'pending';
 
     public const STATUS_PROCESSING = 'processing';
