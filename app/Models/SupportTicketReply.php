@@ -13,6 +13,10 @@ use Illuminate\Database\Eloquent\Model;
 ])]
 class SupportTicketReply extends Model
 {
+    protected $casts = [
+        'sent_at' => 'datetime',
+    ];
+
     public function ticket(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(SupportTicket::class);
