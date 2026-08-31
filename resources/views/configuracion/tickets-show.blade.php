@@ -215,8 +215,7 @@
                     </ul>
                 @endif
 
-                @if ($ticket->replies->isNotEmpty())
-                    <div class="mt-6 border-t pt-4">
+                <div class="mt-6 border-t pt-4">
                     <form method="POST" action="{{ route('tickets.admin-reply', $ticket) }}">
                         @csrf
                         <x-input-label for="reply_body" :value="__('Responder por email')" />
