@@ -268,7 +268,7 @@
                                 </div>
                                 <div class="px-6 py-4 border-t flex items-center justify-end gap-3">
                                     <button type="button" @click="preview = false" class="text-sm text-gray-600 hover:underline">{{ __('Cancelar') }}</button>
-                                    <x-primary-button type="button" @click="send()" :disabled="sending">
+                                    <x-primary-button type="button" @click="send()" x-bind:disabled="sending">
                                         <span x-show="!sending">{{ __('Enviar por email') }}</span>
                                         <span x-show="sending" x-cloak>{{ __('Enviando…') }}</span>
                                     </x-primary-button>
