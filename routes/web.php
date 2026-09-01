@@ -19,6 +19,7 @@ use App\Http\Controllers\SeriesController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\SupportContextController;
 use App\Http\Controllers\SupportTicketController;
+use App\Http\Controllers\Admin\OnboardingController;
 use App\Http\Controllers\TicketAnalysisController;
 use App\Http\Controllers\TokenController;
 use App\Http\Controllers\TokenFunctionController;
@@ -145,6 +146,9 @@ Route::middleware('auth')->group(function () {
         Route::post('/configuracion/tickets/{ticket}/reply', [TicketAnalysisController::class, 'reply'])->name('tickets.admin-reply');
 
         Route::post('/configuracion/ai', [AiConfigController::class, 'update'])->name('ai.update');
+
+        Route::get('/configuracion/onboarding', [OnboardingController::class, 'index'])->name('admin.onboarding');
+        Route::post('/configuracion/onboarding/process', [OnboardingController::class, 'process'])->name('admin.onboarding.process');
     });
 
     Route::get('/artworks', [ArtworkController::class, 'index'])->name('artworks.index');

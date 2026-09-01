@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password', 'google_id', 'github_id', 'github_token', 'github_nickname', 'github_repo', 'short_domain', 'avatar', 'statement', 'cv_pdf', 'website_url', 'instagram', 'behance', 'artstation', 'youtube', 'tiktok', 'is_admin', 'granted_plan_id', 'granted_expires_at', 'tokens_balance', 'welcome_tokens_claimed'])]
+#[Fillable(['name', 'email', 'password', 'google_id', 'github_id', 'github_token', 'github_nickname', 'github_repo', 'short_domain', 'avatar', 'statement', 'cv_pdf', 'website_url', 'instagram', 'behance', 'artstation', 'youtube', 'tiktok', 'is_admin', 'granted_plan_id', 'granted_expires_at', 'tokens_balance', 'welcome_tokens_claimed', 'last_login_at'])]
 #[Hidden(['password', 'remember_token'])]
 class Artist extends Authenticatable
 {
@@ -325,6 +325,7 @@ class Artist extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'last_login_at' => 'datetime',
             'password' => 'hashed',
             'github_token' => 'encrypted',
             'is_admin' => 'boolean',

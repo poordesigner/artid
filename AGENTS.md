@@ -193,6 +193,26 @@ Soporte al usuario: **Chatwoot** (widget + bot) y **tickets de soporte** privado
   "Analizar con IA" (ver "Gestor de tickets"). El borrador del análisis pre-completa el textarea de respuesta.
   Enlace desde `/admin/dashboard` (en `admin/dashboard.blade.php`).
 
+## Email Marketer (Secuencias de Onboarding)
+
+- **Agente 16**: automación de emails post-registro para guiar al artista en las primeras semanas.
+- **Ejecución**: manual desde admin (`/configuracion/onboarding` → botón "Ejecutar ahora") o vía
+  `php artisan email:onboarding:process`. No hay cron automático aún.
+- **Secuencias** (en `config/onboarding.php`):
+  - Día 0: **Bienvenida** (`welcome`) — siempre se envía; da tokens y invita a crear primera obra.
+  - Día 3: **Recordatorio tokens** (`reminder_tokens`) — si tiene tokens pero no creó obras.
+  - Día 7: **Tutorial** (`tutorial`) — si aún no creó obras; ofrece tutorial y ayuda.
+  - Día 14: **Prueba social** (`social_proof`) — si ya creó al menos 1 obra; muestra cuántos artistas hay.
+  - Día 30: **Comprar tokens** (`sell_tokens`) — si tiene ≤2 tokens; invita a comprar paquete.
+- **Detección de actividad**: combina `last_login_at` (middleware `TrackLastLogin`), `tokens_balance`,
+  y `artworks()->exists()` para decidir si salta un paso. Las condiciones están en `OnboardingConditions`.
+- **Tracking**: tabla `onboarding_emails` (artist_id + step, unique). Un email solo se envía 1 vez por artista.
+- **Modelos**: `OnboardingEmail` (tracking), Notifications implementan `ShouldQueue` (envío asíncrono).
+- **Templates**: `resources/views/emails/onboarding/` (5 templates HTML inline, estilo ticket-reply).
+- **Admin**: `/configuracion/onboarding` (`admin.onboarding`) muestra stats por step (elegibles, enviados, pendientes).
+- **Middleware**: `TrackLastLogin` actualiza `artists.last_login_at` en cada request autenticada (throttle 1 min).
+- **Migraciones**: `add_last_login_at_to_artists_table` + `create_onboarding_emails_table`.
+
 ## Localización (idioma)
 
 - No persistente: middleware `SetLocale` (grupo web en bootstrap) detecta cookie `locale` o idioma del navegador.
