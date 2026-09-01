@@ -132,7 +132,7 @@ Soporte al usuario: **Chatwoot** (widget + bot) y **tickets de soporte** privado
 ## Gestor de tickets (agente 2, triage con IA)
 
 - **Objetivo (asist-first)**: al abrir un ticket en admin hay un botón **"Analizar con IA"** que documenta en el ticket:
-  resumen, prioridad sugerida (normal/alta), contexto del usuario y borrador de respuesta con acciones sugeridas. NADO se
+  resumen, prioridad sugerida (normal/alta), contexto del usuario y borrador de respuesta con acciones sugeridas. NADA se
   envía automáticamente; el admin decide.
 - **Flujo**: admin `GET /configuracion/tickets/{ticket}` (`TicketAnalysisController@show`, vista
   `configuracion/tickets-show.blade.php`) → botón → `POST .../analyze` crea `TicketAnalysis` (status pending) y despacha
@@ -141,14 +141,14 @@ Soporte al usuario: **Chatwoot** (widget + bot) y **tickets de soporte** privado
   responde síncronamente `{summary, priority, draft_reply, suggested_actions[], model}` → el job persiste en
   `ticket_analyses` (status completed/failed) → la vista hace reload cada 4s mientras `pending`.
   **El análisis también se dispara automáticamente al crear el ticket** (`SupportTicketController@store` despacha el
-  job), sin que el admin lo pida. En el índice admin (`configuracion/tickets.blade.php`) cada ticket analizado tiene
-  un botón **"IA"** (modal con resumen/prioridad/acciones/borrador) y un botón **"Enviar (1 clic)"** que envía por
-  email directamente el borrador del agente.
+  job), sin que el admin lo pida.
+- El borrador del análisis (`draft_reply`) pre-completa el textarea editable en `configuracion/tickets-show.blade.php`.
+  El admin edita, envía y decide cuándo cerrar el ticket (no hay auto-cierre).
 - **`GET /api/tickets/{id}/context`** (con `?secret=` = `TICKET_AGENT_WEBHOOK_SECRET`, 403 si no): devuelve el ticket,
   el artista (email verificado, antigüedad, tokens, obras, series, tickets previos, perfil público) y el pack de
   conocimiento (mapeo `config/ticket_agent.topic_pack_map`: cuenta→cuenta, obras→obras, facturacion→facturacion,
   tecnico→configuracion, otro→otros) vía `SupportContextBuilder::pack()`.
-- **Modelos**: `TicketAnalysis` (ticket_id, status pending|processing|completed|failed, summary, priority, draft_reply,
+- **Modelos**: `TicketAnalysis` (support_ticket_id, status pending|processing|completed|failed, summary, priority, draft_reply,
   suggested_actions json, analysis json, error, model, analyzed_at; relación `SupportTicket::analysis()` hasOne
   latestOfMany), `AnalyzeTicketJob` (timeout 90, 1 intento). `SupportContextBuilder` (app/Support) reúne el prompt base +
   packs; `SupportContextController` delega en él.
@@ -170,7 +170,8 @@ Soporte al usuario: **Chatwoot** (widget + bot) y **tickets de soporte** privado
 - Al responder un ticket desde admin (`POST /configuracion/tickets/{ticket}/reply`, `tickets.admin-reply`) se guarda
   una `SupportTicketReply` (sender `admin`|`agent`, body, sent_at) en el hilo (`SupportTicket::replies()`) y se envía
   el correo al artista con `TicketReplyMail` (`resources/views/emails/ticket-reply.blade.php`, HTML plano, sin
-  `x-mail::*` que requiere el paquete `laravel/mail` no instalado). Se cierra el ticket tras responder.
+  `x-mail::*` que requiere el paquete `laravel/mail` no instalado). El ticket **no se cierra automáticamente**;
+  el admin decide cuándo cerrarlo.
 - El borrador del análisis (`draft_reply`) pre-completa el textarea editable en `configuracion/tickets-show.blade.php`.
 - **Email (env en Coolify)**: cuenta GoDaddy `qrte-soporte@poordesigner.com` (SMTP
   `smtpout.secureserver.net`, puerto 465 SSL / 587 STARTTLS). Setear: `MAIL_MAILER=smtp`, `MAIL_HOST`,
@@ -189,7 +190,8 @@ Soporte al usuario: **Chatwoot** (widget + bot) y **tickets de soporte** privado
 - Admin: `/configuracion/tickets` (índice con filtro por status, últimas 100, `tickets.admin`),
   `POST /configuracion/tickets/{ticket}/status` para abrir/cerrar (`tickets.admin-status`) y
   `GET /configuracion/tickets/{ticket}` (`tickets.admin-show`) para el detalle con contexto del usuario + botón
-  "Analizar con IA" (ver "Gestor de tickets"). Enlace desde `/admin/dashboard` (en `admin/dashboard.blade.php`).
+  "Analizar con IA" (ver "Gestor de tickets"). El borrador del análisis pre-completa el textarea de respuesta.
+  Enlace desde `/admin/dashboard` (en `admin/dashboard.blade.php`).
 
 ## Localización (idioma)
 
