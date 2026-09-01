@@ -572,5 +572,9 @@
     "Abrir": "Open",
     "Ver todas": "View all",
     "Tu ticket :number tiene una respuesta": "Your ticket :number has a reply",
-    "El ticket está cerrado: al enviar un mensaje se reabrirá.": "This ticket is closed: sending a message will reopen it."
+    "El ticket está cerrado: al enviar un mensaje se reabrirá.": "This ticket is closed: sending a message will reopen it.",
+    "Enviar este borrador de respuesta por email?": "Send this reply draft by email?",
+    "Enviar (1 clic)": "Send (1-click)",
+    "Cerrar": "Close",
+    "Abrir ticket": "Open ticket"
 }

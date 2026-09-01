@@ -3,7 +3,22 @@
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">{{ __('Tickets de soporte') }}</h2>
     </x-slot>
 
-    <div class="py-12">
+    <div class="py-12" x-data="{
+        active: null,
+        analyses: @js($tickets->filter(fn ($t) => $t->relationLoaded('analysis') && $t->analysis && $t->analysis->isCompleted())->mapWithKeys(fn ($t) => [
+            $t->id => [
+                'number' => $t->number,
+                'subject' => $t->subject,
+                'summary' => $t->analysis->summary,
+                'priority' => $t->analysis->priority,
+                'priority_label' => $t->analysis->priorityLabel(),
+                'draft_reply' => $t->analysis->draft_reply,
+                'suggested_actions' => $t->analysis->suggested_actions ?? [],
+            ],
+        ])),
+        openIa(id) { this.active = id; },
+        closeIa() { this.active = null; }
+    }">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             @if (session('status'))
                 <div class="mb-4 p-4 bg-green-50 text-green-700 rounded-md">{{ session('status') }}</div>
@@ -66,6 +81,22 @@
                                             </td>
                                             <td class="px-4 py-3 text-right whitespace-nowrap">
                                                 <a href="{{ route('tickets.admin-show', $ticket) }}" class="text-indigo-600 hover:text-indigo-900 text-sm">{{ __('Ver') }}</a>
+
+                                                @if ($ticket->analysis && $ticket->analysis->isCompleted())
+                                                    <button type="button" @@click="openIa({{ $ticket->id }})"
+                                                            class="ms-2 text-indigo-600 hover:text-indigo-900 text-sm">IA</button>
+                                                    @php($draft = is_string($ticket->analysis->draft_reply) ? $ticket->analysis->draft_reply : '')
+                                                    @if ($draft !== '' && ! $ticket->isClosed())
+                                                        <form method="POST" action="{{ route('tickets.admin-reply', $ticket) }}" class="inline" onsubmit="return confirm('{{ __('Enviar este borrador de respuesta por email?') }}');">
+                                                            @csrf
+                                                            <input type="hidden" name="body" value="{{ $draft }}">
+                                                            <button type="submit" class="ms-2 text-emerald-600 hover:text-emerald-900 text-sm">{{ __('Enviar (1 clic)') }}</button>
+                                                        </form>
+                                                    @endif
+                                                @else
+                                                    <span class="ms-2 text-gray-300 text-sm">IA</span>
+                                                @endif
+
                                                 <form method="POST" action="{{ route('tickets.admin-status', $ticket) }}" class="inline">
                                                     @csrf
                                                     <button type="submit" name="status" value="{{ $ticket->isClosed() ? 'open' : 'closed' }}"
@@ -83,5 +114,49 @@
                 </div>
             </div>
         </div>
+
+        {{-- Modal: análisis del agente IA --}}
+        <template x-if="active">
+            <div class="fixed inset-0 z-50 overflow-y-auto" style="display: none;">
+                <div class="flex items-end sm:items-center justify-center min-h-full p-4">
+                    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" x-on:click="closeIa()"></div>
+                    <div class="relative bg-white rounded-lg shadow-xl max-w-2xl w-full">
+                        <div class="px-6 py-4 border-b flex items-center justify-between">
+                            <div>
+                                <h3 class="text-base font-semibold text-gray-900" x-text="analyses[active]?.number + ' — ' + analyses[active]?.subject"></h3>
+                                <span class="mt-1 inline-block px-2 py-0.5 rounded-full text-xs font-medium"
+                                      :class="analyses[active]?.priority === 'alta' ? 'bg-red-50 text-red-700' : 'bg-gray-100 text-gray-600'"
+                                      x-text="analyses[active]?.priority_label"></span>
+                            </div>
+                            <button type="button" x-on:click="closeIa()" class="text-gray-400 hover:text-gray-600">✕</button>
+                        </div>
+                        <div class="px-6 py-4 space-y-4 text-sm" x-show="active">
+                            <div>
+                                <p class="text-xs uppercase tracking-wider text-gray-400">{{ __('Resumen del ticket') }}</p>
+                                <p class="mt-1 text-gray-800 whitespace-pre-line" x-text="analyses[active]?.summary"></p>
+                            </div>
+                            <div x-show="analyses[active]?.suggested_actions?.length">
+                                <p class="text-xs uppercase tracking-wider text-gray-400">{{ __('Acciones sugeridas') }}</p>
+                                <ul class="mt-1 space-y-1 list-disc list-inside text-gray-700">
+                                    <template x-for="action in analyses[active]?.suggested_actions" :key="action">
+                                        <li x-text="action"></li>
+                                    </template>
+                                </ul>
+                            </div>
+                            <div>
+                                <p class="text-xs uppercase tracking-wider text-gray-400">{{ __('Borrador de respuesta') }}</p>
+                                <div class="mt-1 p-4 bg-gray-50 rounded-md border border-gray-200 text-gray-800 whitespace-pre-wrap" x-text="analyses[active]?.draft_reply || '—'"></div>
+                            </div>
+                        </div>
+                        <div class="px-6 py-4 border-t flex items-center justify-end gap-3">
+                            <button type="button" x-on:click="closeIa()" class="text-sm text-gray-600 hover:underline">{{ __('Cerrar') }}</button>
+                            <a :href="'/configuracion/tickets/' + active" class="inline-flex items-center px-4 py-2 bg-brand border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-brand-600">
+                                {{ __('Abrir ticket') }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
     </div>
 </x-app-layout>
