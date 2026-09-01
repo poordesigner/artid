@@ -64,8 +64,6 @@ class TicketAnalysisController extends Controller
             'sent_at' => now(),
         ]);
 
-        $ticket->update(['status' => SupportTicket::STATUS_CLOSED]);
-
         $artist->notifications()->create([
             'type' => 'ticket_reply',
             'title' => __('Tu ticket :number tiene una respuesta', ['number' => $ticket->number]),

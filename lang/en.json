@@ -574,9 +574,9 @@
     "Tu ticket :number tiene una respuesta": "Your ticket :number has a reply",
     "El ticket está cerrado: al enviar un mensaje se reabrirá.": "This ticket is closed: sending a message will reopen it.",
     "Enviar este borrador de respuesta por email?": "Send this reply draft by email?",
-    "Enviar (1 clic)": "Send (1-click)",
     "Cerrar": "Close",
     "Abrir ticket": "Open ticket",
+    "Revisar y Enviar": "Review and Send",
     "Resumen del ticket": "Ticket summary",
     "Acciones sugeridas": "Suggested actions",
     "Borrador sugerido": "Suggested draft",
@@ -584,7 +584,6 @@
     "Sin respuestas aún": "No replies yet",
     "Enviar respuesta": "Send reply",
     "Usar borrador sugerido...": "Use suggested draft...",
-    "Enviar y cerrar": "Send and close",
     "Enviando...": "Sending...",
     "Ticket cerrado. Reabre para responder.": "Ticket closed. Reopen to reply.",
     "Cancelar": "Cancel"

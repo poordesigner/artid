@@ -86,17 +86,7 @@
 
                                                 @if ($ticket->analysis && $ticket->analysis->isCompleted())
                                                     <button type="button" x-on:click="openIa({{ $ticket->id }})"
-                                                            class="ms-2 text-indigo-600 hover:text-indigo-900 text-sm">IA</button>
-                                                    @php($draft = is_string($ticket->analysis->draft_reply) ? $ticket->analysis->draft_reply : '')
-                                                    @if ($draft !== '' && ! $ticket->isClosed())
-                                                        <form method="POST" action="{{ route('tickets.admin-reply', $ticket) }}" class="inline" onsubmit="return confirm('{{ __('Enviar este borrador de respuesta por email?') }}');">
-                                                            @csrf
-                                                            <input type="hidden" name="body" value="{{ $draft }}">
-                                                            <button type="submit" class="ms-2 text-emerald-600 hover:text-emerald-900 text-sm">{{ __('Enviar (1 clic)') }}</button>
-                                                        </form>
-                                                    @endif
-                                                @else
-                                                    <span class="ms-2 text-gray-300 text-sm">IA</span>
+                                                            class="ms-2 text-indigo-600 hover:text-indigo-900 text-sm">{{ __('Revisar y Enviar') }}</button>
                                                 @endif
 
                                                 <form method="POST" action="{{ route('tickets.admin-status', $ticket) }}" class="inline">
@@ -176,7 +166,7 @@
                                     <button type="button" @click="closeIa()" class="px-4 py-2 text-sm text-gray-600 hover:underline">{{ __('Cancelar') }}</button>
                                     <button type="button" @click="sendReply(active, $refs.replyBody.value)"
                                             :disabled="sending" class="px-4 py-2 bg-brand text-white rounded-md text-sm hover:bg-brand-600 disabled:opacity-50">
-                                        <span x-show="!sending">{{ __('Enviar y cerrar') }}</span>
+                                        <span x-show="!sending">{{ __('Enviar respuesta') }}</span>
                                         <span x-show="sending">{{ __('Enviando...') }}</span>
                                     </button>
                                 </div>
