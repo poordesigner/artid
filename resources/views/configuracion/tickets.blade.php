@@ -21,6 +21,7 @@
         }
     }">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            @php($useDraftLabel = __('Usar borrador sugerido...'))
             @if (session('status'))
                 <div class="mb-4 p-4 bg-green-50 text-green-700 rounded-md">{{ session('status') }}</div>
             @endif
@@ -169,7 +170,7 @@
                             <div x-show="analyses[active]?.ticket_status === 'open'" class="border-t pt-4">
                                 <p class="text-xs uppercase tracking-wider text-gray-400">{{ __('Enviar respuesta') }}</p>
                                 <textarea x-ref="replyBody" class="mt-2 w-full p-3 border border-gray-300 rounded-md text-sm resize-none"
-                                        rows="4" :placeholder="analyses[active]?.draft_reply ? '{{ __(\"Usar borrador sugerido...\") }}' : ''"
+                                        rows="4" :placeholder="analyses[active]?.draft_reply ? '{{ $useDraftLabel }}' : ''"
                                         x-init="if ($refs.replyBody && analyses[active]?.draft_reply) $refs.replyBody.value = analyses[active].draft_reply"></textarea>
                                 <div class="mt-2 flex justify-end gap-2">
                                     <button type="button" @click="closeIa()" class="px-4 py-2 text-sm text-gray-600 hover:underline">{{ __('Cancelar') }}</button>
