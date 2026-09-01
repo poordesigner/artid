@@ -576,5 +576,16 @@
     "Enviar este borrador de respuesta por email?": "Send this reply draft by email?",
     "Enviar (1 clic)": "Send (1-click)",
     "Cerrar": "Close",
-    "Abrir ticket": "Open ticket"
+    "Abrir ticket": "Open ticket",
+    "Resumen del ticket": "Ticket summary",
+    "Acciones sugeridas": "Suggested actions",
+    "Borrador sugerido": "Suggested draft",
+    "Historial de conversación": "Conversation history",
+    "Sin respuestas aún": "No replies yet",
+    "Enviar respuesta": "Send reply",
+    "Usar borrador sugerido...": "Use suggested draft...",
+    "Enviar y cerrar": "Send and close",
+    "Enviando...": "Sending...",
+    "Ticket cerrado. Reabre para responder.": "Ticket closed. Reopen to reply.",
+    "Cancelar": "Cancel"
 }

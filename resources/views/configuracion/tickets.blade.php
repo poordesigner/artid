@@ -14,10 +14,27 @@
                 'priority_label' => $t->analysis->priorityLabel(),
                 'draft_reply' => $t->analysis->draft_reply,
                 'suggested_actions' => $t->analysis->suggested_actions ?? [],
+                'replies' => $t->replies->map(fn ($r) => [
+                    'sender' => $r->sender,
+                    'body' => $r->body,
+                    'sent_at' => $r->sent_at?->toIso8601String(),
+                ])->values()->toArray(),
+                'ticket_status' => $t->status,
             ],
         ])),
         openIa(id) { this.active = id; },
-        closeIa() { this.active = null; }
+        closeIa() { this.active = null; },
+        sending: false,
+        sendReply(ticketId, body) {
+            this.sending = true;
+            fetch('/configuracion/tickets/' + ticketId + '/reply', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content },
+                body: JSON.stringify({ body })
+            }).then(r => r.ok ? (this.closeIa(), location.reload()) : r.json().then(e => alert(e.message || 'Error')))
+            .catch(() => alert('Error de red'))
+            .finally(() => this.sending = false);
+        }
     }">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             @if (session('status'))
@@ -115,12 +132,12 @@
             </div>
         </div>
 
-        {{-- Modal: análisis del agente IA --}}
+        {{-- Modal: análisis del agente IA + hilo + respuesta --}}
         <template x-if="active">
             <div class="fixed inset-0 z-50 overflow-y-auto" style="display: none;">
                 <div class="flex items-end sm:items-center justify-center min-h-full p-4">
                     <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" x-on:click="closeIa()"></div>
-                    <div class="relative bg-white rounded-lg shadow-xl max-w-2xl w-full">
+                    <div class="relative bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] flex flex-col">
                         <div class="px-6 py-4 border-b flex items-center justify-between">
                             <div>
                                 <h3 class="text-base font-semibold text-gray-900" x-text="analyses[active]?.number + ' — ' + analyses[active]?.subject"></h3>
@@ -130,7 +147,7 @@
                             </div>
                             <button type="button" x-on:click="closeIa()" class="text-gray-400 hover:text-gray-600">✕</button>
                         </div>
-                        <div class="px-6 py-4 space-y-4 text-sm" x-show="active">
+                        <div class="px-6 py-4 space-y-4 text-sm overflow-y-auto flex-1" x-show="active">
                             <div>
                                 <p class="text-xs uppercase tracking-wider text-gray-400">{{ __('Resumen del ticket') }}</p>
                                 <p class="mt-1 text-gray-800 whitespace-pre-line" x-text="analyses[active]?.summary"></p>
@@ -144,15 +161,44 @@
                                 </ul>
                             </div>
                             <div>
-                                <p class="text-xs uppercase tracking-wider text-gray-400">{{ __('Borrador de respuesta') }}</p>
+                                <p class="text-xs uppercase tracking-wider text-gray-400">{{ __('Borrador sugerido') }}</p>
                                 <div class="mt-1 p-4 bg-gray-50 rounded-md border border-gray-200 text-gray-800 whitespace-pre-wrap" x-text="analyses[active]?.draft_reply || '—'"></div>
                             </div>
-                        </div>
-                        <div class="px-6 py-4 border-t flex items-center justify-end gap-3">
-                            <button type="button" x-on:click="closeIa()" class="text-sm text-gray-600 hover:underline">{{ __('Cerrar') }}</button>
-                            <a :href="'/configuracion/tickets/' + active" class="inline-flex items-center px-4 py-2 bg-brand border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-brand-600">
-                                {{ __('Abrir ticket') }}
-                            </a>
+                            <div class="border-t pt-4">
+                                <p class="text-xs uppercase tracking-wider text-gray-400">{{ __('Historial de conversación') }}</p>
+                                <div class="mt-2 space-y-3 max-h-64 overflow-y-auto">
+                                    <template x-for="reply in analyses[active]?.replies" :key="reply.sent_at + reply.sender">
+                                        <div class="flex" :class="reply.sender === 'admin' ? 'justify-end' : 'justify-start'">
+                                            <div class="max-w-[75%] p-3 rounded-lg"
+                                                 :class="reply.sender === 'admin' ? 'bg-brand text-white rounded-br-none' : 'bg-gray-100 text-gray-900 rounded-bl-none'">
+                                                <p class="text-sm whitespace-pre-wrap" x-text="reply.body"></p>
+                                                <p class="text-xs mt-1 opacity-70 text-right"
+                                                   x-text="reply.sent_at ? new Date(reply.sent_at).toLocaleString() : ''"></p>
+                                            </div>
+                                        </div>
+                                    </template>
+                                    <div x-show="!analyses[active]?.replies?.length" class="text-center text-gray-400 text-sm py-4">
+                                        {{ __('Sin respuestas aún') }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div x-show="analyses[active]?.ticket_status === 'open'" class="border-t pt-4">
+                                <p class="text-xs uppercase tracking-wider text-gray-400">{{ __('Enviar respuesta') }}</p>
+                                <textarea x-ref="replyBody" class="mt-2 w-full p-3 border border-gray-300 rounded-md text-sm resize-none"
+                                        rows="4" :placeholder="analyses[active]?.draft_reply ? '{{ __(\"Usar borrador sugerido...\") }}' : ''"
+                                        x-init="if ($refs.replyBody && analyses[active]?.draft_reply) $refs.replyBody.value = analyses[active].draft_reply"></textarea>
+                                <div class="mt-2 flex justify-end gap-2">
+                                    <button type="button" @click="closeIa()" class="px-4 py-2 text-sm text-gray-600 hover:underline">{{ __('Cancelar') }}</button>
+                                    <button type="button" @click="sendReply(active, $refs.replyBody.value)"
+                                            :disabled="sending" class="px-4 py-2 bg-brand text-white rounded-md text-sm hover:bg-brand-600 disabled:opacity-50">
+                                        <span x-show="!sending">{{ __('Enviar y cerrar') }}</span>
+                                        <span x-show="sending">{{ __('Enviando...') }}</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div x-show="analyses[active]?.ticket_status === 'closed'" class="border-t pt-4 text-center text-gray-500 text-sm py-2">
+                                {{ __('Ticket cerrado. Reabre para responder.') }}
+                            </div>
                         </div>
                     </div>
                 </div>

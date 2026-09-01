@@ -639,5 +639,16 @@
     "Enviar este borrador de respuesta por email?": "Enviar este borrador de respuesta por email?",
     "Enviar (1 clic)": "Enviar (1 clic)",
     "Cerrar": "Cerrar",
-    "Abrir ticket": "Abrir ticket"
+    "Abrir ticket": "Abrir ticket",
+    "Resumen del ticket": "Resumen del ticket",
+    "Acciones sugeridas": "Acciones sugeridas",
+    "Borrador sugerido": "Borrador sugerido",
+    "Historial de conversación": "Historial de conversación",
+    "Sin respuestas aún": "Sin respuestas aún",
+    "Enviar respuesta": "Enviar respuesta",
+    "Usar borrador sugerido...": "Usar borrador sugerido...",
+    "Enviar y cerrar": "Enviar y cerrar",
+    "Enviando...": "Enviando...",
+    "Ticket cerrado. Reabre para responder.": "Ticket cerrado. Reabre para responder.",
+    "Cancelar": "Cancelar"
 }
