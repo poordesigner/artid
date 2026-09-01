@@ -135,7 +135,27 @@ class SupportTicketController extends Controller
 
         $tickets = $tickets->limit(100)->get();
 
-        return view('configuracion.tickets', compact('tickets'));
+        $analyses = $tickets
+            ->filter(fn ($t) => $t->relationLoaded('analysis') && $t->analysis && $t->analysis->isCompleted())
+            ->mapWithKeys(fn ($t) => [
+                $t->id => [
+                    'number' => $t->number,
+                    'subject' => $t->subject,
+                    'summary' => $t->analysis->summary,
+                    'priority' => $t->analysis->priority,
+                    'priority_label' => $t->analysis->priorityLabel(),
+                    'draft_reply' => $t->analysis->draft_reply,
+                    'suggested_actions' => $t->analysis->suggested_actions ?? [],
+                    'replies' => $t->replies->map(fn ($r) => [
+                        'sender' => $r->sender,
+                        'body' => $r->body,
+                        'sent_at' => $r->sent_at?->toIso8601String(),
+                    ])->values()->toArray(),
+                    'ticket_status' => $t->status,
+                ],
+            ]);
+
+        return view('configuracion.tickets', compact('tickets', 'analyses'));
     }
 
     public function adminUpdateStatus(Request $request, SupportTicket $ticket): RedirectResponse

@@ -5,23 +5,7 @@
 
     <div class="py-12" x-data="{
         active: null,
-        analyses: @js($tickets->filter(fn ($t) => $t->relationLoaded('analysis') && $t->analysis && $t->analysis->isCompleted())->mapWithKeys(fn ($t) => [
-            $t->id => [
-                'number' => $t->number,
-                'subject' => $t->subject,
-                'summary' => $t->analysis->summary,
-                'priority' => $t->analysis->priority,
-                'priority_label' => $t->analysis->priorityLabel(),
-                'draft_reply' => $t->analysis->draft_reply,
-                'suggested_actions' => $t->analysis->suggested_actions ?? [],
-                'replies' => $t->replies->map(fn ($r) => [
-                    'sender' => $r->sender,
-                    'body' => $r->body,
-                    'sent_at' => $r->sent_at?->toIso8601String(),
-                ])->values()->toArray(),
-                'ticket_status' => $t->status,
-            ],
-        ])),
+        analyses: @js($analyses),
         openIa(id) { this.active = id; },
         closeIa() { this.active = null; },
         sending: false,
