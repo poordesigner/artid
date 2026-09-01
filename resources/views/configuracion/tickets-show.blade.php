@@ -221,13 +221,22 @@
                     </ul>
                 @endif
 
-                <div class="mt-6 border-t pt-4" x-data="{ preview: false, replyBody: @js(is_string($analysis?->draft_reply) ? $analysis->draft_reply : '') }">
+                <div class="mt-6 border-t pt-4" x-data="{
+                        preview: false,
+                        sending: false,
+                        replyBody: @js($ticket->replies->isEmpty() && is_string($analysis?->draft_reply) ? $analysis->draft_reply : ''),
+                        send() {
+                            if (this.sending) return;
+                            this.sending = true;
+                            this.$refs.replyForm.submit();
+                        }
+                    }">
                     <form method="POST" action="{{ route('tickets.admin-reply', $ticket) }}" x-ref="replyForm">
                         @csrf
                         <x-input-label for="reply_body" :value="__('Responder por email')" />
                         <textarea id="reply_body" name="body" rows="6" required x-model="replyBody"
                                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                                  placeholder="{{ __('Borrador de respuesta (el análisis lo pre-completa; puedes editarlo).') }}">{{ is_string($analysis?->draft_reply) ? $analysis->draft_reply : '' }}</textarea>
+                                  placeholder="{{ __('Borrador de respuesta (el análisis lo pre-completa; puedes editarlo).') }}">{{ $ticket->replies->isEmpty() && is_string($analysis?->draft_reply) ? $analysis->draft_reply : '' }}</textarea>
                         <x-input-error :messages="$errors->get('body')" class="mt-2" />
                         <div class="mt-4 flex items-center gap-4">
                             <x-primary-button type="button" @click="preview = true">{{ __('Vista previa y enviar') }}</x-primary-button>
@@ -259,7 +268,10 @@
                                 </div>
                                 <div class="px-6 py-4 border-t flex items-center justify-end gap-3">
                                     <button type="button" @click="preview = false" class="text-sm text-gray-600 hover:underline">{{ __('Cancelar') }}</button>
-                                    <x-primary-button type="button" @click="$refs.replyForm.submit()">{{ __('Enviar por email') }}</x-primary-button>
+                                    <x-primary-button type="button" @click="send()" :disabled="sending">
+                                        <span x-show="!sending">{{ __('Enviar por email') }}</span>
+                                        <span x-show="sending" x-cloak>{{ __('Enviando…') }}</span>
+                                    </x-primary-button>
                                 </div>
                             </div>
                         </div>
