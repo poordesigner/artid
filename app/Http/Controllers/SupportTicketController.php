@@ -68,7 +68,6 @@ class SupportTicketController extends Controller
             return $ticket;
         });
 
-        // Análisis automático del gestor de tickets (agente 2) sin que el admin lo pida.
         $analysis = $ticket->analysis()->create([
             'status' => \App\Models\TicketAnalysis::STATUS_PENDING,
         ]);
