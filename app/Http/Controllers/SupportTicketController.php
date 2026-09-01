@@ -153,7 +153,7 @@ class SupportTicketController extends Controller
                     ])->values()->toArray(),
                     'ticket_status' => $t->status,
                 ],
-            ]);
+            ])->toArray();
 
         return view('configuracion.tickets', compact('tickets', 'analyses'));
     }
