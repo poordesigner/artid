@@ -635,19 +635,5 @@
     "Abrir": "Abrir",
     "Ver todas": "Ver todas",
     "Tu ticket :number tiene una respuesta": "Tu ticket :number tiene una respuesta",
-    "El ticket está cerrado: al enviar un mensaje se reabrirá.": "El ticket está cerrado: al enviar un mensaje se reabrirá.",
-    "Enviar este borrador de respuesta por email?": "Enviar este borrador de respuesta por email?",
-    "Cerrar": "Cerrar",
-    "Abrir ticket": "Abrir ticket",
-    "Revisar y Enviar": "Revisar y Enviar",
-    "Resumen del ticket": "Resumen del ticket",
-    "Acciones sugeridas": "Acciones sugeridas",
-    "Borrador sugerido": "Borrador sugerido",
-    "Historial de conversación": "Historial de conversación",
-    "Sin respuestas aún": "Sin respuestas aún",
-    "Enviar respuesta": "Enviar respuesta",
-    "Usar borrador sugerido...": "Usar borrador sugerido...",
-    "Enviando...": "Enviando...",
-    "Ticket cerrado. Reabre para responder.": "Ticket cerrado. Reabre para responder.",
-    "Cancelar": "Cancelar"
+    "El ticket está cerrado: al enviar un mensaje se reabrirá.": "El ticket está cerrado: al enviar un mensaje se reabrirá."
 }
