@@ -140,6 +140,10 @@ Soporte al usuario: **Chatwoot** (widget + bot) y **tickets de soporte** privado
   `qrte-ticket-analyzer` consulta `GET /api/tickets/{id}/context?secret=` + `GET /api/support/llm`, llama a Groq y
   responde síncronamente `{summary, priority, draft_reply, suggested_actions[], model}` → el job persiste en
   `ticket_analyses` (status completed/failed) → la vista hace reload cada 4s mientras `pending`.
+  **El análisis también se dispara automáticamente al crear el ticket** (`SupportTicketController@store` despacha el
+  job), sin que el admin lo pida. En el índice admin (`configuracion/tickets.blade.php`) cada ticket analizado tiene
+  un botón **"IA"** (modal con resumen/prioridad/acciones/borrador) y un botón **"Enviar (1 clic)"** que envía por
+  email directamente el borrador del agente.
 - **`GET /api/tickets/{id}/context`** (con `?secret=` = `TICKET_AGENT_WEBHOOK_SECRET`, 403 si no): devuelve el ticket,
   el artista (email verificado, antigüedad, tokens, obras, series, tickets previos, perfil público) y el pack de
   conocimiento (mapeo `config/ticket_agent.topic_pack_map`: cuenta→cuenta, obras→obras, facturacion→facturacion,
