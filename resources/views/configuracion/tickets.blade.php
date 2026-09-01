@@ -85,7 +85,7 @@
                                                 <a href="{{ route('tickets.admin-show', $ticket) }}" class="text-indigo-600 hover:text-indigo-900 text-sm">{{ __('Ver') }}</a>
 
                                                 @if ($ticket->analysis && $ticket->analysis->isCompleted())
-                                                    <button type="button" @@click="openIa({{ $ticket->id }})"
+                                                    <button type="button" x-on:click="openIa({{ $ticket->id }})"
                                                             class="ms-2 text-indigo-600 hover:text-indigo-900 text-sm">IA</button>
                                                     @php($draft = is_string($ticket->analysis->draft_reply) ? $ticket->analysis->draft_reply : '')
                                                     @if ($draft !== '' && ! $ticket->isClosed())
@@ -119,7 +119,7 @@
 
         {{-- Modal: análisis del agente IA + hilo + respuesta --}}
         <template x-if="active">
-            <div class="fixed inset-0 z-50 overflow-y-auto" style="display: none;">
+            <div class="fixed inset-0 z-50 overflow-y-auto">
                 <div class="flex items-end sm:items-center justify-center min-h-full p-4">
                     <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" x-on:click="closeIa()"></div>
                     <div class="relative bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] flex flex-col">
