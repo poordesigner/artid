@@ -35,122 +35,471 @@
 
             {{-- Panel: Tratamiento de datos --}}
             <div x-show="tab === 'datos'" x-cloak class="mt-6 bg-white shadow-sm sm:rounded-lg p-6 sm:p-8">
-                <p class="text-xs text-gray-400">{{ __('Última actualización: :date', ['date' => '01 de septiembre de 2026']) }}</p>
-                <h2 class="mt-2 text-xl font-semibold text-gray-900">{{ __('Política de Tratamiento de Datos Personales') }}</h2>
-                <p class="text-sm text-gray-500">{{ __('Ley 1581 de 2012, Decreto 1377 de 2013 y normas complementarias — República de Colombia') }}</p>
+                <p class="text-xs text-gray-400">Última actualización: 02 de septiembre de 2026</p>
+                <h2 class="mt-2 text-xl font-semibold text-gray-900">Política de Tratamiento de Datos Personales — QRTE (POORdesigner.com)</h2>
+                <p class="text-sm text-gray-500">Ley 1581 de 2012, Decreto 1377 de 2013 y demás normas aplicables — República de Colombia</p>
+                <p class="mt-3 text-sm text-gray-600">Esta Política de Tratamiento de Datos Personales describe cómo QRTE recopila, utiliza, almacena, protege y trata la información personal de sus usuarios, de conformidad con la Ley 1581 de 2012, el Decreto 1377 de 2013 y demás normas aplicables de la República de Colombia.</p>
 
                 <div class="mt-6 prose prose-sm max-w-none text-gray-700 space-y-6">
                     <section>
-                        <h3 class="font-semibold text-gray-900">1. {{ __('Responsable del tratamiento') }}</h3>
-                        <p class="mt-1">{{ __('QRTE, proyecto de POORdesigner.com. Correo de contacto para temas de datos personales:') }} <a href="mailto:qrte@poordesigner.com" class="text-brand hover:underline">qrte@poordesigner.com</a>. {{ __('Sitio web:') }} https://artid.poordesigner.com — https://qrte.poordesigner.com.</p>
-                        <p class="mt-1">{{ __('Para efectos de la Ley 1581 de 2012, QRTE actúa como Responsable del tratamiento. Cuando usamos proveedores (encargados) — por ejemplo Paddle (pagos), R2/Cloudflare (almacenamiento), proveedor de correo y hosting — lo hacemos bajo acuerdos que les obligan a tratar los datos solo según nuestras instrucciones.') }}</p>
+                        <h3 class="font-semibold text-gray-900">1. Responsable del tratamiento</h3>
+                        <p class="mt-1">QRTE es una plataforma operada por POORdesigner.com, quien actúa como Responsable del Tratamiento de los Datos Personales para las finalidades descritas en esta Política.</p>
+                        <p class="mt-2 font-medium text-gray-900">Contacto para asuntos relacionados con protección de datos:</p>
+                        <p>Correo electrónico: <a href="mailto:qrte@poordesigner.com" class="text-brand hover:underline">qrte@poordesigner.com</a></p>
+                        <p class="mt-1">Sitios web:</p>
+                        <ul class="list-disc list-inside">
+                            <li>https://artid.poordesigner.com</li>
+                            <li>https://qrte.poordesigner.com</li>
+                        </ul>
+                        <p class="mt-2">QRTE podrá apoyarse en proveedores tecnológicos nacionales o internacionales que actúen como Encargados del Tratamiento, quienes tratarán la información únicamente para la prestación de servicios relacionados con la operación de la plataforma.</p>
                     </section>
 
                     <section>
-                        <h3 class="font-semibold text-gray-900">2. {{ __('Datos que tratamos') }}</h3>
+                        <h3 class="font-semibold text-gray-900">2. Datos personales que tratamos</h3>
+                        <p class="mt-1">Dependiendo del uso de la plataforma, podremos tratar las siguientes categorías de información:</p>
+                        <p class="mt-3 font-medium">2.1 Datos de identificación y contacto</p>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li>Nombre y apellidos.</li>
+                            <li>Dirección de correo electrónico.</li>
+                            <li>Imagen de perfil.</li>
+                            <li>Enlaces públicos y redes sociales.</li>
+                            <li>Información de contacto que el usuario decida proporcionar.</li>
+                        </ul>
+                        <p class="mt-3 font-medium">2.2 Datos de autenticación y seguridad</p>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li>Identificadores de autenticación.</li>
+                            <li>Registros de inicio de sesión.</li>
+                            <li>Configuración de seguridad.</li>
+                            <li>Proveedores externos de autenticación (como Google OAuth).</li>
+                            <li>Tokens de sesión.</li>
+                            <li>Registros asociados a la protección de la cuenta.</li>
+                        </ul>
+                        <p class="mt-3 font-medium">2.3 Contenido generado por el usuario</p>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li>Obras registradas.</li>
+                            <li>Imágenes.</li>
+                            <li>Descripciones.</li>
+                            <li>Series.</li>
+                            <li>Exposiciones.</li>
+                            <li>Historiales de proveniencia.</li>
+                            <li>Enlaces.</li>
+                            <li>Documentos y archivos adjuntos.</li>
+                            <li>Información incorporada voluntariamente por el usuario.</li>
+                        </ul>
+                        <p class="mt-3 font-medium">2.4 Datos técnicos y de uso</p>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li>Dirección IP.</li>
+                            <li>Fecha de registro.</li>
+                            <li>Último acceso.</li>
+                            <li>Tipo de navegador.</li>
+                            <li>Idioma.</li>
+                            <li>Configuración regional.</li>
+                            <li>Registros de actividad.</li>
+                            <li>Historial de uso de tokens.</li>
+                            <li>Cookies y tecnologías similares.</li>
+                        </ul>
+                        <p class="mt-3 font-medium">2.5 Datos de pagos</p>
+                        <p>QRTE no almacena información de tarjetas de crédito ni medios de pago. Los pagos son procesados por proveedores especializados como Paddle u otros autorizados. QRTE únicamente conserva información relacionada con:</p>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li>Identificador de transacción.</li>
+                            <li>Estado del pago.</li>
+                            <li>Producto adquirido.</li>
+                            <li>Cantidad de tokens acreditados.</li>
+                            <li>Información administrativa necesaria para la prestación del servicio.</li>
+                        </ul>
+                        <p class="mt-3 font-medium">2.6 Comunicaciones de soporte</p>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li>Conversaciones de soporte.</li>
+                            <li>Tickets.</li>
+                            <li>Correos electrónicos.</li>
+                            <li>Adjuntos enviados por el usuario.</li>
+                            <li>Interacciones con sistemas automatizados de atención.</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h3 class="font-semibold text-gray-900">3. Información pública</h3>
+                        <p class="mt-1">Algunas funcionalidades de QRTE están diseñadas para generar contenido público. Dependiendo de la configuración elegida por el usuario, la siguiente información podrá ser visible para terceros:</p>
                         <ul class="mt-1 list-disc list-inside space-y-1">
-                            <li>{{ __('Identificación y contacto del artista: nombre, correo electrónico, foto de perfil, enlaces y redes que decidas publicar.') }}</li>
-                            <li>{{ __('Contenido que subes: obras, imágenes, descripciones, series, exposiciones, historial de propiedad, enlaces y archivos adjuntos de tickets de soporte.') }}</li>
-                            <li>{{ __('Datos de uso y técnicos: fecha de creación de cuenta, último acceso, saldo y movimientos de tokens, logs, dirección IP, cookies y preferencias de idioma.') }}</li>
-                            <li>{{ __('Datos de pago: QRTE no almacena datos de tarjeta. Los pagos los procesa Paddle Billing; nosotros solo guardamos el resultado (paquete comprado, importe, estado y tokens acreditados).') }}</li>
-                            <li>{{ __('Comunicaciones de soporte: tickets, respuestas y adjuntos que nos envías.') }}</li>
+                            <li>Fichas de obras.</li>
+                            <li>Perfiles de artista.</li>
+                            <li>Imágenes publicadas.</li>
+                            <li>Enlaces públicos.</li>
+                            <li>Información asociada a códigos QR.</li>
                         </ul>
-                        <p class="mt-2 text-sm text-gray-600">{{ __('No solicitamos datos sensibles (salud, biometría, orientación, etc.) ni datos de menores. Si nos los envías voluntariamente en una descripción o adjunto, los trataremos solo para atender tu solicitud y los podrás pedir suprimir.') }}</p>
+                        <p class="mt-2">El usuario es responsable de determinar qué información desea publicar y entiende que cualquier información marcada como pública podrá ser visualizada por personas que accedan al enlace correspondiente o escaneen el código QR asociado.</p>
                     </section>
 
                     <section>
-                        <h3 class="font-semibold text-gray-900">3. {{ __('Finalidades') }}</h3>
+                        <h3 class="font-semibold text-gray-900">4. Datos sensibles y menores de edad</h3>
+                        <p class="mt-1">QRTE no solicita ni requiere datos sensibles tales como:</p>
                         <ul class="mt-1 list-disc list-inside space-y-1">
-                            <li>{{ __('Crear y administrar tu cuenta de artista, autenticarte (incluido Google OAuth) y mantener tu sesión.') }}</li>
-                            <li>{{ __('Prestar el servicio: generar QR firmado, ficha pública verificada, perfil público, exposiciones, proveniencia cifrada y enlaces.') }}</li>
-                            <li>{{ __('Gestionar tokens: acreditar bienvenida y compras, descontar al crear obra y mostrar historial.') }}</li>
-                            <li>{{ __('Procesar pagos únicos de paquetes de tokens a través de Paddle y prevenir fraude.') }}</li>
-                            <li>{{ __('Atender soporte (Chatwoot y tickets), enviar respuestas por correo y mejorar la calidad del servicio.') }}</li>
-                            <li>{{ __('Enviar comunicaciones operativas (verificación de correo, confirmación de compra, respuesta a tickets, avisos de seguridad) y, si lo autorizas, novedades del servicio.') }}</li>
-                            <li>{{ __('Cumplir obligaciones legales, atender requerimientos de autoridades y defender derechos en reclamaciones.') }}</li>
-                            <li>{{ __('Analítica agregada y seguridad: medir uso, detectar abusos y mantener la integridad de los QR firmados.') }}</li>
+                            <li>Información médica.</li>
+                            <li>Datos biométricos.</li>
+                            <li>Información sobre orientación sexual.</li>
+                            <li>Convicciones religiosas.</li>
+                            <li>Afiliación política.</li>
+                            <li>Datos de menores de edad.</li>
                         </ul>
+                        <p class="mt-2">Si dichos datos son suministrados voluntariamente por el usuario, serán tratados exclusivamente para la finalidad relacionada con la solicitud correspondiente y podrán ser eliminados a petición del titular.</p>
                     </section>
 
                     <section>
-                        <h3 class="font-semibold text-gray-900">4. {{ __('Base legal y autorización') }}</h3>
-                        <p class="mt-1">{{ __('Tratamos tus datos con base en tu autorización previa, expresa e informada, que nos otorgas al registrarte, al marcar la casilla de aceptación o al usar el servicio; además del cumplimiento contractual (prestarte QRTE) y el cumplimiento legal cuando aplique. Puedes revocar la autorización salvo que exista un deber legal o contractual que lo impida; la revocatoria no afecta tratamientos ya realizados.') }}</p>
-                    </section>
-
-                    <section>
-                        <h3 class="font-semibold text-gray-900">5. {{ __('Derechos del titular') }}</h3>
-                        <p class="mt-1">{{ __('Conforme a la Ley 1581 y el Decreto 1377, tienes derecho a:') }}</p>
+                        <h3 class="font-semibold text-gray-900">5. Finalidades del tratamiento</h3>
+                        <p class="mt-1">Los datos personales podrán ser tratados para:</p>
                         <ul class="mt-1 list-disc list-inside space-y-1">
-                            <li>{{ __('Conocer, actualizar y rectificar tus datos.') }}</li>
-                            <li>{{ __('Solicitar prueba de la autorización otorgada.') }}</li>
-                            <li>{{ __('Ser informado del uso dado a tus datos, previa solicitud.') }}</li>
-                            <li>{{ __('Revocar la autorización y/o pedir la supresión cuando no se respeten los principios legales o no exista deber de conservarlos.') }}</li>
-                            <li>{{ __('Presentar quejas ante la Superintendencia de Industria y Comercio por infracciones a la ley.') }}</li>
-                            <li>{{ __('Acceder gratuitamente a tus datos tratados.') }}</li>
+                            <li>Crear y gestionar cuentas de usuario.</li>
+                            <li>Verificar identidad y acceso.</li>
+                            <li>Prestar los servicios ofrecidos por QRTE.</li>
+                            <li>Generar identificadores y códigos QR.</li>
+                            <li>Mantener fichas públicas y perfiles de artista.</li>
+                            <li>Gestionar historiales de obras y proveniencia.</li>
+                            <li>Administrar tokens y transacciones.</li>
+                            <li>Procesar pagos mediante terceros autorizados.</li>
+                            <li>Prevenir fraude y accesos no autorizados.</li>
+                            <li>Atender solicitudes de soporte.</li>
+                            <li>Gestionar comunicaciones operativas.</li>
+                            <li>Mejorar la experiencia de uso.</li>
+                            <li>Realizar análisis estadísticos agregados.</li>
+                            <li>Cumplir obligaciones legales.</li>
+                            <li>Gestionar reclamaciones y procesos administrativos.</li>
+                            <li>Mantener la seguridad e integridad de la plataforma.</li>
                         </ul>
                     </section>
 
                     <section>
-                        <h3 class="font-semibold text-gray-900">6. {{ __('Deberes de QRTE como Responsable') }}</h3>
+                        <h3 class="font-semibold text-gray-900">6. Automatización, inteligencia artificial y sistemas de soporte</h3>
+                        <p class="mt-1">QRTE podrá utilizar herramientas automatizadas, sistemas de inteligencia artificial o mecanismos de procesamiento asistido para:</p>
                         <ul class="mt-1 list-disc list-inside space-y-1">
-                            <li>{{ __('Solicitar y conservar copia de la autorización cuando se requiera.') }}</li>
-                            <li>{{ __('Informar la finalidad y los derechos que te asisten.') }}</li>
-                            <li>{{ __('Garantizar que la información sea veraz, completa, exacta, actualizada y comprensible.') }}</li>
-                            <li>{{ __('Adoptar medidas técnicas y administrativas para proteger los datos contra pérdida, uso indebido o acceso no autorizado.') }}</li>
-                            <li>{{ __('Tramitar consultas y reclamos en los plazos de ley e informar a Encargados cualquier novedad sobre los datos.') }}</li>
+                            <li>Atención inicial de consultas.</li>
+                            <li>Clasificación de solicitudes.</li>
+                            <li>Recuperación de información de ayuda.</li>
+                            <li>Generación de respuestas sugeridas.</li>
+                            <li>Detección de fraude.</li>
+                            <li>Análisis de incidencias.</li>
+                            <li>Mejora continua del servicio.</li>
+                        </ul>
+                        <p class="mt-2">Estas herramientas se utilizan como apoyo operativo y no sustituyen necesariamente la supervisión humana cuando resulte apropiado.</p>
+                    </section>
+
+                    <section>
+                        <h3 class="font-semibold text-gray-900">7. Base legal para el tratamiento</h3>
+                        <p class="mt-1">El tratamiento de datos se fundamenta en:</p>
+                        <ul class="mt-1 list-disc list-inside space-y-1">
+                            <li>La autorización previa, expresa e informada del titular.</li>
+                            <li>La ejecución de la relación contractual derivada del uso del servicio.</li>
+                            <li>El cumplimiento de obligaciones legales.</li>
+                            <li>La protección de intereses legítimos relacionados con la seguridad, estabilidad y operación de la plataforma.</li>
+                        </ul>
+                        <p class="mt-2">La autorización podrá otorgarse mediante:</p>
+                        <ul class="mt-1 list-disc list-inside space-y-1">
+                            <li>Formularios electrónicos.</li>
+                            <li>Casillas de aceptación.</li>
+                            <li>Registro de cuenta.</li>
+                            <li>Acciones inequívocas que evidencien consentimiento.</li>
                         </ul>
                     </section>
 
                     <section>
-                        <h3 class="font-semibold text-gray-900">7. {{ __('Procedimiento para consultas y reclamos') }}</h3>
-                        <p class="mt-1">{{ __('Escríbenos a') }} <a href="mailto:qrte@poordesigner.com" class="text-brand hover:underline">qrte@poordesigner.com</a> {{ __('con el asunto "Datos personales" e indica tu nombre, correo registrado y el derecho que deseas ejercer (consulta, actualización, rectificación o supresión) con el detalle.') }}</p>
-                        <ul class="mt-2 list-disc list-inside space-y-1">
-                            <li><strong>{{ __('Consultas:') }}</strong> {{ __('serán atendidas en un máximo de 10 días hábiles. Si no es posible, te informaremos el motivo y la nueva fecha (máximo 5 días hábiles adicionales).') }}</li>
-                            <li><strong>{{ __('Reclamos:') }}</strong> {{ __('si consideras que tus datos deben corregirse o suprimirse, presenta el reclamo con los hechos, tu identificación y documentos de soporte. Si está incompleto, en 5 días hábiles te pediremos completarlo; si no lo completas en 2 meses, entenderemos que desistes. Una vez completo, lo marcaremos como "reclamo en trámite" y lo resolveremos en máximo 15 días hábiles (prorrogables 8 días más con aviso).') }}</li>
+                        <h3 class="font-semibold text-gray-900">8. Derechos de los titulares</h3>
+                        <p class="mt-1">Los titulares de los datos tienen derecho a:</p>
+                        <ul class="mt-1 list-disc list-inside space-y-1">
+                            <li>Conocer sus datos personales.</li>
+                            <li>Actualizar sus datos.</li>
+                            <li>Rectificar información incorrecta.</li>
+                            <li>Solicitar prueba de la autorización otorgada.</li>
+                            <li>Conocer el uso dado a sus datos.</li>
+                            <li>Solicitar la supresión cuando proceda legalmente.</li>
+                            <li>Revocar la autorización cuando sea aplicable.</li>
+                            <li>Acceder gratuitamente a su información.</li>
+                            <li>Presentar consultas o reclamos.</li>
+                            <li>Acudir ante la Superintendencia de Industria y Comercio cuando consideren vulnerados sus derechos.</li>
+                            <li>Solicitar una copia razonable y técnicamente disponible de la información proporcionada a la plataforma.</li>
                         </ul>
                     </section>
 
                     <section>
-                        <h3 class="font-semibold text-gray-900">8. {{ __('Transferencias y transmisiones') }}</h3>
-                        <p class="mt-1">{{ __('No vendemos tus datos. Solo los compartimos con encargados necesarios para operar QRTE (pagos con Paddle, almacenamiento R2/Cloudflare, envío de correos, hosting/VPS y Chatwoot para soporte) y, si la ley lo exige, con autoridades competentes. Cuando haya transferencia internacional (datos alojados fuera de Colombia), se hace bajo estándares de seguridad y confidencialidad exigidos por la Ley 1581.') }}</p>
+                        <h3 class="font-semibold text-gray-900">9. Deberes de QRTE</h3>
+                        <p class="mt-1">QRTE se compromete a:</p>
+                        <ul class="mt-1 list-disc list-inside space-y-1">
+                            <li>Garantizar la confidencialidad de la información.</li>
+                            <li>Informar adecuadamente las finalidades del tratamiento.</li>
+                            <li>Adoptar medidas razonables de seguridad.</li>
+                            <li>Tratar los datos conforme a la ley.</li>
+                            <li>Tramitar consultas y reclamos oportunamente.</li>
+                            <li>Mantener información veraz y actualizada cuando ello dependa de QRTE.</li>
+                            <li>Exigir a sus proveedores niveles adecuados de protección y seguridad.</li>
+                        </ul>
                     </section>
 
                     <section>
-                        <h3 class="font-semibold text-gray-900">9. {{ __('Conservación y seguridad') }}</h3>
-                        <p class="mt-1">{{ __('Conservamos tus datos mientras mantengas cuenta activa o sea necesario para prestar el servicio, cumplir la ley y atender reclamaciones. Al eliminar tu cuenta, suprimimos o anonimicemos los datos que no debamos conservar por obligación legal. Aplicamos cifrado en tránsito (HTTPS), control de acceso por roles (artista/admin), firma HMAC en QR y almacenamiento cifrado para proveniencia.') }}</p>
+                        <h3 class="font-semibold text-gray-900">10. Procedimiento para consultas y reclamos</h3>
+                        <p class="mt-1">Las solicitudes relacionadas con protección de datos podrán enviarse a: <a href="mailto:qrte@poordesigner.com" class="text-brand hover:underline">qrte@poordesigner.com</a> indicando:</p>
+                        <ul class="mt-1 list-disc list-inside space-y-1">
+                            <li>Nombre completo.</li>
+                            <li>Correo registrado.</li>
+                            <li>Derecho que desea ejercer.</li>
+                            <li>Descripción de la solicitud.</li>
+                        </ul>
+                        <p class="mt-2"><strong>Consultas</strong> serán atendidas dentro de los plazos previstos por la legislación colombiana.</p>
+                        <p class="mt-1"><strong>Reclamos</strong> serán gestionados conforme a los términos establecidos en la Ley 1581 de 2012 y demás normas aplicables.</p>
                     </section>
 
                     <section>
-                        <h3 class="font-semibold text-gray-900">10. {{ __('Datos de menores') }}</h3>
-                        <p class="mt-1">{{ __('QRTE no está dirigido a menores de 18 años. Si detectamos datos de un menor sin autorización de representante legal, los suprimiremos.') }}</p>
+                        <h3 class="font-semibold text-gray-900">11. Transferencias y transmisiones nacionales e internacionales</h3>
+                        <p class="mt-1">QRTE no vende ni comercializa datos personales. La información podrá ser compartida únicamente con proveedores y aliados necesarios para la prestación del servicio, incluyendo servicios de:</p>
+                        <ul class="mt-1 list-disc list-inside space-y-1">
+                            <li>Procesamiento de pagos.</li>
+                            <li>Almacenamiento.</li>
+                            <li>Infraestructura tecnológica.</li>
+                            <li>Correos electrónicos.</li>
+                            <li>Autenticación.</li>
+                            <li>Analítica.</li>
+                            <li>Soporte al cliente.</li>
+                            <li>Seguridad.</li>
+                        </ul>
+                        <p class="mt-2">Algunos de estos proveedores podrán encontrarse fuera de Colombia. Al utilizar QRTE, el usuario reconoce que determinadas transferencias internacionales pueden resultar necesarias para la adecuada prestación del servicio.</p>
                     </section>
 
                     <section>
-                        <h3 class="font-semibold text-gray-900">11. {{ __('Canales y vigencia') }}</h3>
-                        <p class="mt-1">{{ __('Canal único para derechos de habeas data:') }} <a href="mailto:qrte@poordesigner.com" class="text-brand hover:underline">qrte@poordesigner.com</a>. {{ __('Esta política rige desde su publicación y se actualiza cuando cambien finalidades, encargados o normativa. Publicaremos la nueva versión en esta página con su fecha y, si el cambio es sustancial, te avisaremos por correo antes de que entre en vigor.') }}</p>
+                        <h3 class="font-semibold text-gray-900">12. Conservación de la información</h3>
+                        <p class="mt-1">Los datos serán conservados:</p>
+                        <ul class="mt-1 list-disc list-inside space-y-1">
+                            <li>Mientras exista una cuenta activa.</li>
+                            <li>Mientras sea necesario para prestar el servicio.</li>
+                            <li>Mientras exista una obligación legal de conservación.</li>
+                            <li>Mientras puedan surgir reclamaciones relacionadas con la relación contractual.</li>
+                        </ul>
+                        <p class="mt-2">Posteriormente podrán ser eliminados, anonimizados o bloqueados según corresponda.</p>
                     </section>
 
                     <section>
-                        <h3 class="font-semibold text-gray-900">12. {{ __('Autorización') }}</h3>
-                        <p class="mt-1">{{ __('Al registrarte y usar QRTE declaras que conoces esta Política y autorizas el tratamiento de tus datos en los términos aquí descritos, incluyendo el tratamiento por encargados para las finalidades indicadas.') }}</p>
+                        <h3 class="font-semibold text-gray-900">13. Seguridad de la información</h3>
+                        <p class="mt-1">QRTE aplica medidas técnicas, organizativas y administrativas razonables destinadas a proteger la información contra:</p>
+                        <ul class="mt-1 list-disc list-inside space-y-1">
+                            <li>Acceso no autorizado.</li>
+                            <li>Pérdida.</li>
+                            <li>Alteración.</li>
+                            <li>Divulgación.</li>
+                            <li>Uso indebido.</li>
+                        </ul>
+                        <p class="mt-2">Ningún sistema es absolutamente seguro, por lo que no es posible garantizar una seguridad perfecta o absoluta.</p>
                     </section>
 
-                    <p class="pt-4 text-sm text-gray-500 border-t">{{ __('¿Dudas sobre esta política? Escríbenos a') }} <a href="mailto:qrte@poordesigner.com" class="text-brand hover:underline">qrte@poordesigner.com</a>.</p>
+                    <section>
+                        <h3 class="font-semibold text-gray-900">14. Incidentes de seguridad</h3>
+                        <p class="mt-1">En caso de incidentes de seguridad que puedan afectar significativamente la información personal tratada, QRTE adoptará medidas razonables de investigación, mitigación y notificación conforme a la normativa aplicable.</p>
+                    </section>
+
+                    <section>
+                        <h3 class="font-semibold text-gray-900">15. Responsabilidad sobre la información publicada</h3>
+                        <p class="mt-1">El usuario es responsable de asegurarse de que la información incorporada en:</p>
+                        <ul class="mt-1 list-disc list-inside space-y-1">
+                            <li>Obras.</li>
+                            <li>Perfiles.</li>
+                            <li>Historiales.</li>
+                            <li>Certificados.</li>
+                            <li>Descripciones.</li>
+                            <li>Documentos adjuntos.</li>
+                        </ul>
+                        <p class="mt-2">cumple con la legislación aplicable y no vulnera derechos de terceros. QRTE no garantiza la exactitud, autenticidad, legalidad o legitimidad de la información suministrada por los usuarios.</p>
+                    </section>
+
+                    <section>
+                        <h3 class="font-semibold text-gray-900">16. Menores de edad</h3>
+                        <p class="mt-1">QRTE no está dirigido a menores de 18 años. Si se detecta la recopilación de datos de menores sin las autorizaciones legalmente requeridas, dichos datos podrán ser eliminados o bloqueados. Los representantes legales podrán solicitar su revisión o eliminación.</p>
+                    </section>
+
+                    <section>
+                        <h3 class="font-semibold text-gray-900">17. Cookies y tecnologías similares</h3>
+                        <p class="mt-1">QRTE utiliza cookies y tecnologías similares para:</p>
+                        <ul class="mt-1 list-disc list-inside space-y-1">
+                            <li>Mantener sesiones activas.</li>
+                            <li>Mejorar la seguridad.</li>
+                            <li>Recordar preferencias.</li>
+                            <li>Analizar el uso de la plataforma.</li>
+                            <li>Optimizar la experiencia del usuario.</li>
+                        </ul>
+                        <p class="mt-2">La desactivación de determinadas cookies podrá afectar algunas funcionalidades del servicio.</p>
+                    </section>
+
+                    <section>
+                        <h3 class="font-semibold text-gray-900">18. Vigencia y modificaciones</h3>
+                        <p class="mt-1">La presente Política entra en vigor desde su publicación. QRTE podrá modificarla para adaptarse a cambios legales, regulatorios, tecnológicos u operativos. Las actualizaciones serán publicadas en la plataforma indicando su fecha de entrada en vigor y, cuando el cambio sea sustancial, se procurará informar a los usuarios mediante medios razonables.</p>
+                    </section>
+
+                    <section>
+                        <h3 class="font-semibold text-gray-900">19. Autorización</h3>
+                        <p class="mt-1">Al registrarte, acceder o utilizar QRTE, declaras que has leído y comprendido esta Política y autorizas el tratamiento de tus datos personales según las finalidades aquí descritas.</p>
+                    </section>
+
+                    <section>
+                        <h3 class="font-semibold text-gray-900">20. Contacto</h3>
+                        <p class="mt-1">QRTE / POORdesigner.com<br>https://artid.poordesigner.com<br>https://qrte.poordesigner.com<br><a href="mailto:qrte@poordesigner.com" class="text-brand hover:underline">qrte@poordesigner.com</a></p>
+                    </section>
                 </div>
             </div>
 
-            {{-- Panel: Términos y condiciones (placeholder) --}}
+            {{-- Panel: Términos y condiciones --}}
             <div x-show="tab === 'terminos'" x-cloak class="mt-6 bg-white shadow-sm sm:rounded-lg p-6 sm:p-8">
-                <h2 class="text-xl font-semibold text-gray-900">{{ __('Términos y condiciones') }}</h2>
-                <p class="mt-2 text-sm text-gray-600">{{ __('Estamos preparando este documento. Mientras tanto, el uso de QRTE se rige por la') }} {{ __('Política de Tratamiento de Datos') }} {{ __('y las condiciones informadas en el proceso de compra de tokens (precio, 1 token = 1 obra, pago único vía Paddle).') }}</p>
-                <p class="mt-2 text-sm text-gray-600">{{ __('Si necesitas una cláusula específica para un contrato o exposición, escríbenos a') }} <a href="mailto:qrte@poordesigner.com" class="text-brand hover:underline">qrte@poordesigner.com</a>.</p>
+                <p class="text-xs text-gray-400">{{ __('Última actualización: :date', ['date' => '02 de septiembre de 2026']) }}</p>
+                <h2 class="mt-2 text-xl font-semibold text-gray-900">{{ __('Términos y Condiciones de Uso — QRTE (POORdesigner.com)') }}</h2>
+
+                <div class="mt-6 prose prose-sm max-w-none text-gray-700 space-y-6">
+                    <section>
+                        <h3 class="font-semibold text-gray-900">1. {{ __('Aceptación') }}</h3>
+                        <p class="mt-1">{{ __('Al crear cuenta, acceder o usar QRTE aceptas estos Términos y la Política de Tratamiento de Datos (Ley 1581). Si no estás de acuerdo, no uses el servicio. El uso del checkout de Paddle implica también aceptar sus términos.') }}</p>
+                    </section>
+                    <section>
+                        <h3 class="font-semibold text-gray-900">2. {{ __('Descripción del servicio') }}</h3>
+                        <p class="mt-1">{{ __('QRTE es un SaaS de Identidad Digital para obras físicas: ficha técnica, QR permanente firmado (HMAC-SHA256), perfil público, historial de exposiciones, proveniencia cifrada y enlaces. Cada obra consume 1 token = QR + ficha básica para siempre. No hay suscripción. Los planes por suscripción en el código son legado y no están a la venta.') }}</p>
+                    </section>
+                    <section>
+                        <h3 class="font-semibold text-gray-900">3. {{ __('Cuenta') }}</h3>
+                        <p class="mt-1">{{ __('Debes ser mayor de 18 años, dar datos veraces y custodiar tu contraseña/2FA. Eres responsable de lo que ocurra en tu cuenta. Podemos suspender cuentas por fraude, spam, suplantación o violación de estos Términos.') }}</p>
+                    </section>
+                    <section>
+                        <h3 class="font-semibold text-gray-900">4. {{ __('Tokens y pagos') }}</h3>
+                        <div class="mt-2 space-y-2">
+                            <p><strong>4.1</strong> {{ __('Recibes ARTID_WELCOME_TOKENS (hoy 5) al primer registro, una sola vez.') }}</p>
+                            <p><strong>4.2</strong> {{ __('Paquetes de tokens se pagan una sola vez vía Paddle Billing (merchant of record). Paddle cobra, factura y gestiona impuestos. Nosotros solo acreditamos tokens al recibir transaction.completed con custom_data.token_package_id.') }}</p>
+                            <p><strong>4.3</strong> {{ __('Los tokens no expiran, no son transferibles ni canjeables por dinero. Salvo error de acreditación o exigencia legal, no hay reembolsos. Si Paddle reembolsa, descontamos los tokens no consumidos; si ya se consumieron, el saldo puede quedar negativo.') }}</p>
+                            <p><strong>4.4</strong> {{ __('Crear obra descuenta 1 token de forma atómica. Sin saldo no puedes crear, pero sí editar/gestionar obras existentes. El admin puede otorgar tokens de cortesía (grant).') }}</p>
+                        </div>
+                    </section>
+                    <section>
+                        <h3 class="font-semibold text-gray-900">5. {{ __('Contenido del artista y licencias') }}</h3>
+                        <div class="mt-2 space-y-2">
+                            <p><strong>5.1</strong> {{ __('Sigues siendo dueño de tus obras, imágenes, textos y enlaces. Nos otorgas licencia mundial, no exclusiva y revocable (al borrar) para alojar, optimizar (WEBP ≤300KB en R2), mostrar en tu ficha/perfil público y generar el QR.') }}</p>
+                            <p><strong>5.2</strong> {{ __('Declaras que tienes derechos sobre lo que subes y que no infringe propiedad intelectual, privacidad o ley. No subas contenido ilegal, difamatorio, que incite al odio o que vulnere derechos de terceros.') }}</p>
+                            <p><strong>5.3</strong> {{ __('Ficha pública /o/{publicId}?s=... y perfil /artist/{id} son públicos por diseño: cualquiera con el QR o el link puede verlos. No subas datos sensibles que no quieras hacer públicos.') }}</p>
+                        </div>
+                    </section>
+                    <section>
+                        <h3 class="font-semibold text-gray-900">6. {{ __('QR y verificación') }}</h3>
+                        <p class="mt-1">{{ __('El QR codifica una URL firmada versionada (s=v1.hmac). Verificamos firma en servidor; sin firma válida devolvemos 404. El artwork_id es solo display. Garantizamos que el QR no cambia aunque edites la obra, mientras mantengas la obra activa. No garantizamos que un QR impreso siga legible si se deteriora físicamente.') }}</p>
+                    </section>
+                    <section>
+                        <h3 class="font-semibold text-gray-900">7. {{ __('Proveniencia y COA') }}</h3>
+                        <p class="mt-1">{{ __('El historial de propiedad (initial/transfer + llave secreta) es una herramienta de trazabilidad, no un título legal de propiedad ni un certificado notarial. Las transferencias cifradas solo son legibles con la llave. Tú gestionas la entrega de la llave al nuevo poseedor.') }}</p>
+                    </section>
+                    <section>
+                        <h3 class="font-semibold text-gray-900">8. {{ __('Uso aceptable') }}</h3>
+                        <p class="mt-1">{{ __('Prohibido: scraping masivo, ingeniería inversa, eludir firmas/rate limits, suplantar, subir malware, o usar QRTE para engañar sobre autenticidad. Podemos limitar, ocultar o eliminar contenido que viole esto.') }}</p>
+                    </section>
+                    <section>
+                        <h3 class="font-semibold text-gray-900">9. {{ __('Disponibilidad y soporte') }}</h3>
+                        <p class="mt-1">{{ __('Servicio en la nube (VPS Coolify + R2 + Redis). Objetivo de disponibilidad best-effort, sin SLA contractual en esta etapa. Soporte vía widget Chatwoot y tickets /tickets (respuesta por email desde qrte@poordesigner.com). Las respuestas de IA son asistivas y no vinculantes.') }}</p>
+                    </section>
+                    <section>
+                        <h3 class="font-semibold text-gray-900">10. {{ __('Privacidad') }}</h3>
+                        <p class="mt-1">{{ __('El tratamiento de datos se rige por la pestaña Tratamiento de datos (Ley 1581) y, para Turnstile, por su addendum. Chatwoot y Paddle actúan como encargados/procesadores según el caso.') }}</p>
+                    </section>
+                    <section>
+                        <h3 class="font-semibold text-gray-900">11. {{ __('Propiedad intelectual de QRTE') }}</h3>
+                        <p class="mt-1">{{ __('Marca QRTE, logos, código, textos y diseño son de POORdesigner.com. No se otorga licencia de marca. No copies ni redistribuyas el software.') }}</p>
+                    </section>
+                    <section>
+                        <h3 class="font-semibold text-gray-900">12. {{ __('Garantías y responsabilidad') }}</h3>
+                        <p class="mt-1">{{ __('Servicio "tal cual" y "según disponibilidad". En la máxima medida permitida por la ley colombiana: (a) excluimos garantías implícitas de comerciabilidad/idoneidad; (b) nuestra responsabilidad agregada no excederá lo que pagaste en los 6 meses previos; (c) no respondemos por lucro cesante, pérdida de datos o daños indirectos. Nada limita responsabilidad por dolo o culpa grave.') }}</p>
+                    </section>
+                    <section>
+                        <h3 class="font-semibold text-gray-900">13. {{ __('Indemnidad') }}</h3>
+                        <p class="mt-1">{{ __('Nos indemnizarás por reclamaciones de terceros derivadas de tu contenido o uso indebido del servicio.') }}</p>
+                    </section>
+                    <section>
+                        <h3 class="font-semibold text-gray-900">14. {{ __('Terminación') }}</h3>
+                        <p class="mt-1">{{ __('Puedes eliminar tu cuenta desde Configuración (acción irreversible). Podemos suspender/terminar por incumplimiento. Al terminar, tu saldo de tokens no usados se pierde y tus fichas públicas pueden ocultarse; si la ley exige conservación, las retenemos de forma no pública.') }}</p>
+                    </section>
+                    <section>
+                        <h3 class="font-semibold text-gray-900">15. {{ __('Cambios') }}</h3>
+                        <p class="mt-1">{{ __('Podemos actualizar estos Términos. Publicaremos la nueva versión en /legal con fecha y, si el cambio es sustancial, avisaremos por email con al menos 15 días de antelación. El uso continuado después de la vigencia implica aceptación.') }}</p>
+                    </section>
+                    <section>
+                        <h3 class="font-semibold text-gray-900">16. {{ __('Ley aplicable y jurisdicción') }}</h3>
+                        <p class="mt-1">{{ __('Se rigen por las leyes de la República de Colombia. Cualquier controversia se somete a los jueces de Medellín, sin perjuicio de normas imperativas de protección al consumidor.') }}</p>
+                    </section>
+                    <section>
+                        <h3 class="font-semibold text-gray-900">17. {{ __('Contacto') }}</h3>
+                        <p class="mt-1"><a href="mailto:qrte@poordesigner.com" class="text-brand hover:underline">qrte@poordesigner.com</a> — POORdesigner.com / QRTE, https://artid.poordesigner.com</p>
+                    </section>
+                </div>
             </div>
 
             {{-- Panel: Cookies --}}
             <div x-show="tab === 'cookies'" x-cloak class="mt-6 bg-white shadow-sm sm:rounded-lg p-6 sm:p-8">
-                <h2 class="text-xl font-semibold text-gray-900">{{ __('Política de cookies') }}</h2>
-                <p class="mt-2 text-sm text-gray-600">{{ __('QRTE usa cookies esenciales para autenticación, preferencias de idioma (:locale) y estado de pago pendiente. No usamos cookies de publicidad de terceros. Puedes bloquear cookies desde tu navegador, pero algunas funciones (login, idioma) pueden dejar de funcionar.') }}</p>
-                <p class="mt-2 text-sm text-gray-600">{{ __('El widget de Chatwoot puede usar cookies propias para mantener la conversación de soporte. Consulta su política en') }} <a href="https://www.chatwoot.com/privacy-policy" target="_blank" rel="noopener" class="text-brand hover:underline">chatwoot.com/privacy-policy</a>.</p>
+                <p class="text-xs text-gray-400">Última actualización: 02 de septiembre de 2026</p>
+                <h2 class="mt-2 text-xl font-semibold text-gray-900">Política de Cookies</h2>
+                <p class="mt-3 text-sm text-gray-600">QRTE utiliza cookies y tecnologías similares para garantizar el funcionamiento de la plataforma, mejorar la experiencia de usuario, mantener la seguridad de las sesiones y recordar determinadas preferencias de configuración. Al utilizar QRTE aceptas el uso de las cookies descritas en esta Política, en la medida permitida por la legislación aplicable.</p>
+
+                <div class="mt-6 prose prose-sm max-w-none text-gray-700 space-y-6">
+                    <section>
+                        <h3 class="font-semibold text-gray-900">1. ¿Qué son las cookies?</h3>
+                        <p class="mt-1">Las cookies son pequeños archivos de texto que se almacenan en tu dispositivo cuando visitas un sitio web. Permiten reconocer tu navegador, recordar preferencias y facilitar determinadas funcionalidades.</p>
+                    </section>
+
+                    <section>
+                        <h3 class="font-semibold text-gray-900">2. Cookies que utilizamos</h3>
+                        <p class="mt-2 font-medium">Cookies esenciales</p>
+                        <p class="mt-1">Son necesarias para el funcionamiento de la plataforma y no pueden desactivarse sin afectar funcionalidades básicas. Estas cookies pueden utilizarse para:</p>
+                        <ul class="mt-1 list-disc list-inside space-y-1">
+                            <li>Mantener sesiones autenticadas.</li>
+                            <li>Verificar la identidad del usuario.</li>
+                            <li>Proteger el acceso a la cuenta.</li>
+                            <li>Recordar configuraciones de idioma.</li>
+                            <li>Gestionar procesos relacionados con autenticación y seguridad.</li>
+                            <li>Mantener información temporal necesaria para determinadas operaciones dentro del servicio.</li>
+                        </ul>
+                        <p class="mt-3 font-medium">Cookies de preferencias</p>
+                        <p>Permiten recordar configuraciones seleccionadas por el usuario, tales como:</p>
+                        <ul class="mt-1 list-disc list-inside space-y-1">
+                            <li>Idioma.</li>
+                            <li>Opciones de visualización.</li>
+                            <li>Preferencias de navegación.</li>
+                        </ul>
+                        <p class="mt-3 font-medium">Cookies de soporte</p>
+                        <p>El sistema de soporte podrá utilizar tecnologías propias o de terceros para mantener conversaciones activas, identificar solicitudes de soporte y mejorar la continuidad de la atención al usuario. Actualmente, el widget de soporte basado en Chatwoot puede utilizar cookies o tecnologías similares para mantener la conversación y asociar mensajes a una misma sesión.</p>
+                        <p class="mt-2">Puedes consultar la información publicada por Chatwoot en: <a href="https://www.chatwoot.com/privacy" target="_blank" rel="noopener" class="text-brand hover:underline">chatwoot.com/privacy</a></p>
+                    </section>
+
+                    <section>
+                        <h3 class="font-semibold text-gray-900">3. Cookies analíticas</h3>
+                        <p class="mt-1">QRTE podrá incorporar herramientas de analítica que permitan comprender el uso general de la plataforma, identificar errores y mejorar la experiencia de los usuarios. En caso de habilitarse herramientas analíticas adicionales, QRTE actualizará esta Política cuando resulte necesario.</p>
+                    </section>
+
+                    <section>
+                        <h3 class="font-semibold text-gray-900">4. Cookies publicitarias</h3>
+                        <p class="mt-1">Actualmente QRTE no utiliza cookies de publicidad comportamental ni redes publicitarias de terceros para mostrar anuncios personalizados.</p>
+                    </section>
+
+                    <section>
+                        <h3 class="font-semibold text-gray-900">5. Gestión de cookies</h3>
+                        <p class="mt-1">La mayoría de navegadores permiten:</p>
+                        <ul class="mt-1 list-disc list-inside space-y-1">
+                            <li>Bloquear cookies.</li>
+                            <li>Eliminar cookies existentes.</li>
+                            <li>Limitar determinadas categorías de cookies.</li>
+                        </ul>
+                        <p class="mt-2">Ten en cuenta que la desactivación de cookies esenciales puede afectar funcionalidades como:</p>
+                        <ul class="mt-1 list-disc list-inside space-y-1">
+                            <li>Inicio de sesión.</li>
+                            <li>Seguridad de la cuenta.</li>
+                            <li>Persistencia de la sesión.</li>
+                            <li>Preferencias de idioma.</li>
+                            <li>Sistemas de soporte.</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h3 class="font-semibold text-gray-900">6. Cambios en esta Política</h3>
+                        <p class="mt-1">QRTE podrá actualizar esta Política de Cookies cuando incorpore nuevas funcionalidades, proveedores o tecnologías que impliquen el uso de cookies o tecnologías similares. Las versiones actualizadas serán publicadas con su fecha de vigencia correspondiente.</p>
+                    </section>
+
+                    <section>
+                        <h3 class="font-semibold text-gray-900">7. Contacto</h3>
+                        <p class="mt-1">Si tienes preguntas sobre esta Política de Cookies puedes escribirnos a: <a href="mailto:qrte@poordesigner.com" class="text-brand hover:underline">qrte@poordesigner.com</a></p>
+                    </section>
+                </div>
             </div>
 
             {{-- Panel: Turnstile --}}
