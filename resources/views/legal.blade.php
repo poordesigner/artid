@@ -25,6 +25,11 @@
                         class="whitespace-nowrap border-b-2 px-1 py-3 text-sm font-medium transition">
                         {{ __('Política de cookies') }}
                     </button>
+                    <button @click="tab = 'turnstile'"
+                        :class="tab === 'turnstile' ? 'border-brand text-brand' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
+                        class="whitespace-nowrap border-b-2 px-1 py-3 text-sm font-medium transition">
+                        Turnstile
+                    </button>
                 </nav>
             </div>
 
@@ -146,6 +151,60 @@
                 <h2 class="text-xl font-semibold text-gray-900">{{ __('Política de cookies') }}</h2>
                 <p class="mt-2 text-sm text-gray-600">{{ __('QRTE usa cookies esenciales para autenticación, preferencias de idioma (:locale) y estado de pago pendiente. No usamos cookies de publicidad de terceros. Puedes bloquear cookies desde tu navegador, pero algunas funciones (login, idioma) pueden dejar de funcionar.') }}</p>
                 <p class="mt-2 text-sm text-gray-600">{{ __('El widget de Chatwoot puede usar cookies propias para mantener la conversación de soporte. Consulta su política en') }} <a href="https://www.chatwoot.com/privacy-policy" target="_blank" rel="noopener" class="text-brand hover:underline">chatwoot.com/privacy-policy</a>.</p>
+            </div>
+
+            {{-- Panel: Turnstile --}}
+            <div x-show="tab === 'turnstile'" x-cloak class="mt-6 bg-white shadow-sm sm:rounded-lg p-6 sm:p-8">
+                <p class="text-xs text-gray-400">{{ __('Última actualización del addendum de Cloudflare: 18 de junio de 2025') }}</p>
+                <h2 class="mt-2 text-xl font-semibold text-gray-900">Cloudflare Turnstile — {{ __('Addendum de privacidad') }}</h2>
+                <p class="text-sm text-gray-500">{{ __('Traducción al español del Turnstile Privacy Addendum de Cloudflare, complementario a su Política de Privacidad principal. Fuente oficial:') }} <a href="https://www.cloudflare.com/en-gb/turnstile-privacy-policy/" target="_blank" rel="noopener" class="text-brand hover:underline">cloudflare.com/en-gb/turnstile-privacy-policy</a></p>
+
+                <div class="mt-6 prose prose-sm max-w-none text-gray-700 space-y-6">
+                    <section>
+                        <h3 class="font-semibold text-gray-900">1. {{ __('Introducción') }}</h3>
+                        <p class="mt-1">{{ __('Turnstile, desarrollado por Cloudflare, Inc., es una herramienta de seguridad pro-privacidad que procesa señales mínimas únicamente para proteger los sitios web contra actividad maliciosa, distinguiendo usuarios humanos de bots y bloqueando el tráfico automatizado. Cloudflare no decide si un sitio usa Turnstile; lo pone a disposición de cualquier web que necesite detectar y bloquear bots.') }}</p>
+                        <p class="mt-1">{{ __('En QRTE usamos Turnstile en formularios de registro y acceso para prevenir spam y abuso. El widget que ves ("Verificación de seguridad") es provisto por Cloudflare.') }}</p>
+                    </section>
+
+                    <section>
+                        <h3 class="font-semibold text-gray-900">2. {{ __('Alcance de este addendum') }}</h3>
+                        <p class="mt-1">{{ __('Este addendum complementa la') }} <a href="https://www.cloudflare.com/en-gb/privacypolicy/" target="_blank" rel="noopener" class="text-brand hover:underline">{{ __('Política de Privacidad principal de Cloudflare') }}</a> {{ __('y aporta información específica sobre Turnstile (incluida su Challenge Platform; toda referencia a "Turnstile" aplica por igual a dicha plataforma). Cuando este addendum es más específico, prevalece sobre la política general.') }}</p>
+                    </section>
+
+                    <section>
+                        <h3 class="font-semibold text-gray-900">3. {{ __('Información que se recopila') }}</h3>
+                        <p class="mt-1">{{ __('Turnstile procesa señales del lado del cliente ("Signals") como: dirección IP, huella TLS (TLS Fingerprint), cabecera User-Agent, sitekey y origen asociado. Cloudflare declara que no puede identificar directamente a personas a partir de estas señales, incluidas las IP.') }}</p>
+                    </section>
+
+                    <section>
+                        <h3 class="font-semibold text-gray-900">4. {{ __('Cómo se usa la información') }}</h3>
+                        <p class="mt-1"><strong>a) {{ __('Detección y bloqueo de bots.') }}</strong> {{ __('Turnstile evalúa las señales del visitante y del sitio para distinguir humanos de bots y bloquear el tráfico malicioso. La finalidad no es identificar, perfilar ni segmentar personas, sino únicamente proteger la web visitada. Estas señales son estrictamente necesarias para ese fin y permitir una experiencia segura.') }}</p>
+                        <p class="mt-1">{{ __('Para esta finalidad Cloudflare actúa como Encargado (procesador): trata las señales en nombre y por instrucciones de QRTE (Responsable). Si quieres ejercer derechos sobre este tratamiento, contáctanos a') }} <a href="mailto:qrte@poordesigner.com" class="text-brand hover:underline">qrte@poordesigner.com</a> {{ __('y nosotros lo gestionamos con Cloudflare.') }}</p>
+                        <p class="mt-2"><strong>b) {{ __('Mejora de la capacidad de detección de Turnstile.') }}</strong> {{ __('Cloudflare también procesa las señales para mejorar sus algoritmos de detección y responder a amenazas de bots en evolución, manteniendo la seguridad de las webs que visitas.') }}</p>
+                        <p class="mt-1">{{ __('Para esta finalidad Cloudflare actúa como Responsable (controller) y su tratamiento se rige por este addendum junto con su Política principal.') }}</p>
+                    </section>
+
+                    <section>
+                        <h3 class="font-semibold text-gray-900">5. {{ __('Aviso para residentes en UE y Reino Unido') }}</h3>
+                        <p class="mt-1">{{ __('En la medida en que estos datos califiquen como datos personales:') }}</p>
+                        <ul class="mt-1 list-disc list-inside space-y-1">
+                            <li>{{ __('Como encargado (protección del sitio del cliente), el cliente de Cloudflare —QRTE— como responsable determina la base legal y Cloudflare trata los datos por nuestra instrucción y en nuestro nombre.') }}</li>
+                            <li>{{ __('Como responsable (mejora de Turnstile), Cloudflare se ampara en su interés legítimo en mejorar la eficacia de la detección de bots.') }}</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h3 class="font-semibold text-gray-900">6. {{ __('Cookies') }}</h3>
+                        <p class="mt-1">{{ __('Las señales recopiladas por Turnstile son estrictamente necesarias para detectar y bloquear bots y permitir una experiencia segura en sitios que lo implementan. Para más detalle sobre cookies de Cloudflare, consulta su') }} <a href="https://www.cloudflare.com/en-gb/cookie-policy/" target="_blank" rel="noopener" class="text-brand hover:underline">{{ __('Política de cookies') }}</a> {{ __('y la') }} <a href="https://developers.cloudflare.com/turnstile/" target="_blank" rel="noopener" class="text-brand hover:underline">{{ __('documentación de Turnstile') }}</a>.</p>
+                    </section>
+
+                    <section>
+                        <h3 class="font-semibold text-gray-900">7. {{ __('Contacto para temas de privacidad de Turnstile') }}</h3>
+                        <p class="mt-1">{{ __('Para preguntas sobre este addendum o tus datos tratados vía Turnstile, puedes contactar al Delegado de Protección de Datos de Cloudflare en') }} <a href="mailto:dpo@cloudflare.com" class="text-brand hover:underline">dpo@cloudflare.com</a> {{ __('o a nosotros en') }} <a href="mailto:qrte@poordesigner.com" class="text-brand hover:underline">qrte@poordesigner.com</a> {{ __('si tu consulta se refiere al uso de Turnstile en QRTE.') }}</p>
+                    </section>
+
+                    <p class="pt-4 text-sm text-gray-500 border-t">{{ __('Texto traducido por QRTE a partir del original en inglés. En caso de discrepancia, prevalece el original de Cloudflare:') }} <a href="https://www.cloudflare.com/en-gb/turnstile-privacy-policy/" target="_blank" rel="noopener" class="text-brand hover:underline">cloudflare.com/en-gb/turnstile-privacy-policy</a>.</p>
+                </div>
             </div>
         </div>
     </div>
