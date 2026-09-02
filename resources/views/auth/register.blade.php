@@ -61,10 +61,12 @@
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
         </div>
 
-        <!-- Turnstile CAPTCHA (invisible) -->
+        <!-- Turnstile CAPTCHA (visible checkbox) -->
         <div class="mt-4">
-            <input type="hidden" name="cf-turnstile-response" id="cf-turnstile-response">
-            <div class="cf-turnstile" data-sitekey="{{ config('services.turnstile.site_key') }}" data-callback="turnstileCallback" data-theme="light" data-size="invisible"></div>
+            <div class="cf-turnstile" data-sitekey="{{ config('services.turnstile.site_key') }}" data-theme="light" data-size="normal"></div>
+            @error('cf-turnstile-response')
+                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+            @enderror
         </div>
 
         <div class="flex items-center justify-end mt-4">
@@ -72,22 +74,9 @@
                 {{ __('Already registered?') }}
             </a>
 
-            <x-primary-button class="ms-4" id="register-submit">
+            <x-primary-button class="ms-4">
                 {{ __('Register') }}
             </x-primary-button>
         </div>
-
-        <script>
-            function turnstileCallback(token) {
-                document.getElementById('cf-turnstile-response').value = token;
-            }
-            
-            document.getElementById('register-submit').addEventListener('click', function(e) {
-                if (!document.getElementById('cf-turnstile-response').value) {
-                    e.preventDefault();
-                    turnstile.execute();
-                }
-            });
-        </script>
     </form>
 </x-guest-layout>
