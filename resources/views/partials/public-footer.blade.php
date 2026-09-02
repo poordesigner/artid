@@ -6,10 +6,11 @@
                 <span class="text-sm text-gray-400">by <a href="https://poordesigner.com" class="text-gray-500 hover:text-gray-900 transition" target="_blank" rel="noopener">POORdesigner.com</a></span>
             </div>
             <div class="flex items-center gap-8 text-sm text-gray-500">
-                <a href="{{ route('login') }}" class="hover:text-gray-900 transition">{{ __('Login') }}</a>
+                <a href="{{ route('legal') }}" class="hover:text-gray-900 transition">{{ __('Legal') }}</a>
                 <a href="{{ route('ayuda') }}" class="hover:text-gray-900 transition">{{ __('Ayuda') }}</a>
                 <a href="{{ route('planes') }}" class="hover:text-gray-900 transition">{{ __('Planes') }}</a>
                 <a href="{{ route('caracteristicas') }}" class="hover:text-gray-900 transition">{{ __('Características') }}</a>
+                <a href="{{ route('login') }}" class="hover:text-gray-900 transition">{{ __('Login') }}</a>
             </div>
         </div>
         <div class="mt-8 pt-8 border-t border-gray-100 text-center">

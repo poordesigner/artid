@@ -78,6 +78,10 @@ Route::get('/caracteristicas', function () {
     return view('caracteristicas');
 })->name('caracteristicas');
 
+Route::get('/legal', function () {
+    return view('legal');
+})->name('legal');
+
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
         return auth()->user()->isAdmin()
