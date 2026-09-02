@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Validation\Rules;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
@@ -30,9 +31,19 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        // Honeypot: bots fill hidden fields, humans don't
+        if ($request->filled('website_url')) {
+            throw ValidationException::withMessages([
+                'email' => __('Too many attempts. Please try again later.'),
+            ]);
+        }
+
+        // Turnstile CAPTCHA verification
+        $this->verifyTurnstile($request);
+
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.Artist::class],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.Artist::class, new \App\Rules\DisposableEmailRule()],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -49,5 +60,34 @@ class RegisteredUserController extends Controller
         Auth::login($artist);
 
         return redirect(route('dashboard', absolute: false));
+    }
+
+    protected function verifyTurnstile(Request $request): void
+    {
+        $token = $request->input('cf-turnstile-response');
+        $secretKey = config('services.turnstile.secret_key');
+
+        if (!$secretKey) {
+            // Turnstile not configured, skip verification
+            return;
+        }
+
+        if (!$token) {
+            throw ValidationException::withMessages([
+                'email' => __('Please complete the security check.'),
+            ]);
+        }
+
+        $response = Http::asForm()->post('https://challenges.cloudflare.com/turnstile/v0/siteverify', [
+            'secret' => $secretKey,
+            'response' => $token,
+            'remoteip' => $request->ip(),
+        ]);
+
+        if (!$response->successful() || !$response->json('success')) {
+            throw ValidationException::withMessages([
+                'email' => __('Security check failed. Please try again.'),
+            ]);
+        }
     }
 }

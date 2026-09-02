@@ -1,4 +1,8 @@
 <x-guest-layout>
+    @push('scripts')
+        <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    @endpush
+
     <a href="{{ route('auth.google.redirect') }}"
        class="inline-flex items-center justify-center gap-2 w-full px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-sm text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition ease-in-out duration-150">
         <svg class="h-4 w-4" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -16,6 +20,9 @@
 
     <form method="POST" action="{{ route('register') }}">
         @csrf
+
+        <!-- Honeypot: bots fill this, humans don't see it -->
+        <input type="text" name="website_url" tabindex="-1" autocomplete="off" style="display:none;" aria-hidden="true">
 
         <!-- Name -->
         <div>
@@ -54,14 +61,33 @@
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
         </div>
 
+        <!-- Turnstile CAPTCHA (invisible) -->
+        <div class="mt-4">
+            <input type="hidden" name="cf-turnstile-response" id="cf-turnstile-response">
+            <div class="cf-turnstile" data-sitekey="{{ config('services.turnstile.site_key') }}" data-callback="turnstileCallback" data-theme="light" data-size="invisible"></div>
+        </div>
+
         <div class="flex items-center justify-end mt-4">
             <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
                 {{ __('Already registered?') }}
             </a>
 
-            <x-primary-button class="ms-4">
+            <x-primary-button class="ms-4" id="register-submit">
                 {{ __('Register') }}
             </x-primary-button>
         </div>
+
+        <script>
+            function turnstileCallback(token) {
+                document.getElementById('cf-turnstile-response').value = token;
+            }
+            
+            document.getElementById('register-submit').addEventListener('click', function(e) {
+                if (!document.getElementById('cf-turnstile-response').value) {
+                    e.preventDefault();
+                    turnstile.execute();
+                }
+            });
+        </script>
     </form>
 </x-guest-layout>
