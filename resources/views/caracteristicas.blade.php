@@ -19,7 +19,7 @@
     @include('partials.public-navbar')
 
     <section class="py-24 sm:py-28">
-        <div class="max-w-[75rem] mx-auto px-6 lg:px-8">
+        <div class="max-w-[84rem] mx-auto px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-stretch">
 
                 {{-- Izquierda: Cómo funciona --}}
@@ -28,24 +28,24 @@
                     <hr class="mt-8 border-gray-200">
                     <div class="mt-10 space-y-6">
                         <div>
-                            <h3 class="mt-2 text-base font-semibold tracking-wide text-gray-900">{{ __('Ficha de Datos Digital') }}</h3>
-                            <p class="mt-1 text-xs text-gray-600 leading-relaxed">{{ __('Crea una ficha técnica básica de tu obra: título, año, edición, serie, técnicas, dimensiones, descripción, imagen y links externos.') }}</p>
+                            <h3 class="mt-2 text-[1.15rem] font-semibold tracking-wide text-gray-900">{{ __('Ficha de Datos Digital') }}</h3>
+                            <p class="mt-1 text-[0.86rem] text-gray-600 leading-relaxed">{{ __('Crea una ficha técnica básica de tu obra: título, año, edición, serie, técnicas, dimensiones, descripción, imagen y links externos.') }}</p>
                         </div>
                         <div>
-                            <h3 class="mt-2 text-base font-semibold tracking-wide text-gray-900">{{ __('QR Permanente') }}</h3>
-                            <p class="mt-1 text-xs text-gray-600 leading-relaxed">{{ __('Cada obra se asocia con un QR único que nunca cambia y es el medio de acceso fácil a la ficha técnica de la misma. Lo puedes usar como quieras: imprimir, pegar a tu obra, incluir en páginas web o donde lo consideres conveniente.') }}</p>
+                            <h3 class="mt-2 text-[1.15rem] font-semibold tracking-wide text-gray-900">{{ __('QR Permanente') }}</h3>
+                            <p class="mt-1 text-[0.86rem] text-gray-600 leading-relaxed">{{ __('Cada obra se asocia con un QR único que nunca cambia y es el medio de acceso fácil a la ficha técnica de la misma. Lo puedes usar como quieras: imprimir, pegar a tu obra, incluir en páginas web o donde lo consideres conveniente.') }}</p>
                         </div>
                         <div>
-                            <h3 class="mt-2 text-base font-semibold tracking-wide text-gray-900">{{ __('Llaves Cifradas') }}</h3>
-                            <p class="mt-1 text-xs text-gray-600 leading-relaxed">{{ __('La relación entre la ficha técnica y la ruta de acceso del código QR está firmada criptográficamente. Solo la obra auténtica accede a su ficha.') }}</p>
+                            <h3 class="mt-2 text-[1.15rem] font-semibold tracking-wide text-gray-900">{{ __('Llaves Cifradas') }}</h3>
+                            <p class="mt-1 text-[0.86rem] text-gray-600 leading-relaxed">{{ __('La relación entre la ficha técnica y la ruta de acceso del código QR está firmada criptográficamente. Solo la obra auténtica accede a su ficha.') }}</p>
                         </div>
                         <div>
-                            <h3 class="mt-2 text-base font-semibold tracking-wide text-gray-900">{{ __('Historial de Exposiciones') }}</h3>
-                            <p class="mt-1 text-xs text-gray-600 leading-relaxed">{{ __('Documenta el historial de exposiciones asociadas a tu obra. Registrando el lugar, las fechas y links externos de cada exposición.') }}</p>
+                            <h3 class="mt-2 text-[1.15rem] font-semibold tracking-wide text-gray-900">{{ __('Historial de Exposiciones') }}</h3>
+                            <p class="mt-1 text-[0.86rem] text-gray-600 leading-relaxed">{{ __('Documenta el historial de exposiciones asociadas a tu obra. Registrando el lugar, las fechas y links externos de cada exposición.') }}</p>
                         </div>
                         <div>
-                            <h3 class="mt-2 text-base font-semibold tracking-wide text-gray-900">{{ __('Procedencia (Historial de Propiedad) y Certificado de Autenticidad (COA)') }}</h3>
-                            <p class="mt-1 text-xs text-gray-600 leading-relaxed">{{ __('Si la obra deja de ser de la tenencia del artista y pasa a un nuevo propietario, se puede crear un nuevo registro de procedencia (con los datos básicos o anónimos del nuevo propietario) y generar un Certificado de Autenticidad (COA) con un ID criptográfico especial. El nuevo propietario, al acceder a la ficha técnica de la obra con el código QR, podrá validar la legalidad de la misma usando el ID criptográfico asociado a su COA y tener una herramienta adicional para demostrar su derecho de tenencia de la obra.') }}</p>
+                            <h3 class="mt-2 text-[1.15rem] font-semibold tracking-wide text-gray-900">{{ __('Procedencia (Historial de Propiedad) y Certificado de Autenticidad (COA)') }}</h3>
+                            <p class="mt-1 text-[0.86rem] text-gray-600 leading-relaxed">{{ __('Si la obra deja de ser de la tenencia del artista y pasa a un nuevo propietario, se puede crear un nuevo registro de procedencia (con los datos básicos o anónimos del nuevo propietario) y generar un Certificado de Autenticidad (COA) con un ID criptográfico especial. El nuevo propietario, al acceder a la ficha técnica de la obra con el código QR, podrá validar la legalidad de la misma usando el ID criptográfico asociado a su COA y tener una herramienta adicional para demostrar su derecho de tenencia de la obra.') }}</p>
                         </div>
                     </div>
                 </div>
