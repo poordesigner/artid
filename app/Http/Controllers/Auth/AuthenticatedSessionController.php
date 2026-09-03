@@ -28,6 +28,25 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        $user = $request->user();
+        if ($user && !$user->terms_accepted_at) {
+            $version = config('artid.legal_version');
+            $user->update([
+                'terms_accepted_at' => now(),
+                'terms_version' => $version,
+                'terms_ip' => $request->ip(),
+                'terms_user_agent' => $request->userAgent(),
+            ]);
+            \App\Models\LegalConsent::create([
+                'artist_id' => $user->id,
+                'type' => 'terms',
+                'version' => $version,
+                'granted' => true,
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+            ]);
+        }
+
         return redirect()->intended(route('dashboard', absolute: false));
     }
 

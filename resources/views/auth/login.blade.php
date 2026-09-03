@@ -15,6 +15,7 @@
         </svg>
         {{ __('Continue with Google') }}
     </a>
+    <p class="mt-2 text-[11px] leading-tight text-center text-gray-500">{{ __('Al continuar con Google aceptas que QRTE reciba y procese la información necesaria para autenticar tu cuenta de acuerdo con nuestra :link.', ['link' => __('Política de Tratamiento de Datos Personales')]) }} <a href="{{ route('legal', ['tab' => 'datos']) }}" target="_blank" class="underline hover:text-gray-700">{{ __('Ver política') }}</a></p>
 
     <div class="flex items-center justify-center my-4">
         <span class="text-xs text-gray-500">{{ __('or') }}</span>
@@ -33,12 +34,10 @@
         <!-- Password -->
         <div class="mt-4">
             <x-input-label for="password" :value="__('Password')" />
-
             <x-text-input id="password" class="block mt-1 w-full"
                             type="password"
                             name="password"
                             required autocomplete="current-password" />
-
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
 
@@ -49,6 +48,15 @@
                 <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
             </label>
         </div>
+
+        <p class="mt-4 text-[11px] leading-tight text-center text-gray-500">
+            {{ __('Al iniciar sesión continúas utilizando QRTE conforme a los :terminos, la :datos y la :cookies vigentes.', [
+                'terminos' => __('Términos y Condiciones de Uso'),
+                'datos' => __('Política de Tratamiento de Datos Personales'),
+                'cookies' => __('Política de Cookies'),
+            ]) }}
+            <a href="{{ route('legal') }}" class="underline hover:text-gray-700">{{ __('Ver legales') }}</a>
+        </p>
 
         <p class="mt-6 text-center text-sm text-gray-600">
             {{ __('¿No tienes cuenta?') }}

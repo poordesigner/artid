@@ -45,13 +45,46 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.Artist::class, new \App\Rules\DisposableEmailRule()],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'terms' => ['required', 'accepted'],
+            'marketing' => ['nullable', 'boolean'],
         ]);
+
+        $legalVersion = config('artid.legal_version');
+        $ip = $request->ip();
+        $ua = $request->userAgent();
+        $marketing = $request->boolean('marketing');
 
         $artist = Artist::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'terms_accepted_at' => now(),
+            'terms_version' => $legalVersion,
+            'terms_ip' => $ip,
+            'terms_user_agent' => $ua,
+            'marketing_consent' => $marketing,
+            'marketing_consent_at' => $marketing ? now() : null,
+            'marketing_ip' => $marketing ? $ip : null,
         ]);
+
+        \App\Models\LegalConsent::create([
+            'artist_id' => $artist->id,
+            'type' => 'terms',
+            'version' => $legalVersion,
+            'granted' => true,
+            'ip' => $ip,
+            'user_agent' => $ua,
+        ]);
+        if ($marketing) {
+            \App\Models\LegalConsent::create([
+                'artist_id' => $artist->id,
+                'type' => 'marketing',
+                'version' => $legalVersion,
+                'granted' => true,
+                'ip' => $ip,
+                'user_agent' => $ua,
+            ]);
+        }
 
         $artist->grantWelcomeTokens();
 

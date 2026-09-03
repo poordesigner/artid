@@ -13,6 +13,7 @@
         </svg>
         {{ __('Continue with Google') }}
     </a>
+    <p class="mt-2 text-[11px] leading-tight text-center text-gray-500">{{ __('Al continuar con Google aceptas que QRTE reciba y procese la información necesaria para autenticar tu cuenta de acuerdo con nuestra :link.', ['link' => __('Política de Tratamiento de Datos Personales')]) }} <a href="{{ route('legal', ['tab' => 'datos']) }}" target="_blank" class="underline hover:text-gray-700">{{ __('Ver política') }}</a></p>
 
     <div class="flex items-center justify-center my-4">
         <span class="text-xs text-gray-500">{{ __('or') }}</span>
@@ -41,24 +42,42 @@
         <!-- Password -->
         <div class="mt-4">
             <x-input-label for="password" :value="__('Password')" />
-
             <x-text-input id="password" class="block mt-1 w-full"
                             type="password"
                             name="password"
                             required autocomplete="new-password" />
-
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
 
         <!-- Confirm Password -->
         <div class="mt-4">
             <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-
             <x-text-input id="password_confirmation" class="block mt-1 w-full"
                             type="password"
                             name="password_confirmation" required autocomplete="new-password" />
-
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+        </div>
+
+        <!-- Checkboxes legales -->
+        <div class="mt-4 space-y-3">
+            <label class="flex gap-2 items-start">
+                <input type="checkbox" name="terms" value="1" required {{ old('terms') ? 'checked' : '' }} class="mt-1 rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500">
+                <span class="text-xs leading-tight text-gray-700">
+                    {{ __('He leído y acepto los :terminos, la :datos y la :cookies.', [
+                        'terminos' => __('Términos y Condiciones de Uso'),
+                        'datos' => __('Política de Tratamiento de Datos Personales'),
+                        'cookies' => __('Política de Cookies'),
+                    ]) }}
+                    <a href="{{ route('legal', ['tab' => 'terminos']) }}" target="_blank" class="underline hover:text-gray-900">{{ __('Términos') }}</a> ·
+                    <a href="{{ route('legal', ['tab' => 'datos']) }}" target="_blank" class="underline hover:text-gray-900">{{ __('Datos') }}</a> ·
+                    <a href="{{ route('legal', ['tab' => 'cookies']) }}" target="_blank" class="underline hover:text-gray-900">Cookies</a>
+                </span>
+            </label>
+            <x-input-error :messages="$errors->get('terms')" class="mt-1" />
+            <label class="flex gap-2 items-start">
+                <input type="checkbox" name="marketing" value="1" {{ old('marketing') ? 'checked' : '' }} class="mt-1 rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500">
+                <span class="text-xs leading-tight text-gray-600">{{ __('Deseo recibir novedades, actualizaciones y comunicaciones comerciales de QRTE.') }}</span>
+            </label>
         </div>
 
         <!-- Turnstile CAPTCHA (visible checkbox) -->

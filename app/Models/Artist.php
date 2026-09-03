@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password', 'google_id', 'github_id', 'github_token', 'github_nickname', 'github_repo', 'short_domain', 'avatar', 'statement', 'cv_pdf', 'website_url', 'instagram', 'behance', 'artstation', 'youtube', 'tiktok', 'is_admin', 'granted_plan_id', 'granted_expires_at', 'tokens_balance', 'welcome_tokens_claimed', 'last_login_at'])]
+#[Fillable(['name', 'email', 'password', 'google_id', 'github_id', 'github_token', 'github_nickname', 'github_repo', 'short_domain', 'avatar', 'statement', 'cv_pdf', 'website_url', 'instagram', 'behance', 'artstation', 'youtube', 'tiktok', 'is_admin', 'granted_plan_id', 'granted_expires_at', 'tokens_balance', 'welcome_tokens_claimed', 'last_login_at', 'terms_accepted_at', 'terms_version', 'terms_ip', 'terms_user_agent', 'marketing_consent', 'marketing_consent_at', 'marketing_ip'])]
 #[Hidden(['password', 'remember_token'])]
 class Artist extends Authenticatable
 {
@@ -55,6 +55,11 @@ class Artist extends Authenticatable
     public function notifications(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(ArtistNotification::class)->orderByDesc('id');
+    }
+
+    public function legalConsents(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(LegalConsent::class)->orderByDesc('id');
     }
 
     /**
@@ -326,6 +331,9 @@ class Artist extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'last_login_at' => 'datetime',
+            'terms_accepted_at' => 'datetime',
+            'marketing_consent_at' => 'datetime',
+            'marketing_consent' => 'boolean',
             'password' => 'hashed',
             'github_token' => 'encrypted',
             'is_admin' => 'boolean',

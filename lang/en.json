@@ -746,5 +746,15 @@
     "Podemos actualizar estos Términos. Publicaremos la nueva versión en /legal con fecha y, si el cambio es sustancial, avisaremos por email con al menos 15 días de antelación. El uso continuado después de la vigencia implica aceptación.": "We may update these Terms. We will publish the new version at /legal with date and, if material, notify by email at least 15 days in advance. Continued use after effectiveness implies acceptance.",
     "Ley aplicable y jurisdicción": "Governing law and jurisdiction",
     "Se rigen por las leyes de la República de Colombia. Cualquier controversia se somete a los jueces de Medellín, sin perjuicio de normas imperativas de protección al consumidor.": "Governed by the laws of the Republic of Colombia. Any dispute is submitted to the courts of Medellín, without prejudice to mandatory consumer protection rules.",
-    "Contacto": "Contact"
+    "Contacto": "Contact",
+    "He leído y acepto los :terminos, la :datos y la :cookies.": "I have read and accept the :terminos, the :datos and the :cookies.",
+    "Términos y Condiciones de Uso": "Terms and Conditions of Use",
+    "Términos": "Terms",
+    "Datos": "Data",
+    "Deseo recibir novedades, actualizaciones y comunicaciones comerciales de QRTE.": "I want to receive news, updates and commercial communications from QRTE.",
+    "Al continuar con Google aceptas que QRTE reciba y procese la información necesaria para autenticar tu cuenta de acuerdo con nuestra :link.": "By continuing with Google you accept that QRTE will receive and process the information needed to authenticate your account per our :link.",
+    "Ver política": "View policy",
+    "Al iniciar sesión continúas utilizando QRTE conforme a los :terminos, la :datos y la :cookies vigentes.": "By signing in you continue using QRTE under the current :terminos, :datos and :cookies.",
+    "Ver legales": "View legal",
+    "or": "or"
 }

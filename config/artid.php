@@ -49,4 +49,15 @@ return [
 
     'welcome_tokens' => (int) env('ARTID_WELCOME_TOKENS', 5),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Versión legal vigente (para huella de consentimiento)
+    |--------------------------------------------------------------------------
+    |
+    | Se guarda en artists.terms_version y legal_consents.version.
+    | Bump al publicar nuevos Términos/Tratamiento/Cookies.
+    |
+    */
+    'legal_version' => env('ARTID_LEGAL_VERSION', '2026-09-02'),
+
 ];

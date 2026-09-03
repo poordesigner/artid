@@ -40,19 +40,67 @@ class GoogleController extends Controller
             ->orWhere('email', $googleUser->getEmail())
             ->first();
 
+        $request = request();
+        $legalVersion = config('artid.legal_version');
+        $ip = $request->ip();
+        $ua = $request->userAgent();
+
         if (! $artist) {
             $artist = Artist::create([
                 'name' => $googleUser->getName(),
                 'email' => $googleUser->getEmail(),
                 'google_id' => $googleUser->getId(),
                 'email_verified_at' => now(),
+                'terms_accepted_at' => now(),
+                'terms_version' => $legalVersion,
+                'terms_ip' => $ip,
+                'terms_user_agent' => $ua,
             ]);
-
+            \App\Models\LegalConsent::create([
+                'artist_id' => $artist->id,
+                'type' => 'terms',
+                'version' => $legalVersion,
+                'granted' => true,
+                'ip' => $ip,
+                'user_agent' => $ua,
+            ]);
             $artist->grantWelcomeTokens();
         } elseif (! $artist->google_id) {
             $artist->update([
                 'google_id' => $googleUser->getId(),
                 'email_verified_at' => now(),
+            ]);
+            // Backfill huella si aún no tenía trazabilidad
+            if (! $artist->terms_accepted_at) {
+                $artist->update([
+                    'terms_accepted_at' => now(),
+                    'terms_version' => $legalVersion,
+                    'terms_ip' => $ip,
+                    'terms_user_agent' => $ua,
+                ]);
+                \App\Models\LegalConsent::create([
+                    'artist_id' => $artist->id,
+                    'type' => 'terms',
+                    'version' => $legalVersion,
+                    'granted' => true,
+                    'ip' => $ip,
+                    'user_agent' => $ua,
+                ]);
+            }
+        } elseif (! $artist->terms_accepted_at) {
+            $artist->update([
+                'terms_accepted_at' => now(),
+                'terms_version' => $legalVersion,
+                'terms_ip' => $ip,
+                'terms_user_agent' => $ua,
+            ]);
+            \App\Models\LegalConsent::create([
+                'artist_id' => $artist->id,
+                'type' => 'terms',
+                'version' => $legalVersion,
+                'granted' => true,
+                'ip' => $ip,
+                'user_agent' => $ua,
             ]);
         }
 
