@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>Redirigiendo...</title>
+    <script>
+        var params = new URLSearchParams(window.location.search);
+        var art = params.get('art') || params.get('id') || params.get('obra');
+        var debug = params.get('debug');
+        if (art) {
+            if (debug) {
+                document.addEventListener('DOMContentLoaded', function () {
+                    document.body.innerHTML = '<pre>' + JSON.stringify({
+                        href: window.location.href,
+                        search: window.location.search,
+                        hash: window.location.hash,
+                        art: art
+                    }, null, 2) + '</pre>';
+                });
+            } else {
+                window.location.replace('./#/art/' + encodeURIComponent(art));
+            }
+        }
+    </script>
+</head>
+<body>
+    <p>Redirigiendo...</p>
+</body>
+</html>
